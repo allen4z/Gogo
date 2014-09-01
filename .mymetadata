@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-module
+  type="WEB"
+  name="Gogo"
+  id="myeclipse.1408513801800"
+  context-root="/Gogo"
+  j2ee-spec="5.0"
+  archive="Gogo.war">
+  <attributes>
+    <attribute name="webrootdir" value="WebRoot" />
+  </attributes>
+</project-module>
+
