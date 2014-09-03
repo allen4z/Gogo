@@ -1,49 +1,26 @@
 package com.gogo.service;
 
-import java.util.Date;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.gogo.dao.ActivityDao;
-import com.gogo.dao.UserDao;
 import com.gogo.domain.Activity;
 import com.gogo.domain.User;
 
 
-@Service
-public class ActivityService {
 	
-	@Autowired
-	private ActivityDao actDao;
-	@Autowired
-	private UserDao userDao;
+public interface ActivityService {
 	
-	public Activity loadActbyActId(int actId){
-		return actDao.loadActbyActId(actId);
-	}
+	public Activity loadActbyActId(int actId);
+	
 
-	public List<User> loadJoinUserByActId(String actId) {
-		return actDao.loadJoinUserByActId(actId);
-	}
-
+	public List<User> loadJoinUserByActId(String actId);
 	
-	public void saveActivity(Activity act) {
-		actDao.saveActivity(act);
-	}
+	public void saveActivity(Activity act);
 	
-	public int saveActivity(Activity act, int userId) {
-		User user = userDao.loadUserById(userId);
-		act.setActCreateTime(new Date());
-		act.setOwnUser(user);
-		
-		return (Integer) actDao.saveActivity(act);
-	}
+	public int saveActivity(Activity act, int userId);
 
-	public boolean delActivity(String actId) {
-		return actDao.delActivity(actId);
-	}
+	public boolean delActivity(String actId);
 
 
 }

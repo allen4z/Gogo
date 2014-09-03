@@ -1,4 +1,4 @@
-package com.gogo.dao;
+package com.gogo.dao.impl;
 
 import java.io.Serializable;
 import java.lang.reflect.ParameterizedType;

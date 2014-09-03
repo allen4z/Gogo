@@ -1,4 +1,4 @@
-package com.gogo.ctrl;
+package com.gogo.ctrl.impl;
 
 import javax.servlet.http.HttpServletRequest;
 

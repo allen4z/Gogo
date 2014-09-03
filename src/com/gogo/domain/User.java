@@ -22,12 +22,15 @@ public class User {
 	@Column(name="user_id")
 	private int userId;
 	
+	//@Pattern(regexp="w{4,30}")
 	@Column(name="user_name",length=20)
 	private String userName;
 	
+	//@Pattern(regexp="S{6,20}")
 	@Column(name="user_password",length=20)
 	private String password;
 	
+	//@Pattern(regexp="w{4,30}")
 	@Column(name="user_alis_name",length=20)
 	private String alisName;
 	
