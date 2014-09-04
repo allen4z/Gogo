@@ -24,7 +24,7 @@
 	
 	<bean id="localeResolver" class="org.springframework.web.servlet.i18n.CookieLocaleResolver" /> 
 
-	<context:property-placeholder location="classpath:jdbc.properties" />
+	<context:property-placeholder location="classpath:config.properties" />
 	
 	<!-- 配置数据源 -->
 	<bean id="dataSource"  class="org.logicalcobwebs.proxool.ProxoolDataSource">
@@ -94,7 +94,7 @@
 			<tx:method name="save*" propagation="REQUIRED"/> 
 			<tx:method name="add*" propagation="REQUIRED"/>  
             <tx:method name="update*" propagation="REQUIRED"/>  
-            <tx:method name="delete" propagation="REQUIRED"/>  
+            <tx:method name="delete*" propagation="REQUIRED"/>  
             <!--hibernate4必须配置为开启事务 否则 getCurrentSession()获取不到-->
             <tx:method name="*" propagation="REQUIRED" read-only="true"/>
 		</tx:attributes>

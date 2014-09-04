@@ -40,4 +40,13 @@ public class UserDaoImpl extends BaseDao<User> implements UserDao{
 		List<Activity> actList = find(hql);
 		return actList;
 	}
+
+
+	public void updateUser(User user) {
+		update(user);
+	}
+	
+	public void deleteUser(User user){
+		remove(user);
+	}
 }

@@ -1,6 +1,6 @@
 package com.gogo.ctrl.impl;
 
-import java.util.List;
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -20,7 +20,7 @@ import com.gogo.service.ActivityService;
 
 @Controller
 @RequestMapping("/activity")
-public class ActivityControllerImpl implements ActivityController {
+public class ActivityControllerImpl extends BaseController implements ActivityController {
 
 	@Autowired
 	private ActivityService actService;
@@ -30,10 +30,11 @@ public class ActivityControllerImpl implements ActivityController {
 	 * @param act
 	 * @return
 	 */
-	@RequestMapping("saveAct/{userId}")
+	@RequestMapping("saveAct")
 	@ResponseBody
-	public int saveActivity(@RequestBody Activity act,@PathVariable int userId){
-		int id = actService.saveActivity(act,userId);
+	public int saveActivity(HttpServletRequest req ,@RequestBody Activity act){
+		User user = getSessionUser(req);
+		int id = actService.saveActivity(act,user);
 		return id;
 	}
 	
@@ -42,8 +43,11 @@ public class ActivityControllerImpl implements ActivityController {
 	 * @param actId
 	 * @return
 	 */
-	public boolean delActivity(String actId,String userId) throws Exception{
-		return actService.delActivity(actId);
+	@RequestMapping("deleteAct/{actId}")
+	public void delActivity(HttpServletRequest req , int actId) throws Exception{
+		User user = getSessionUser(req);
+		
+		actService.deleteActivity(actId,user.getUserId());
 	}
 	
 	/**
@@ -51,8 +55,9 @@ public class ActivityControllerImpl implements ActivityController {
 	 * @param actId
 	 * @return
 	 */
-	public boolean updateActivity(String actId,String userId)throws Exception{
-		return false;
+	public void updateActivity(HttpServletRequest req,@RequestBody Activity act)throws Exception{
+		User user = getSessionUser(req);
+		actService.updateActivity(act, user.getUserId());
 	}
 	
 	/**
@@ -68,15 +73,6 @@ public class ActivityControllerImpl implements ActivityController {
 	public Activity loadActByActId(@PathVariable int actId)throws Exception{
 		Activity act = actService.loadActbyActId(actId);
 		return act;
-	}
-	
-	/**
-	 * 根据活动ID获得所有参与活动的用户信息
-	 * @param actId
-	 * @return
-	 */
-	public List<User> loadJoinUserByActId(String actId) throws Exception{
-		return actService.loadJoinUserByActId(actId);
 	}
 	
 	@RequestMapping("addPage")

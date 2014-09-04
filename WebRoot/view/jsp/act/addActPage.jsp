@@ -8,7 +8,7 @@
 	$(document).ready(function(){
 		$("#addActBtn").click(function(){
 		
-			var actionInfo = 'activity/saveAct/<%=user.getUserId()%>';	
+			var actionInfo = 'activity/saveAct';	
 			var params = {
 				actName : $("#act_name").val(),
 				actContent : $("#act_content").val(),

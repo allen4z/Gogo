@@ -17,4 +17,8 @@ public interface UserDao{
 	public List<Activity> loadJoinActivitesByUser(int userId);
 
 	public List<Activity> loadOwnActivitesByUser(int userId);
+	
+	public void updateUser(User user);
+	
+	public void deleteUser(User user);
 }
