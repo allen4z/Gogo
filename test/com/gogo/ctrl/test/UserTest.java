@@ -1,6 +1,6 @@
 package com.gogo.ctrl.test;
 
-import static org.junit.Assert.assertNull;
+import static org.junit.Assert.*;
 
 import javax.annotation.Resource;
 
@@ -41,7 +41,8 @@ public class UserTest extends AbstractTransactionalJUnit4SpringContextTests  {
 	@Test
 	public void loadUserTest() throws Exception{
 		User user = userservice.loadUserById(1);
-		assertNull(user);
+		assertNotNull(user);
+		
 	}
 	
 	/*//@Test
