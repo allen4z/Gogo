@@ -2,6 +2,7 @@ package com.gogo.ctrl;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.gogo.domain.Activity;
@@ -37,7 +38,11 @@ public interface ActivityController {
 	
 	public Activity loadActByActId( int actId)throws Exception;
 	
+	public String uploadImage(MultipartFile file)throws Exception;
+	
 	public String addPage() throws Exception;
 
 	public ModelAndView showPage( int actId) throws Exception;
+	
+	
 }

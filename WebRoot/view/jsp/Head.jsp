@@ -22,7 +22,7 @@
 	});
 </script>
 </head>
-<body onload="onLoad()">
+<body>
 
 <%=user.getAlisName() %>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;

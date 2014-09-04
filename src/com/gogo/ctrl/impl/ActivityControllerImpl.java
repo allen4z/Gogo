@@ -1,5 +1,7 @@
 package com.gogo.ctrl.impl;
 
+import java.io.File;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,7 +9,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.gogo.annotation.GoJsonFilter;
@@ -75,6 +80,16 @@ public class ActivityControllerImpl extends BaseController implements ActivityCo
 		return act;
 	}
 	
+	@RequestMapping(value="upload",method=RequestMethod.POST)
+	@ResponseBody
+	public String uploadImage(@RequestParam MultipartFile file) throws Exception {
+		if(!file.isEmpty()){
+			file.transferTo(new File("d:/tmp/"+file.getOriginalFilename()));
+			return "success";
+		}
+		return "faild";
+	}
+	
 	@RequestMapping("addPage")
 	public String addPage() throws Exception{
 		return "act/addActPage";
@@ -87,4 +102,6 @@ public class ActivityControllerImpl extends BaseController implements ActivityCo
 		mav.setViewName("act/showActPage");
 		return mav;
 	}
+
+
 }

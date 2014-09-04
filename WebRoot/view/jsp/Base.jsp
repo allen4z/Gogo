@@ -13,7 +13,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	<meta http-equiv="description" content="This is my page">
 	
 	<script src="view/js/json2.js"></script>
-	<script src="view/js/jquery-1.9.1.js"></script>
+	<script src="view/js/jquery.js"></script>
 	
 	<script src="view/js/go_ajax.js"></script>
   </head>

@@ -67,7 +67,7 @@
         </property>  
     </bean>  
     
-    <aop:aspectj-autoproxy proxy-target-class="false" />
+    <aop:aspectj-autoproxy proxy-target-class="true" />
     
 	<!-- 配置Jdbc模板  -->
 	<!-- <bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate"

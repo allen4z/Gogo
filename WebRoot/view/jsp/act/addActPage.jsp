@@ -4,7 +4,47 @@
 <html>
 <head>
 <title>Gogo-Main</title>
+<script src="view/js/ajaxfileupload.js"></script>
+
+
 <script type="text/javascript">
+
+	function ajaxFileUpload(){
+		$.ajaxFileUpload({
+			url:'activity/upload',
+			secureuri:false,
+			fileElementId:'file',
+			dataType: 'json',
+			beforeSend:function()
+			{
+				alert(2);
+				$("#loading").show();
+			},
+			complete:function()
+			{
+				$("#loading").hide();
+			},				
+			success: function (data, status)
+			{
+				if(typeof(data.error) != 'undefined')
+				{
+					if(data.error != '')
+					{
+						alert(data.error);
+					}else
+					{
+						alert(data.msg);
+					}
+				}
+			},
+			error: function (data, status, e)
+			{
+				alert(e);
+			}
+		})
+		return false;
+	}
+
 	$(document).ready(function(){
 		$("#addActBtn").click(function(){
 		
@@ -26,7 +66,10 @@
 				alert(error);
 			});
 		});
+		
 	});
+	
+	
 </script>
 </head>
 <body>
@@ -40,11 +83,23 @@
 结束时间：<input id="act_endtime" name="act_endtime" type="date"/>
 报名时间：<input id="act_signtime" name="act_signtime" type="date"/>
 
+<img id="loading" src="view/images/loading.gif" style="display:none;">
 <input id="addActBtn" name="addActBtn"  type="button" value="保存"/>
 
 
 <input id="registerBtn" value="注册" type="button"><br/>
  	
+</form>
+
+上传图片：
+<img id="loading" src="/images/loading.gif" style="display:none;">
+
+<form name="form" action="" method="POST" enctype="multipart/form-data">
+<input id="file" type="file" size="45" name="file" class="input">
+
+<button class="button" id="buttonUpload" onclick="ajaxFileUpload();">Upload</button>
+<input id="submit" type="submit" value="提交"/>
+
 </form>
 </body>
 </html>
