@@ -1,5 +1,7 @@
 package com.gogo.ctrl.test;
 
+import java.util.List;
+
 import javax.annotation.Resource;
 
 import org.junit.Assert;
@@ -11,7 +13,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import com.gogo.dao.UserDao;
-import com.gogo.domain.User;
 import com.gogo.service.UserService;
 import com.gogo.test.AbstractContextTests;
 
@@ -34,9 +35,8 @@ public class UserCtrlTest extends AbstractContextTests  {
 	
 	@Test
 	public void loadUserTest() throws Exception{
-		User user = userDao.loadUserById(1);
-	
-		Assert.assertEquals(user.getUserName(), "1");
+		List list = userDao.loadUserByName("1", 1,2);
+		Assert.assertNotNull(list);
 	}
 	
 	/*@Test

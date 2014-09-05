@@ -34,6 +34,14 @@ public class UserServiceImpl implements UserService {
 		return user;
 	}
 	
+	public List<User> loadUserByName(String userName,int curPage,int pagesize){
+		
+		int psize = pagesize == 0 ?  10 : pagesize;
+		
+		List<User> user =  userDao.loadUserByName(userName,curPage,psize);
+		return user;
+	}
+	
 	public List<Activity> loadJoinActivitesByUser(int userId){
 		return userDao.loadJoinActivitesByUser(userId);
 	}

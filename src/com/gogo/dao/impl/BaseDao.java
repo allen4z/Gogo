@@ -10,7 +10,9 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.orm.hibernate3.SessionFactoryUtils;
+
+import com.gogo.page.IPageContext;
+import com.gogo.page.Page;
 
 public class BaseDao<T> {
 	
@@ -90,8 +92,6 @@ public class BaseDao<T> {
 	     * @return 查询结果
 	     */
 	    public List find(String hql) {
-//	        return this.getSession().find(hql);
-	       
 	        Query queryObject = getSession().createQuery(hql);
 			return queryObject.list();
 	    }
@@ -117,5 +117,15 @@ public class BaseDao<T> {
 
 	    public Session getSession() {
 	        return sessionFactory.getCurrentSession();
+	    }
+	    
+	    //分页查询
+	    public List findByPage(String hql, int page,int pagesize){
+	    	Query q = getSession().createQuery(hql);
+	    	//开始位置
+	    	int start = (page-1)*pagesize+1;
+	    	q.setFirstResult(start);
+	    	q.setMaxResults(pagesize);
+	    	return q.list(); 
 	    }
 }

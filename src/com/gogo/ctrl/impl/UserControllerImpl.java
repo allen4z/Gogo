@@ -68,9 +68,20 @@ public class UserControllerImpl extends BaseController implements UserController
 	@ResponseBody
 	public List<User> loadUserByUserName(String userName){
 		List<User> users =  userService.loadUserByName(userName);
-
 		return users;
-		
+	}
+	
+	/**
+	 * 根据用户Name获得用户信息（分页）
+	 * @param userName
+	 * @param curPage
+	 * @return
+	 */
+	@RequestMapping("loadByName/{userName}/{curPage}/{pagesize}")
+	@ResponseBody
+	public List<User> loadUserByUserName(@PathVariable String userName,@PathVariable int curPage,@PathVariable int pagesize){
+		List<User> users =  userService.loadUserByName(userName,curPage,pagesize);
+		return users;
 	}
 	
 	/**

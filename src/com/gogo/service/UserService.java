@@ -13,6 +13,7 @@ public interface UserService {
 	public User loadUserById(int userId);
 	
 	public List<User> loadUserByName(String userName);
+	public List<User> loadUserByName(String userName,int curPage,int pagesize);
 	
 	public List<Activity> loadJoinActivitesByUser(int userId);
 

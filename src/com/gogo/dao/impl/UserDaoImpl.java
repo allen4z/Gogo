@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 import com.gogo.dao.UserDao;
 import com.gogo.domain.Activity;
 import com.gogo.domain.User;
+import com.gogo.page.Page;
 
 @Repository
 public class UserDaoImpl extends BaseDao<User> implements UserDao{
@@ -23,6 +24,12 @@ public class UserDaoImpl extends BaseDao<User> implements UserDao{
 	public List<User> loadUserByName(String userName){
 		String hql = "from User where userName='"+userName+"'";
 		List<User> userList  = find(hql);
+		return userList;
+	}
+	
+	public List<User> loadUserByName(String userName,int curPage,int pagesize){
+		String hql = "from User where userName='"+userName+"'";		
+		List<User> userList  = findByPage(hql,curPage,pagesize);
 		return userList;
 	}
 
