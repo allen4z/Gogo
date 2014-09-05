@@ -1,9 +1,10 @@
+<%@page import="com.gogo.page.Page"%>
 <%@page import="com.gogo.ctrl.model.UserMainModel"%>
 <%@ page language="java" import="java.util.*" pageEncoding="utf-8"%>
 <%@include file="Head.jsp" %>
 <%@page import="com.gogo.domain.Activity"%>
 <%
-	UserMainModel umm =(UserMainModel)request.getAttribute("userMainModel");
+	Page<Activity> ownAct =(Page)request.getAttribute("userOwnAct");
 %>
 <html>
 <head>
@@ -50,7 +51,7 @@
 	</tr>
 	
 	<%
-			List<Activity> list = umm.getOwnActivity();
+			List<Activity> list = ownAct.getItems();
 			for(Activity act : list){
 		%>
 		<tr>
@@ -65,7 +66,7 @@
 </table>
 </div>
 <div id="joinActTable">
-<table>
+<!-- <table>
 	<tr>
 		<td colspan="2" align="center">参加活动</td>
 	</tr>
@@ -74,6 +75,6 @@
 		<td>活动内容</td>
 	</tr>
 </table>
-</div>
+</div> -->
 </body>
 </html>

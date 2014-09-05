@@ -9,6 +9,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -16,6 +18,7 @@ import com.gogo.ctrl.UserController;
 import com.gogo.ctrl.model.UserMainModel;
 import com.gogo.domain.Activity;
 import com.gogo.domain.User;
+import com.gogo.page.Page;
 import com.gogo.service.UserService;
 
 @Controller
@@ -59,28 +62,25 @@ public class UserController extends BaseController{
 		return userService.loadUserById(userId);
 	}
 	
-	/**
-	 * 根据用户Name获得用户信息
-	 * @param userId
-	 * @return
-	 */
-	@RequestMapping("loadByName/{userName}")
-	@ResponseBody
-	public List<User> loadUserByUserName(String userName){
-		List<User> users =  userService.loadUserByName(userName);
-		return users;
-	}
 	
 	/**
-	 * 根据用户Name获得用户信息（分页）
+	 * 根据用户Name获得用户信息
 	 * @param userName
 	 * @param curPage
 	 * @return
 	 */
-	@RequestMapping("loadByName/{userName}/{curPage}/{pagesize}")
+	@RequestMapping(value="loadByName/{userName}",method=RequestMethod.GET)
 	@ResponseBody
-	public List<User> loadUserByUserName(@PathVariable String userName,@PathVariable int curPage,@PathVariable int pagesize){
-		List<User> users =  userService.loadUserByName(userName,curPage,pagesize);
+	public List<User> loadUserByUserName(@PathVariable String userName,
+			@RequestParam(required=false) Integer curPage,
+			@RequestParam(required=false) Integer pagesize){
+		
+		List<User> users = null;
+		if(curPage == null || curPage == 0){
+			users =  userService.loadUserByName(userName);
+		}else{
+			users =  userService.loadUserByName(userName,curPage,getPageSize(pagesize));
+		}
 		return users;
 	}
 	
@@ -102,7 +102,7 @@ public class UserController extends BaseController{
 	 */
 	@RequestMapping("loadOwnAct/{userId}")
 	@ResponseBody
-	public List<Activity> loadOwnActivitesByUser(int userId){
+	public Page<Activity> loadOwnActivitesByUser(int userId){
 		return userService.loadOwnActivitesByUser(userId);
 	}
 	
@@ -124,19 +124,9 @@ public class UserController extends BaseController{
 	@RequestMapping(value="main")
 	public ModelAndView backUserMain(HttpServletRequest req){
 		ModelAndView mav = new ModelAndView();
-		UserMainModel umm = new UserMainModel();
-		umm.setUser(getSessionUser(req));
-		
 		int userId = getSessionUser(req).getUserId();
-		
-		List<Activity> ownAct = userService.loadOwnActivitesByUser(userId);
-		
-		List<Activity> joinAct = userService.loadJoinActivitesByUser(userId);
-		
-		umm.setOwnActivity(ownAct);
-		umm.setJoinActivity(joinAct);
-		
-		mav.addObject("userMainModel",umm );
+		Page<Activity> ownAct = userService.loadOwnActivitesByUser(userId);
+		mav.addObject("userOwnAct",ownAct );
 		mav.setViewName("main");
 		return mav;
 	}

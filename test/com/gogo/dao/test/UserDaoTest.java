@@ -28,9 +28,9 @@ public class UserDaoTest extends AbstractContextTests  {
 	
 	//@Test
 	public void loadOwnActTest()throws Exception{
-		List<Activity> list = userDao.loadOwnActivitesByUser(1);
+		/*List<Activity> list = userDao.loadOwnActivitesByUser(1);
 		Assert.assertNotNull(list);
-		Assert.assertTrue(list.size()>0);
+		Assert.assertTrue(list.size()>0);*/
 	}
 	
 	//@Test

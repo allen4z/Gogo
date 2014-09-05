@@ -42,10 +42,10 @@ public class UserDao extends BaseDao<User>{
 	}
 
 
-	public List<Activity> loadOwnActivitesByUser(int userId) {
+	public Page<Activity> loadOwnActivitesByUser(int userId) {
 		String hql = "select act from Activity act left join act.ownUser ou where ou.userId='"+userId+"'";
-		List<Activity> actList = find(hql);
-		return actList;
+		Page<Activity> actPage = find(hql,1);
+		return actPage;
 	}
 
 

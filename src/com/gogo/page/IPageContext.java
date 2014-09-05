@@ -1,12 +1,14 @@
 package com.gogo.page;
 
+import com.gogo.helper.CommonConstant;
+
 
 public interface IPageContext<E> {
     
     /**
      * 默认设定每页显示记录数为10
      */
-    public static final int DEFAULT_PAGE_SIZE = 20;
+    public static final int DEFAULT_PAGE_SIZE = CommonConstant.PAGE_SIZE;
     
     /**
      * 计算总页数.

@@ -11,6 +11,7 @@ import com.gogo.dao.UserDao;
 import com.gogo.domain.Activity;
 import com.gogo.domain.User;
 import com.gogo.helper.DomainStateHelper;
+import com.gogo.page.Page;
 import com.gogo.service.UserService;
 
 @Service
@@ -36,9 +37,7 @@ public class UserService{
 	
 	public List<User> loadUserByName(String userName,int curPage,int pagesize){
 		
-		int psize = pagesize == 0 ?  10 : pagesize;
-		
-		List<User> user =  userDao.loadUserByName(userName,curPage,psize);
+		List<User> user =  userDao.loadUserByName(userName,curPage,pagesize);
 		return user;
 	}
 	
@@ -46,7 +45,7 @@ public class UserService{
 		return userDao.loadJoinActivitesByUser(userId);
 	}
 
-	public List<Activity> loadOwnActivitesByUser(int userId) {
+	public Page<Activity> loadOwnActivitesByUser(int userId) {
 		return userDao.loadOwnActivitesByUser(userId);
 	}
 	

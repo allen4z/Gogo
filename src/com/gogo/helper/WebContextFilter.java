@@ -15,7 +15,6 @@ import javax.servlet.http.HttpServletResponse;
 public class WebContextFilter implements Filter {  
 	  
     public void init(FilterConfig filterConfig) throws ServletException {      
-          System.out.println(123);
     }  
       
     public void doFilter(ServletRequest req, ServletResponse resp,  

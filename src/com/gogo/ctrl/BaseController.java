@@ -33,4 +33,8 @@ public class BaseController {
 		//req.getSession().setMaxInactiveInterval(5); 设置失效时间
 		req.getSession().setAttribute(CommonConstant.USER_CONTEXT, user);
 	}
+	
+	protected int getPageSize(Integer pagesize){
+		return (pagesize == null || pagesize == 0) ? CommonConstant.PAGE_SIZE : pagesize;
+	}
 }

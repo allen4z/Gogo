@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.gogo.page.IPageContext;
 import com.gogo.page.Page;
+import com.gogo.page.QueryPageContext;
 
 public class BaseDao<T> {
 	
@@ -94,6 +95,13 @@ public class BaseDao<T> {
 	    public List find(String hql) {
 	        Query queryObject = getSession().createQuery(hql);
 			return queryObject.list();
+	    }
+	    
+	    public Page find(String hql,int i) {
+	        Query queryObject = getSession().createQuery(hql);
+	        List list = queryObject.list();
+	        IPageContext<T> pageContext = new QueryPageContext<T>(list.size(),1, list);
+			return  pageContext.getPage(i);
 	    }
 
 	    /**
