@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<taglib>
+    <tlib-version>2.0</tlib-version>
+    <jsp-version>2.1</jsp-version>
+    <short-name>common</short-name>
+    <uri>/view/tld/common</uri>
+    <display-name>Common Tag</display-name>
+    <description>Common Tag library</description>
+
+    <tag>
+      <name>page</name>
+      <tag-class>com.gogo.page.NavigationTag</tag-class>
+      <body-content>JSP</body-content>
+      <description>create navigation for paging</description>
+      <attribute>
+           <name>bean</name>
+           <rtexprvalue>true</rtexprvalue>
+      </attribute>
+      <attribute>
+           <name>showJump</name>
+           <rtexprvalue>true</rtexprvalue>
+      </attribute>
+      <attribute>
+           <name>url</name>
+           <required>true</required>
+           <rtexprvalue>true</rtexprvalue>
+      </attribute>
+      <attribute>
+           <name>optimize</name>
+           <required>false</required>
+           <rtexprvalue>true</rtexprvalue>
+      </attribute>
+    </tag>
+     <tag>
+      <name>pageV2</name>
+      <tag-class>com.gogo.page.NavigationTagV2</tag-class>
+      <body-content>JSP</body-content>
+      <description>create navigation for paging</description>
+      <attribute>
+           <name>bean</name>
+           <rtexprvalue>true</rtexprvalue>
+      </attribute>
+      <attribute>
+           <name>number</name>
+           <rtexprvalue>true</rtexprvalue>
+      </attribute>
+      <attribute>
+           <name>url</name>
+           <required>true</required>
+           <rtexprvalue>true</rtexprvalue>
+      </attribute>
+      <attribute>
+           <name>optimize</name>
+           <required>false</required>
+           <rtexprvalue>true</rtexprvalue>
+      </attribute>
+    </tag>
+   
+</taglib>

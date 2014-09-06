@@ -1,6 +1,7 @@
 package com.gogo.ctrl;
 
 import java.io.File;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -16,10 +17,12 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.gogo.annotation.GoJsonFilter;
-import com.gogo.ctrl.ActivityController;
+import com.gogo.dao.RoleDao;
 import com.gogo.domain.Activity;
+import com.gogo.domain.Role;
 import com.gogo.domain.User;
 import com.gogo.domain.filter.UserFilter;
+import com.gogo.exception.BusinessException;
 import com.gogo.service.ActivityService;
 
 
@@ -30,6 +33,8 @@ public class ActivityController extends BaseController {
 	@Autowired
 	private ActivityService actService;
 	
+	@Autowired
+	private RoleDao roleDao;
 	/**
 	 * 创建活动
 	 * @param act
@@ -96,9 +101,21 @@ public class ActivityController extends BaseController {
 	}
 	
 	@RequestMapping("showPage/{actId}")
-	public ModelAndView showPage(@PathVariable int actId) throws Exception{
+	public ModelAndView showPage(HttpServletRequest req ,@PathVariable int actId) throws Exception{
 		ModelAndView mav = new ModelAndView();
-		mav.addObject(actId);
+		Activity act = actService.loadActbyActId(actId);
+		
+		//根据User查询当前活动的角色
+		
+		User user = getSessionUser(req);
+		
+		List<Role> roles = roleDao.loadCurUserRole4Act(user, act);
+		
+		if(roles!= null && roles.size()>0){
+			mav.addObject("role", roles.get(0));
+		}
+		
+		mav.addObject("act", act);
 		mav.setViewName("act/showActPage");
 		return mav;
 	}

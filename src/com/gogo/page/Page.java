@@ -12,9 +12,9 @@ public class Page<E>{
 	//当前页数
 	private int currentIndex;
 	//是否首页
-	private boolean isFirst;
+	private boolean hasPre;
 	//是否尾页
-	private boolean isEnd;
+	private boolean hasNext;
 	//当前页内容
 	private List<E> items;
 	
@@ -33,17 +33,17 @@ public class Page<E>{
 		this.currentIndex = currentIndex;
 	}
 	
-	public boolean isFirst() {
-		return isFirst;
+	public boolean isHasPre() {
+		return hasPre;
 	}
-	public void setFirst(boolean isFirst) {
-		this.isFirst = isFirst;
+	public void setHasPre(boolean hasPre) {
+		this.hasPre = hasPre;
 	}
-	public boolean isEnd() {
-		return isEnd;
+	public boolean isHasNext() {
+		return hasNext;
 	}
-	public void setEnd(boolean isEnd) {
-		this.isEnd = isEnd;
+	public void setHasNext(boolean hasNext) {
+		this.hasNext = hasNext;
 	}
 	public IPageContext<E> getPageContext() {
 		return pageContext;

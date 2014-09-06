@@ -1,23 +1,31 @@
 package com.gogo.service;
 
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.gogo.dao.ActivityDao;
+import com.gogo.dao.RoleDao;
 import com.gogo.domain.Activity;
+import com.gogo.domain.Role;
 import com.gogo.domain.User;
+import com.gogo.domain.UserAndRole;
 import com.gogo.exception.BusinessException;
 import com.gogo.helper.DomainStateHelper;
 import com.gogo.service.ActivityService;
+import com.gogo.user.role.RoleHelper;
 
 @Service
 public class ActivityService {
 	
 	@Autowired
 	private ActivityDao actDao;
+	@Autowired
+	private RoleDao roleDao;
 	
 	public Activity loadActbyActId(int actId){
 		return actDao.loadActbyActId(actId);
@@ -27,7 +35,27 @@ public class ActivityService {
 		act.setActCreateTime(new Date());
 		act.setOwnUser(user);
 		
-		return (Integer) actDao.saveActivity(act);
+		int actId = (Integer) actDao.saveActivity(act);
+		
+		//设置为超级管理员
+		Role role = new Role();
+		role.setRoleCode(RoleHelper.ROLE_CODE);
+		role.setRoleName(RoleHelper.ROLE_NAME);
+		role.setBelongAct(act);
+		
+		UserAndRole uar = new UserAndRole();
+		uar.setRole(role);
+		uar.setUser(user);
+		Set<UserAndRole> belongUser = new HashSet<UserAndRole>();
+		belongUser.add(uar);
+		role.setBelongUser(belongUser);
+		
+		roleDao.save(role);
+		
+		
+		
+		
+		return actId;
 	}
 
 	

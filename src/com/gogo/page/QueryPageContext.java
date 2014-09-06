@@ -23,8 +23,8 @@ public class QueryPageContext<E> implements IPageContext<E> {
 		Page<E> page = new Page<E>();
         page.setPageContext(this);
         int index2 = index > getPageCount() ? 1 : index;
-        page.setEnd(index2 < getPageCount());
-        page.setFirst(index2 > 1);
+        page.setHasNext(index2 < getPageCount());
+        page.setHasPre(index2 > 1);
         page.setCurrentIndex(index2);
         page.setItems(items);
         return page;

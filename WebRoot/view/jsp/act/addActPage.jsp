@@ -85,9 +85,6 @@
 
 <img id="loading" src="view/images/loading.gif" style="display:none;">
 <input id="addActBtn" name="addActBtn"  type="button" value="保存"/>
-
-
-<input id="registerBtn" value="注册" type="button"><br/>
  	
 </form>
 
@@ -96,10 +93,7 @@
 
 <form name="form" action="" method="POST" enctype="multipart/form-data">
 <input id="file" type="file" size="45" name="file" class="input">
-
 <button class="button" id="buttonUpload" onclick="ajaxFileUpload();">Upload</button>
-<input id="submit" type="submit" value="提交"/>
-
 </form>
 </body>
 </html>

@@ -3,8 +3,10 @@
 <%@ page language="java" import="java.util.*" pageEncoding="utf-8"%>
 <%@include file="Head.jsp" %>
 <%@page import="com.gogo.domain.Activity"%>
+<%@ taglib prefix="pagenav" uri="/view/tld/commons.tld"%>
+
 <%
-	Page<Activity> ownAct =(Page)request.getAttribute("userOwnAct");
+	Page<Activity> ownAct =(Page)request.getAttribute("page");
 %>
 <html>
 <head>
@@ -55,7 +57,7 @@
 			for(Activity act : list){
 		%>
 		<tr>
-			<td><%=act.getActName() %></td>
+			<td><a href="activity/showPage/<%=act.getActId()%>"><%=act.getActName() %></a></td>
 			<td><%=act.getActContent() %></td>
 		</tr>
 		<%
@@ -64,7 +66,9 @@
 	%>
 	
 </table>
-</div>
+</div><%-- 
+<pagenav:page url="user/main"></pagenav:page> --%>
+<pagenav:pageV2 url="user/main"></pagenav:pageV2>
 <div id="joinActTable">
 <!-- <table>
 	<tr>
@@ -74,7 +78,7 @@
 		<td>活动名称</td>
 		<td>活动内容</td>
 	</tr>
-</table>
-</div> -->
+</table>-->
+</div> 
 </body>
 </html>

@@ -126,7 +126,7 @@ public class UserController extends BaseController{
 		ModelAndView mav = new ModelAndView();
 		int userId = getSessionUser(req).getUserId();
 		Page<Activity> ownAct = userService.loadOwnActivitesByUser(userId);
-		mav.addObject("userOwnAct",ownAct );
+		mav.addObject("page",ownAct );
 		mav.setViewName("main");
 		return mav;
 	}
