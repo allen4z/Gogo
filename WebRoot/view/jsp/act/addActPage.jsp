@@ -91,9 +91,10 @@
 上传图片：
 <img id="loading" src="/images/loading.gif" style="display:none;">
 
-<form name="form" action="" method="POST" enctype="multipart/form-data">
+<form name="form" action="activity/upload" method="POST" enctype="multipart/form-data">
 <input id="file" type="file" size="45" name="file" class="input">
-<button class="button" id="buttonUpload" onclick="ajaxFileUpload();">Upload</button>
+<input type="submit" value="上传"/>
+<!-- <button class="button" id="buttonUpload" onclick="ajaxFileUpload();">Upload</button> -->
 </form>
 </body>
 </html>
