@@ -12,17 +12,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.gogo.domain.User;
-import com.gogo.helper.CommonConstant;
 import com.gogo.service.UserService;
 
 
 @Controller
 @RequestMapping("/login")
-@SessionAttributes(CommonConstant.USER_CONTEXT)
 public class LoginController extends BaseController{
 
 	
@@ -32,7 +29,7 @@ public class LoginController extends BaseController{
 	private UserService userService;
 	
 	@RequestMapping(value="doLogin",method=RequestMethod.POST)
-	public ModelAndView login(Model model, 
+	public ModelAndView login(HttpSession session, 
 				@RequestParam("userName") String userName,
 				@RequestParam("password") String password) throws Exception{
 		
@@ -44,7 +41,7 @@ public class LoginController extends BaseController{
 		String toUrl;
 		User dbUser = userService.UserInfoCheck(loginUser);
 		if(dbUser!=null){
-			model.addAttribute(CommonConstant.USER_CONTEXT, dbUser);
+			setSessionUser(session, dbUser);
 			toUrl = "redirect:/user/main";
 		}else{
 			String error = "password failed";
