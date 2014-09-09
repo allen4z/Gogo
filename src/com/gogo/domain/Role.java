@@ -6,7 +6,6 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -16,6 +15,7 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.GenericGenerator;
 
 @Entity
 @Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
@@ -23,9 +23,10 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 public class Role {
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@Column(name="role_id")
-	private int roleId;
+	@GenericGenerator(name = "idGenerator", strategy = "uuid")
+	@GeneratedValue(generator = "idGenerator")
+	@Column(name="role_id",length=32)
+	private String roleId;
 	
 	@Column(name="role_code",length=10)
 	private String roleCode;
@@ -41,11 +42,13 @@ public class Role {
 	@OneToMany(mappedBy="role",cascade=CascadeType.ALL)
 	private Set<UserAndRole> belongUser;
 
-	public int getRoleId() {
+
+
+	public String getRoleId() {
 		return roleId;
 	}
 
-	public void setRoleId(int roleId) {
+	public void setRoleId(String roleId) {
 		this.roleId = roleId;
 	}
 
