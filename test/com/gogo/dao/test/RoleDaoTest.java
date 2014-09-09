@@ -24,9 +24,9 @@ public class RoleDaoTest  extends AbstractContextTests {
 	public void loadCurUserRole4ActTest(){
 		
 		User user=new User();
-		user.setUserId(1);
+		user.setUserId("1");
 		Activity act = new Activity();
-		act.setActId(6);
+		act.setActId("6");
 		
 		
 		List roles = roleDao.loadCurUserRole4Act(user, act);

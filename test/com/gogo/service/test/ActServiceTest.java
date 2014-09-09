@@ -20,10 +20,10 @@ public class ActServiceTest extends AbstractContextTests  {
 	@Test
 	public void updateUserTest() throws Exception{
 		Activity act = new Activity();
-		act.setActId(2);
+		act.setActId("2");
 		act.setActName("更新测试");
 		act.setActState(DomainStateHelper.ACT_STOP);
-		service.deleteActivity(1, 1);
+		service.deleteActivity("1", "1");
 	}
 	
 }

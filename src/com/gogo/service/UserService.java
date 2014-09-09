@@ -10,9 +10,10 @@ import org.springframework.transaction.annotation.Transactional;
 import com.gogo.dao.UserDao;
 import com.gogo.domain.Activity;
 import com.gogo.domain.User;
+import com.gogo.exception.BusinessException;
 import com.gogo.helper.DomainStateHelper;
+import com.gogo.helper.MD5Util;
 import com.gogo.page.Page;
-import com.gogo.service.UserService;
 
 @Service
 public class UserService{
@@ -22,6 +23,11 @@ public class UserService{
 	public void saveUser(User user){
 		user.setUserState(DomainStateHelper.USER_NORMAL_STATE);
 		user.setUserRegisterTime(new Date());
+		user.setUpdate_time(new Date());
+		//使用MD5加密用户密码
+		String password = user.getPassword();
+		user.setPassword(MD5Util.MD5(password));
+		
 		userDao.saveUser(user);
 	}
 	
@@ -35,6 +41,10 @@ public class UserService{
 		return user;
 	}
 	
+
+	
+	
+	
 	public List<User> loadUserByName(String userName,int curPage,int pagesize){
 		
 		List<User> user =  userDao.loadUserByName(userName,curPage,pagesize);
@@ -45,8 +55,30 @@ public class UserService{
 		return userDao.loadJoinActivitesByUser(userId);
 	}
 
-	public Page<Activity> loadOwnActivitesByUser(int userId) {
+	public Page<Activity> loadOwnActivitesByUser(String userId) {
 		return userDao.loadOwnActivitesByUser(userId);
 	}
 	
+	
+	/**
+	 * 用户验证
+	 * @param loginUser
+	 * @return
+	 * @throws Exception
+	 */
+	public User UserInfoCheck(User loginUser)  throws Exception{
+		
+		String dbPassword = MD5Util.MD5(loginUser.getPassword());
+		List<User> users =  userDao.loadUserByNameAndPassword(loginUser.getUserName(),dbPassword);
+		
+		if(users != null && users.size()>0){
+			if(users.size()>1){
+				throw new BusinessException("用户名或密码错误！");
+			}
+			User user =users.get(0);
+			return user;
+		}
+		
+		return null;
+	}
 }

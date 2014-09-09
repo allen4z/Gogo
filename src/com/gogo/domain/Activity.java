@@ -17,6 +17,7 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.GenericGenerator;
 
 @Entity
 @Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
@@ -24,9 +25,10 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 public class Activity {
 	
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@Column(name="act_id")
-	private int actId;
+	@GenericGenerator(name = "idGenerator", strategy = "uuid")
+	@GeneratedValue(generator = "idGenerator")
+	@Column(name="act_id",length=32)
+	private String actId;
 	
 	@Column(name="act_name",length=20)
 	private String actName;
@@ -64,17 +66,24 @@ public class Activity {
 	@OneToMany(mappedBy="act",cascade=CascadeType.ALL)
 	private Set<UserAndAct> joinUser;
 	
+	@Column(name="update_time",length=10,nullable=false)
+	private Date update_time;
 	
 	public Activity(){
 		
 	}
 	
-	public int getActId() {
+
+	public String getActId() {
 		return actId;
 	}
-	public void setActId(int actId) {
+
+
+	public void setActId(String actId) {
 		this.actId = actId;
 	}
+
+
 	public String getActName() {
 		return actName;
 	}
@@ -130,4 +139,13 @@ public class Activity {
 	public void setJoinUser(Set<UserAndAct> joinUser) {
 		this.joinUser = joinUser;
 	}
+
+	public Date getUpdate_time() {
+		return update_time;
+	}
+
+	public void setUpdate_time(Date update_time) {
+		this.update_time = update_time;
+	}
+	
 }

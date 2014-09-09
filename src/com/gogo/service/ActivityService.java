@@ -27,15 +27,16 @@ public class ActivityService {
 	@Autowired
 	private RoleDao roleDao;
 	
-	public Activity loadActbyActId(int actId){
+	public Activity loadActbyActId(String actId){
 		return actDao.loadActbyActId(actId);
 	}
 
-	public int saveActivity(Activity act,User user) {
+	public String saveActivity(Activity act,User user) {
 		act.setActCreateTime(new Date());
+		act.setUpdate_time(new Date());
 		act.setOwnUser(user);
 		
-		int actId = (Integer) actDao.saveActivity(act);
+		String actId = (String) actDao.saveActivity(act);
 		
 		//设置为超级管理员
 		Role role = new Role();
@@ -52,9 +53,6 @@ public class ActivityService {
 		
 		roleDao.save(role);
 		
-		
-		
-		
 		return actId;
 	}
 
@@ -63,11 +61,12 @@ public class ActivityService {
 	 * 删除模块，首先检查模块是否属于当前登录用户
 	 * 如不属于，则抛出异常
 	 */
-	public void deleteActivity(int actId,int userId) {
+	public void deleteActivity(String actId,String userId) {
 		Activity act = actDao.loadActbyActId(actId);
 		User user = act.getOwnUser();
-		if(user.getUserId() == userId){
+		if(user.getUserId().equals(userId)){
 			act.setActState(DomainStateHelper.ACT_DEL);
+			act.setUpdate_time(new Date());
 			actDao.updateActivity(act);
 		}else{
 			throw new BusinessException("登录用户无权删除此活动");
@@ -77,16 +76,16 @@ public class ActivityService {
 	/**
 	 * 更新活动信息，将前台传入的数据赋值到查询出的活动 并更新
 	 */
-	public void updateActivity(Activity act, int userId) throws Exception {
-		int actId = act.getActId();
+	public void updateActivity(Activity act, String userId) throws Exception {
+		String actId = act.getActId();
 		
 		Activity act4db = actDao.loadActbyActId(actId);
-		
 		User user = act4db.getOwnUser();
 		
-		if(user.getUserId() == userId){
+		if(user.getUserId().equals(userId)){
 			BeanUtils.copyProperties(act, act4db);
 			DomainStateHelper.copyPriperties(act, act4db);
+			act4db.setUpdate_time(new Date());
 			actDao.updateActivity(act4db);
 		}else{
 			throw new BusinessException("登录用户无权更新此活动");

@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
-import com.gogo.dao.UserDao;
 import com.gogo.domain.Activity;
 import com.gogo.domain.User;
 import com.gogo.page.Page;
@@ -27,6 +26,12 @@ public class UserDao extends BaseDao<User>{
 		return userList;
 	}
 	
+	public List<User> loadUserByNameAndPassword(String userName,String password){
+		String hql = "from User u where u.userName='"+userName+"' and u.password='"+password+"'";
+		List<User> userList  = find(hql);
+		return userList;
+	}
+	
 	public List<User> loadUserByName(String userName,int curPage,int pagesize){
 		String hql = "from User where userName='"+userName+"'";		
 		List<User> userList  = findByPage(hql,curPage,pagesize);
@@ -42,7 +47,7 @@ public class UserDao extends BaseDao<User>{
 	}
 
 
-	public Page<Activity> loadOwnActivitesByUser(int userId) {
+	public Page<Activity> loadOwnActivitesByUser(String userId) {
 		String hql = "select act from Activity act left join act.ownUser ou where ou.userId='"+userId+"'";
 		Page<Activity> actPage = find(hql,1);
 		return actPage;

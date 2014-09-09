@@ -6,23 +6,27 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.gogo.ctrl.UserController;
 import com.gogo.ctrl.model.UserMainModel;
 import com.gogo.domain.Activity;
 import com.gogo.domain.User;
+import com.gogo.helper.CommonConstant;
 import com.gogo.page.Page;
 import com.gogo.service.UserService;
 
 @Controller
 @RequestMapping("/user")
+@SessionAttributes(CommonConstant.USER_CONTEXT)
 public class UserController extends BaseController{
 	
 
@@ -102,7 +106,7 @@ public class UserController extends BaseController{
 	 */
 	@RequestMapping("loadOwnAct/{userId}")
 	@ResponseBody
-	public Page<Activity> loadOwnActivitesByUser(int userId){
+	public Page<Activity> loadOwnActivitesByUser(String userId){
 		return userService.loadOwnActivitesByUser(userId);
 	}
 	
@@ -122,9 +126,9 @@ public class UserController extends BaseController{
 	 * @return
 	 */
 	@RequestMapping(value="main")
-	public ModelAndView backUserMain(HttpServletRequest req){
+	public ModelAndView backUserMain(@ModelAttribute(CommonConstant.USER_CONTEXT) User user){
 		ModelAndView mav = new ModelAndView();
-		int userId = getSessionUser(req).getUserId();
+		String userId = user.getUserId();
 		Page<Activity> ownAct = userService.loadOwnActivitesByUser(userId);
 		mav.addObject("page",ownAct );
 		mav.setViewName("main");

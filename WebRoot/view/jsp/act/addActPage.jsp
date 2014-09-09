@@ -58,12 +58,13 @@
 			};
 			
 			var success = function(id){
+				alert(id);
 				//跳转到展示页面
 				location.href = "showPage/"+id;
 			};
 			
-			send4Json(params,actionInfo,success,function(){
-				alert(error);
+			send4Json(params,actionInfo,success,function(error){
+				alert('error:'+error);
 			});
 		});
 		

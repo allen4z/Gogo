@@ -7,12 +7,14 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -22,12 +24,13 @@ import com.gogo.domain.Activity;
 import com.gogo.domain.Role;
 import com.gogo.domain.User;
 import com.gogo.domain.filter.UserFilter;
-import com.gogo.exception.BusinessException;
+import com.gogo.helper.CommonConstant;
 import com.gogo.service.ActivityService;
 
 
 @Controller
 @RequestMapping("/activity")
+@SessionAttributes(CommonConstant.USER_CONTEXT)
 public class ActivityController extends BaseController {
 
 	@Autowired
@@ -42,9 +45,8 @@ public class ActivityController extends BaseController {
 	 */
 	@RequestMapping("saveAct")
 	@ResponseBody
-	public int saveActivity(HttpServletRequest req ,@RequestBody Activity act){
-		User user = getSessionUser(req);
-		int id = actService.saveActivity(act,user);
+	public String saveActivity(@ModelAttribute(CommonConstant.USER_CONTEXT) User user ,@RequestBody Activity act){
+		String id = actService.saveActivity(act,user);
 		return id;
 	}
 	
@@ -54,9 +56,7 @@ public class ActivityController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping("deleteAct/{actId}")
-	public void delActivity(HttpServletRequest req , int actId) throws Exception{
-		User user = getSessionUser(req);
-		
+	public void delActivity(@ModelAttribute(CommonConstant.USER_CONTEXT) User user , String actId) throws Exception{
 		actService.deleteActivity(actId,user.getUserId());
 	}
 	
@@ -65,8 +65,7 @@ public class ActivityController extends BaseController {
 	 * @param actId
 	 * @return
 	 */
-	public void updateActivity(HttpServletRequest req,@RequestBody Activity act)throws Exception{
-		User user = getSessionUser(req);
+	public void updateActivity(@ModelAttribute(CommonConstant.USER_CONTEXT) User user,@RequestBody Activity act)throws Exception{
 		actService.updateActivity(act, user.getUserId());
 	}
 	
@@ -80,7 +79,7 @@ public class ActivityController extends BaseController {
 	@RequestMapping(value = "loadAct/{actId}",produces = "text/html;charset=UTF-8")
 	@ResponseBody
 	@GoJsonFilter(mixin=UserFilter.class,target=User.class)
-	public Activity loadActByActId(@PathVariable int actId)throws Exception{
+	public Activity loadActByActId(@PathVariable String actId)throws Exception{
 		Activity act = actService.loadActbyActId(actId);
 		return act;
 	}
@@ -101,14 +100,11 @@ public class ActivityController extends BaseController {
 	}
 	
 	@RequestMapping("showPage/{actId}")
-	public ModelAndView showPage(HttpServletRequest req ,@PathVariable int actId) throws Exception{
+	public ModelAndView showPage(@ModelAttribute(CommonConstant.USER_CONTEXT) User user,@PathVariable String actId) throws Exception{
 		ModelAndView mav = new ModelAndView();
 		Activity act = actService.loadActbyActId(actId);
 		
 		//根据User查询当前活动的角色
-		
-		User user = getSessionUser(req);
-		
 		List<Role> roles = roleDao.loadCurUserRole4Act(user, act);
 		
 		if(roles!= null && roles.size()>0){

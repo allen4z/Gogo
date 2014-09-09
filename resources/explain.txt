@@ -1,0 +1,3 @@
+com.gogo.annotation
+此包下的注解用于过滤返回页面json时转换实体的属性。
+如Act中包含了user则可以通过此注解过滤掉user属性。

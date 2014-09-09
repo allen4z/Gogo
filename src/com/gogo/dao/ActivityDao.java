@@ -10,7 +10,7 @@ import com.gogo.domain.Activity;
 @Repository
 public class ActivityDao extends BaseDao<Activity>{
 
-	public Activity loadActbyActId(int actId){
+	public Activity loadActbyActId(String actId){
 		return get(actId);
 	}
 

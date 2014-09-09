@@ -5,12 +5,12 @@ import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.GenericGenerator;
 
 @Entity
 @Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
@@ -18,34 +18,37 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 public class User {
 	
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@Column(name="user_id")
-	private int userId;
+	@GenericGenerator(name = "idGenerator", strategy = "uuid")
+	@GeneratedValue(generator = "idGenerator")
+	@Column(name="user_id",length=32)
+	private String userId;
 	
 	//@Pattern(regexp="w{4,30}")
-	@Column(name="user_name",length=20)
+	@Column(name="user_name",length=20,nullable=false)
 	private String userName;
 	
 	//@Pattern(regexp="S{6,20}")
-	@Column(name="user_password",length=20)
+	@Column(name="user_password",length=32,nullable=false)
 	private String password;
 	
 	//@Pattern(regexp="w{4,30}")
 	@Column(name="user_alis_name",length=20)
 	private String alisName;
 	
-	@Column(name="user_register_time",length=10)
+	@Column(name="user_register_time",length=10,nullable=false)
 	private Date userRegisterTime;
 	
 	//用户状态：删除
-	@Column(name="user_state",length=1)
+	@Column(name="user_state",length=1,nullable=false)
 	private int userState;
-
 	
-	public int getUserId() {
+	@Column(name="update_time",length=10,nullable=false)
+	private Date update_time;
+
+	public String getUserId() {
 		return userId;
 	}
-	public void setUserId(int userId) {
+	public void setUserId(String userId) {
 		this.userId = userId;
 	}
 	public String getUserName() {
@@ -77,6 +80,12 @@ public class User {
 	}
 	public void setUserState(int userState) {
 		this.userState = userState;
+	}
+	public Date getUpdate_time() {
+		return update_time;
+	}
+	public void setUpdate_time(Date update_time) {
+		this.update_time = update_time;
 	}
 	
 }
