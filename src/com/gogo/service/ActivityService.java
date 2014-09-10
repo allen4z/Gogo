@@ -2,6 +2,7 @@ package com.gogo.service;
 
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.springframework.beans.BeanUtils;
@@ -11,12 +12,14 @@ import org.springframework.stereotype.Service;
 import com.gogo.dao.ActivityDao;
 import com.gogo.dao.RoleDao;
 import com.gogo.domain.Activity;
+import com.gogo.domain.City;
+import com.gogo.domain.Place;
 import com.gogo.domain.Role;
 import com.gogo.domain.User;
 import com.gogo.domain.UserAndRole;
 import com.gogo.exception.BusinessException;
 import com.gogo.helper.DomainStateHelper;
-import com.gogo.service.ActivityService;
+import com.gogo.map.GoMapHelper;
 import com.gogo.user.role.RoleHelper;
 
 @Service
@@ -90,5 +93,26 @@ public class ActivityService {
 		}else{
 			throw new BusinessException("登录用户无权更新此活动");
 		}
+	}
+	
+	/**
+	 * 查询附近活动
+	 * 1、如果有地区信息，则按地图查询活动信息
+	 * 2、如果没有地区信息，则按用户所在地查询活动信息
+	 * 3、如果没有任何信息，则按热度展示信息
+	 * @param place
+	 * @return
+	 */
+	public List<Activity> loadActByPlace(Place place,String ip){
+		List<Activity> queryList = null;
+		if(place != null && place.getLongitude() != 0 && place.getLongitude() != 0){
+			queryList = actDao.loadActByPlace(place);
+		}else if(ip != null ){
+			City city = GoMapHelper.getCityInfo(ip);
+			queryList = actDao.loadActbyAddr(city);
+		}else{
+			queryList = actDao.loadActByHotPoint();
+		}
+		return queryList;
 	}
 }

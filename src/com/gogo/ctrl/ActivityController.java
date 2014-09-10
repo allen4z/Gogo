@@ -21,6 +21,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.gogo.annotation.GoJsonFilter;
 import com.gogo.dao.RoleDao;
 import com.gogo.domain.Activity;
+import com.gogo.domain.Place;
 import com.gogo.domain.Role;
 import com.gogo.domain.User;
 import com.gogo.domain.filter.UserFilter;
@@ -82,6 +83,15 @@ public class ActivityController extends BaseController {
 	public Activity loadActByActId(@PathVariable String actId)throws Exception{
 		Activity act = actService.loadActbyActId(actId);
 		return act;
+	}
+	
+	
+	@RequestMapping(value = "loadActByPlace",produces = "text/html;charset=UTF-8")
+	@ResponseBody
+	public List<Activity> loadActByPlace(HttpServletRequest request, @RequestParam(required=false) Place place){
+		String remoteAddr =request.getRemoteAddr();
+		List<Activity> actList =  actService.loadActByPlace(place,remoteAddr);
+		return actList;
 	}
 	
 	@RequestMapping(value="upload",method=RequestMethod.POST)

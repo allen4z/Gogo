@@ -57,6 +57,8 @@ public class Activity {
 	@Column(name="act_state",length=1)
 	private int actState;
 	
+	@Column(name="act_state",length=10)
+	private int hotPoind;
 	
 	@ManyToOne
 	@JoinColumn(name="act_own_user")
@@ -65,6 +67,10 @@ public class Activity {
 	
 	@OneToMany(mappedBy="act",cascade=CascadeType.ALL)
 	private Set<UserAndAct> joinUser;
+	
+	@ManyToOne
+	@JoinColumn(name="place_id")
+	private Place place;
 	
 	@Column(name="update_time",length=10,nullable=false)
 	private Date update_time;
@@ -127,6 +133,26 @@ public class Activity {
 		this.actState = actState;
 	}
 	
+	public int getHotPoind() {
+		return hotPoind;
+	}
+
+
+	public void setHotPoind(int hotPoind) {
+		this.hotPoind = hotPoind;
+	}
+
+
+	public Place getPlace() {
+		return place;
+	}
+
+
+	public void setPlace(Place place) {
+		this.place = place;
+	}
+
+
 	public User getOwnUser() {
 		return ownUser;
 	}
