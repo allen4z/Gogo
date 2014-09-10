@@ -17,6 +17,10 @@ public class UserDao extends BaseDao<User>{
 	
 	
 	public User loadUserById(int userId){
+		return load(userId);
+	}
+	
+	public User getUserById(int userId){
 		return get(userId);
 	}
 	

@@ -31,7 +31,7 @@ public class ActivityService {
 	private RoleDao roleDao;
 	
 	public Activity loadActbyActId(String actId){
-		return actDao.loadActbyActId(actId);
+		return actDao.getActbyActId(actId);
 	}
 
 	public String saveActivity(Activity act,User user) {

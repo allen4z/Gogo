@@ -33,7 +33,7 @@ public class UserService{
 	
 	@Transactional
 	public User loadUserById(int userId){
-		return userDao.loadUserById(userId);
+		return userDao.getUserById(userId);
 	}
 	
 	public List<User> loadUserByName(String userName){

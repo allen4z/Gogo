@@ -14,6 +14,10 @@ import com.gogo.map.GoMapHelper;
 public class ActivityDao extends BaseDao<Activity>{
 
 	public Activity loadActbyActId(String actId){
+		return load(actId);
+	}
+	
+	public Activity getActbyActId(String actId){
 		return get(actId);
 	}
 
