@@ -58,9 +58,10 @@
 			};
 			
 			var success = function(id){
-				alert(id);
+				//alert(id);
 				//跳转到展示页面
-				location.href = "showPage/"+id;
+				//location.href = "showPage/"+id;
+				location.href = '<%=basePath %>user/main'; 
 			};
 			
 			send4Json(params,actionInfo,success,function(error){

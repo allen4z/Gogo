@@ -15,6 +15,7 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.GenericGenerator;
 
 @Entity
@@ -37,6 +38,7 @@ public class Role {
 	@ManyToOne
 	@JoinColumn(name="belongact")
 	@OrderBy("actSignTime ASC")
+	@Cascade(value=org.hibernate.annotations.CascadeType.SAVE_UPDATE)
 	private Activity belongAct;
 	
 	@OneToMany(mappedBy="role",cascade=CascadeType.ALL)

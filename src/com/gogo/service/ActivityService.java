@@ -34,12 +34,10 @@ public class ActivityService {
 		return actDao.getActbyActId(actId);
 	}
 
-	public String saveActivity(Activity act,User user) {
+	public void saveActivity(Activity act,User user) {
 		act.setActCreateTime(new Date());
 		act.setUpdate_time(new Date());
 		act.setOwnUser(user);
-		
-		String actId = (String) actDao.saveActivity(act);
 		
 		//设置为超级管理员
 		Role role = new Role();
@@ -55,8 +53,6 @@ public class ActivityService {
 		role.setBelongUser(belongUser);
 		
 		roleDao.save(role);
-		
-		return actId;
 	}
 
 	

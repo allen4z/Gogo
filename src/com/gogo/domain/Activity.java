@@ -7,7 +7,6 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -57,7 +56,7 @@ public class Activity {
 	@Column(name="act_state",length=1)
 	private int actState;
 	
-	@Column(name="act_state",length=10)
+	@Column(name="act_hotpoint",length=10)
 	private int hotPoind;
 	
 	@ManyToOne

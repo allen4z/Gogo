@@ -46,9 +46,8 @@ public class ActivityController extends BaseController {
 	 */
 	@RequestMapping("saveAct")
 	@ResponseBody
-	public String saveActivity(@ModelAttribute(CommonConstant.USER_CONTEXT) User user ,@RequestBody Activity act){
-		String id = actService.saveActivity(act,user);
-		return id;
+	public void saveActivity(@ModelAttribute(CommonConstant.USER_CONTEXT) User user ,@RequestBody Activity act){
+		actService.saveActivity(act,user);
 	}
 	
 	/**
