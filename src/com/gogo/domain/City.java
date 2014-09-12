@@ -16,15 +16,18 @@ import org.hibernate.annotations.GenericGenerator;
 @Table(name="t_city")
 public class City {
 
+	//城市主键
 	@Id
 	@GenericGenerator(name = "idGenerator", strategy = "uuid")
 	@GeneratedValue(generator = "idGenerator")
 	@Column(name="city_id",length=32)
 	private String cityId;
 	
+	//城市编码
 	@Column(name="city_code",length=10)
 	private String cityCode;
 	
+	//城市名称
 	@Column(name="city_name",length=20)
 	private String cityName;
 

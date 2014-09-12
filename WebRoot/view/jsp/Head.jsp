@@ -19,6 +19,11 @@
 		$("#doLogOut").click(function(){
 			location.href = '<%=basePath %>login/doLogout'; 
 		});
+
+		$("#searchActBtn").click(function(){
+			location.href = '<%=basePath %>activity/allAct'; 
+		});
+		
 	});
 </script>
 </head>
@@ -28,9 +33,9 @@
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 <button id="backMain">返回主页</button>
 &nbsp;
-<button id="searchActBtn" name="searchActBtn" >查找用户信息</button>
+<button id="searchUserBtn" >查找用户信息</button>
 &nbsp;
-<button id="searchUserBtn" name="searchActBtn" >查找附近活动</button>
+<button id="searchActBtn" >查找附近活动</button>
 &nbsp;
 <button id="doLogOut" name="doLogOut" >退出登录</button>
 <br/><br/>

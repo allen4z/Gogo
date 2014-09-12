@@ -9,6 +9,7 @@ import com.gogo.domain.Activity;
 import com.gogo.domain.City;
 import com.gogo.domain.Place;
 import com.gogo.map.GoMapHelper;
+import com.gogo.page.Page;
 
 @Repository
 public class ActivityDao extends BaseDao<Activity>{
@@ -38,7 +39,7 @@ public class ActivityDao extends BaseDao<Activity>{
 	 * @param place
 	 * @return
 	 */
-	public List<Activity> loadActByPlace(Place place) {
+	public Page<Activity> loadActByPlace(Place place) {
 		float longitude = place.getLongitude();
 		float latitude = place.getLatitude();
 		
@@ -49,7 +50,7 @@ public class ActivityDao extends BaseDao<Activity>{
 				+ " And p.latitude="+ (latitude-GoMapHelper.COORD_RANGE)
 				+ " order by p.hotPoint";
 		
-		List<Activity> actList = find(hql);
+		Page<Activity> actList = find(hql,1);
 		
 		return actList;
 	}
@@ -58,11 +59,11 @@ public class ActivityDao extends BaseDao<Activity>{
 	 * 根据当地热点地区信息查询活动信息
 	 * @return
 	 */
-	public List<Activity> loadActbyAddr(City city) {
+	public Page<Activity> loadActbyAddr(City city) {
 		
-		String hql="";
-		
-		return null;
+		String hql=" from Activity ";
+		Page<Activity> actPage = find(hql,1);
+		return actPage;
 	}
 
 	/**
@@ -70,9 +71,10 @@ public class ActivityDao extends BaseDao<Activity>{
 	 * @param ip
 	 * @return
 	 */
-	public List<Activity> loadActByHotPoint() {
-		// TODO Auto-generated method stub
-		return null;
+	public Page<Activity> loadActByHotPoint() {
+		String hql=" from Activity ";
+		Page<Activity> actPage = find(hql,1);
+		return actPage;
 	}
 
 

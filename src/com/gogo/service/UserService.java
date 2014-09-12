@@ -10,7 +10,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.gogo.dao.UserDao;
 import com.gogo.domain.Activity;
 import com.gogo.domain.User;
-import com.gogo.exception.BusinessException;
 import com.gogo.helper.DomainStateHelper;
 import com.gogo.helper.MD5Util;
 import com.gogo.page.Page;
@@ -69,13 +68,9 @@ public class UserService{
 	public User UserInfoCheck(User loginUser)  throws Exception{
 		
 		String dbPassword = MD5Util.MD5(loginUser.getPassword());
-		List<User> users =  userDao.loadUserByNameAndPassword(loginUser.getUserName(),dbPassword);
+		User user =  userDao.loadUserByNameAndPassword(loginUser.getUserName(),dbPassword);
 		
-		if(users != null && users.size()>0){
-			if(users.size()>1){
-				throw new BusinessException("用户名或密码错误！");
-			}
-			User user =users.get(0);
+		if(user != null ){
 			return user;
 		}
 		

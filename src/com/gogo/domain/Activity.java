@@ -13,6 +13,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
 import javax.persistence.Table;
+import javax.persistence.Version;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
@@ -23,16 +24,19 @@ import org.hibernate.annotations.GenericGenerator;
 @Table(name="t_act")
 public class Activity {
 	
+	//主键
 	@Id
 	@GenericGenerator(name = "idGenerator", strategy = "uuid")
 	@GeneratedValue(generator = "idGenerator")
 	@Column(name="act_id",length=32)
 	private String actId;
 	
+	//活动名称
 	@Column(name="act_name",length=20)
 	private String actName;
 	
-	@Column(name="act_contents",length=20)
+	//活动内容
+	@Column(name="act_contents",length=200)
 	private String actContent;
 	
 	//创建时间
@@ -51,43 +55,46 @@ public class Activity {
 	@Column(name="act_sign_time",length=10)
 	private Date actSignTime;
 	
-	//...
 	//活动状态 ：未发布、未发布
 	@Column(name="act_state",length=1)
 	private int actState;
 	
+	//热点
 	@Column(name="act_hotpoint",length=10)
 	private int hotPoind;
 	
+	//活动创建人
 	@ManyToOne
 	@JoinColumn(name="act_own_user")
 	@OrderBy("userName ASC")
 	private User ownUser;
 	
-	@OneToMany(mappedBy="act",cascade=CascadeType.ALL)
-	private Set<UserAndAct> joinUser;
-	
+	//活动拥有角色
+	@OneToMany(mappedBy="belongAct",cascade=CascadeType.ALL)
+	private Set<Role> roles;
+
+	//活动地点
 	@ManyToOne
 	@JoinColumn(name="place_id")
 	private Place place;
 	
+	//版本
+	@Version
 	@Column(name="update_time",length=10,nullable=false)
 	private Date update_time;
 	
+	
+	
 	public Activity(){
-		
 	}
 	
-
 	public String getActId() {
 		return actId;
 	}
 
-
 	public void setActId(String actId) {
 		this.actId = actId;
 	}
-
 
 	public String getActName() {
 		return actName;
@@ -157,12 +164,6 @@ public class Activity {
 	}
 	public void setOwnUser(User ownUser) {
 		this.ownUser = ownUser;
-	}
-	public Set<UserAndAct> getJoinUser() {
-		return joinUser;
-	}
-	public void setJoinUser(Set<UserAndAct> joinUser) {
-		this.joinUser = joinUser;
 	}
 
 	public Date getUpdate_time() {

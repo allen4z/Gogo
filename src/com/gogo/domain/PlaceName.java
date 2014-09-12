@@ -15,13 +15,31 @@ import org.hibernate.annotations.GenericGenerator;
 @Table(name="t_place_name")
 public class PlaceName {
 
+	//主键
 	@Id
 	@GenericGenerator(name = "idGenerator", strategy = "uuid")
 	@GeneratedValue(generator = "idGenerator")
 	@Column(name="place_name_id",length=32)
 	private String placeNameId;
 	
+	//地点名称
 	@Column(name="place_name",length=50)
 	private String placeName;
+
+	public String getPlaceNameId() {
+		return placeNameId;
+	}
+
+	public void setPlaceNameId(String placeNameId) {
+		this.placeNameId = placeNameId;
+	}
+
+	public String getPlaceName() {
+		return placeName;
+	}
+
+	public void setPlaceName(String placeName) {
+		this.placeName = placeName;
+	}
 	
 }

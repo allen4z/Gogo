@@ -3,7 +3,6 @@ package com.gogo.domain;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -11,31 +10,45 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.GenericGenerator;
 
+/**
+ * 角色和用户的关联关系
+ * @author allen
+ *
+ */
 @Entity
 @Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
 @Table(name="t_user_role")
 public class UserAndRole {
 	
-	
+	//主键
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@Column(name="user_role_id")
-	private int userAndRoleId;
+	@GenericGenerator(name = "idGenerator", strategy = "uuid")
+	@GeneratedValue(generator = "idGenerator")
+	@Column(name="user_role_id",length=32)
+	private String userAndRoleId;
 	
+	//用户信息
 	@ManyToOne
 	@JoinColumn(name="user_id")
+	@Cascade(value=org.hibernate.annotations.CascadeType.SAVE_UPDATE)
 	private User user;
 	
+	//角色信息
 	@ManyToOne
 	@JoinColumn(name="role_id")
+	@Cascade(value=org.hibernate.annotations.CascadeType.SAVE_UPDATE)
 	private Role role;
 
-	public int getUserAndRoleId() {
+
+
+	public String getUserAndRoleId() {
 		return userAndRoleId;
 	}
 
-	public void setUserAndRoleId(int userAndRoleId) {
+	public void setUserAndRoleId(String userAndRoleId) {
 		this.userAndRoleId = userAndRoleId;
 	}
 

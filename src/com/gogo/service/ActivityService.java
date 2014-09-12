@@ -1,16 +1,14 @@
 package com.gogo.service;
 
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.gogo.dao.ActivityDao;
-import com.gogo.dao.RoleDao;
+import com.gogo.dao.UserAndRoleDao;
 import com.gogo.domain.Activity;
 import com.gogo.domain.City;
 import com.gogo.domain.Place;
@@ -20,6 +18,7 @@ import com.gogo.domain.UserAndRole;
 import com.gogo.exception.BusinessException;
 import com.gogo.helper.DomainStateHelper;
 import com.gogo.map.GoMapHelper;
+import com.gogo.page.Page;
 import com.gogo.user.role.RoleHelper;
 
 @Service
@@ -28,7 +27,7 @@ public class ActivityService {
 	@Autowired
 	private ActivityDao actDao;
 	@Autowired
-	private RoleDao roleDao;
+	private UserAndRoleDao userAndRoleDao;
 	
 	public Activity loadActbyActId(String actId){
 		return actDao.getActbyActId(actId);
@@ -36,23 +35,19 @@ public class ActivityService {
 
 	public void saveActivity(Activity act,User user) {
 		act.setActCreateTime(new Date());
-		act.setUpdate_time(new Date());
 		act.setOwnUser(user);
 		
 		//设置为超级管理员
-		Role role = new Role();
-		role.setRoleCode(RoleHelper.ROLE_CODE);
-		role.setRoleName(RoleHelper.ROLE_NAME);
-		role.setBelongAct(act);
+		Role mrole = new Role();
+		mrole.setRoleCode(RoleHelper.MANAGER_CODE);
+		mrole.setRoleName(RoleHelper.MANAGER_NAME);
+		mrole.setBelongAct(act);
 		
 		UserAndRole uar = new UserAndRole();
-		uar.setRole(role);
+		uar.setRole(mrole);
 		uar.setUser(user);
-		Set<UserAndRole> belongUser = new HashSet<UserAndRole>();
-		belongUser.add(uar);
-		role.setBelongUser(belongUser);
 		
-		roleDao.save(role);
+		userAndRoleDao.save(uar);
 	}
 
 	
@@ -65,7 +60,7 @@ public class ActivityService {
 		User user = act.getOwnUser();
 		if(user.getUserId().equals(userId)){
 			act.setActState(DomainStateHelper.ACT_DEL);
-			act.setUpdate_time(new Date());
+//			act.setUpdate_time(new Date());
 			actDao.updateActivity(act);
 		}else{
 			throw new BusinessException("登录用户无权删除此活动");
@@ -84,7 +79,7 @@ public class ActivityService {
 		if(user.getUserId().equals(userId)){
 			BeanUtils.copyProperties(act, act4db);
 			DomainStateHelper.copyPriperties(act, act4db);
-			act4db.setUpdate_time(new Date());
+//			act4db.setUpdate_time(new Date());
 			actDao.updateActivity(act4db);
 		}else{
 			throw new BusinessException("登录用户无权更新此活动");
@@ -99,8 +94,8 @@ public class ActivityService {
 	 * @param place
 	 * @return
 	 */
-	public List<Activity> loadActByPlace(Place place,String ip){
-		List<Activity> queryList = null;
+	public Page<Activity> loadActByPlace(Place place,String ip){
+		Page<Activity> queryList = null;
 		if(place != null && place.getLongitude() != 0 && place.getLongitude() != 0){
 			queryList = actDao.loadActByPlace(place);
 		}else if(ip != null ){

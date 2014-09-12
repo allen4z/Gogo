@@ -44,7 +44,7 @@ public class LoginController extends BaseController{
 			setSessionUser(session, dbUser);
 			toUrl = "redirect:/user/main";
 		}else{
-			String error = "password failed";
+			String error = "用户名或密码错误";
 			mav.addObject(ERROR_MSG_KEY, error);
 			toUrl = "redirect:/index.jsp";
 		}

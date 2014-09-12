@@ -2,6 +2,7 @@ package com.gogo.dao;
 
 import java.util.List;
 
+import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 
 import com.gogo.domain.Activity;
@@ -30,10 +31,15 @@ public class UserDao extends BaseDao<User>{
 		return userList;
 	}
 	
-	public List<User> loadUserByNameAndPassword(String userName,String password){
-		String hql = "from User u where u.userName='"+userName+"' and u.password='"+password+"'";
-		List<User> userList  = find(hql);
-		return userList;
+	public User loadUserByNameAndPassword(String userName,String password){
+		
+		User user = (User) getSession().createCriteria(User.class)
+				.add(Restrictions.eq("userName",userName))
+				.add(Restrictions.eq("password",password))
+				.setMaxResults(1)
+				.uniqueResult();
+		
+		return user;
 	}
 	
 	public List<User> loadUserByName(String userName,int curPage,int pagesize){

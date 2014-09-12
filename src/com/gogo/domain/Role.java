@@ -18,33 +18,41 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.GenericGenerator;
 
+/**
+ * 活动角色
+ * @author allen
+ *
+ */
 @Entity
 @Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
 @Table(name="t_role")
 public class Role {
 
+	//主键
 	@Id
 	@GenericGenerator(name = "idGenerator", strategy = "uuid")
 	@GeneratedValue(generator = "idGenerator")
 	@Column(name="role_id",length=32)
 	private String roleId;
 	
+	//角色编码
 	@Column(name="role_code",length=10)
 	private String roleCode;
 	
+	//角色名称
 	@Column(name="role_name",length=10)
 	private String roleName;
 	
+	//角色所在活动
 	@ManyToOne
 	@JoinColumn(name="belongact")
 	@OrderBy("actSignTime ASC")
 	@Cascade(value=org.hibernate.annotations.CascadeType.SAVE_UPDATE)
 	private Activity belongAct;
 	
+	//角色所有人员
 	@OneToMany(mappedBy="role",cascade=CascadeType.ALL)
 	private Set<UserAndRole> belongUser;
-
-
 
 	public String getRoleId() {
 		return roleId;

@@ -3,6 +3,7 @@ package com.gogo.ctrl;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.apache.log4j.Logger;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import com.gogo.domain.User;
@@ -13,9 +14,13 @@ import com.gogo.helper.CommonConstant;
 public class BaseController {
 	protected static final String ERROR_MSG_KEY = "errorMsg";
 	
+	Logger log = Logger.getLogger(BaseController.class);
+	
 	@ExceptionHandler
 	public String exp(HttpServletRequest req,Exception ex){
 		req.setAttribute("ex", ex);
+		log.error(ex.toString());
+		ex.printStackTrace();
 		if(ex instanceof BusinessException){
 			return "error/error-business";
 		}else if(ex instanceof ParameterException) {

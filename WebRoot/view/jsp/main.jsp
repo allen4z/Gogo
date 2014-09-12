@@ -12,11 +12,6 @@
 <head>
 <title>Gogo-Main</title>
 <script type="text/javascript">
-	$(document).ready(function(){
-		$("#searchActBtn").click(function(){
-			location.href = "view/jsp/main.jsp";
-		});
-	});
 	
 	$(document).ready(function(){
 		$("#searchUserBtn").click(function(){
