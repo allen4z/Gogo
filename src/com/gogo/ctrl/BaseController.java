@@ -5,8 +5,10 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.gogo.domain.User;
+import com.gogo.exception.Business4JsonException;
 import com.gogo.exception.BusinessException;
 import com.gogo.exception.ParameterException;
 import com.gogo.helper.CommonConstant;
@@ -28,6 +30,13 @@ public class BaseController {
 		} else {
 			return "error/error";
 		}
+	}
+	
+	
+	@ExceptionHandler(value=Business4JsonException.class)
+	@ResponseBody
+	public String exp4Json(Exception ex){
+		return ex.getMessage();
 	}
 	
 	protected User getSessionUser(HttpSession session){

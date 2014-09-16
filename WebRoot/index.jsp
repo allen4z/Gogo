@@ -18,7 +18,7 @@
 			var f_password = $("#u_password").val();
 			var params = {
 				userName : f_userName,
-				password : f_password
+				userPassword : f_password
 			};
 			var actionInfo = 'login/doLogin4json';
 			var success = function(result) {
@@ -63,7 +63,7 @@
 	<div>
 	<form id="loginForm" action="login/doLogin" method="post">
 		用户名：<input id="userName" name='userName' type="text" /> 
-		密码：<input id="password" name='password' type="password" />
+		密码：<input id="userPassword" name='userPassword' type="password" />
 		<input id="loginBtn" value="登录" type="submit">
 	</form>
 	</div>

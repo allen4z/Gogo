@@ -10,7 +10,7 @@
 			var f_userName = $("#u_userName").val();
 			var f_password = $("#u_password").val();
 			var f_alisName = $("#u_alisName").val();
-			var params = {userName:f_userName,password:f_password,alisName:f_alisName};
+			var params = {userName:f_userName,userPassword:f_password,alisName:f_alisName};
 			var actionInfo = 'user/doRegister';
 			var success = function(result) { 
 					if(result == true){
@@ -18,8 +18,10 @@
 	        			location.href = '<%=basePath%>';		        			
 					}
 		        };
-		    var failed = function(){
-		        	alert('注册失败');
+		    var failed = function(XMLHttpRequest,textStatus, errorThrown){
+		    	// alert(XMLHttpRequest.status);
+                // alert(XMLHttpRequest.readyState);
+		         alert(XMLHttpRequest.responseText);
 		        };
 		        
 		    send4Json(params,actionInfo,success,failed);

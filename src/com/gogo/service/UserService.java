@@ -24,8 +24,8 @@ public class UserService{
 		user.setUserRegisterTime(new Date());
 		user.setUpdate_time(new Date());
 		//使用MD5加密用户密码
-		String password = user.getPassword();
-		user.setPassword(MD5Util.MD5(password));
+		String password = user.getUserPassword();
+		user.setUserPassword(MD5Util.MD5(password));
 		
 		userDao.saveUser(user);
 	}
@@ -67,7 +67,7 @@ public class UserService{
 	 */
 	public User UserInfoCheck(User loginUser)  throws Exception{
 		
-		String dbPassword = MD5Util.MD5(loginUser.getPassword());
+		String dbPassword = MD5Util.MD5(loginUser.getUserPassword());
 		User user =  userDao.loadUserByNameAndPassword(loginUser.getUserName(),dbPassword);
 		
 		if(user != null ){

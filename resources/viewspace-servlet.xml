@@ -25,9 +25,15 @@
 			p:suffix=".jsp"
 	/>
 	
+	    <!-- 以下 validator  ConversionService 在使用 mvc:annotation-driven 会 自动注册-->
+    <bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean">
+        <property name="providerClass"  value="org.hibernate.validator.HibernateValidator"/>
+        <!-- 如果不加默认到 使用classpath下的 ValidationMessages.properties -->
+        <property name="validationMessageSource" ref="messageSource"/>
+    </bean>
+    <bean id="conversion-service" class="org.springframework.format.support.FormattingConversionServiceFactoryBean"  /> 
 	
-	
-	<mvc:annotation-driven>
+	<mvc:annotation-driven validator="validator" conversion-service="conversion-service">
 		<mvc:message-converters>
 			<bean class="com.gogo.helper.UTF8StringHttpMessageConverter"/>
 		</mvc:message-converters>

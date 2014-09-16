@@ -24,6 +24,18 @@
 	
 	<bean id="localeResolver" class="org.springframework.web.servlet.i18n.CookieLocaleResolver" /> 
 
+ <!-- 国际化的消息资源文件 -->
+    <bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+        <property name="basenames">
+            <list>
+                <!-- 在web环境中一定要定位到classpath 否则默认到当前web应用下找  -->
+                <value>classpath:messages</value>
+            </list>
+        </property>
+        <property name="defaultEncoding" value="UTF-8"/>
+        <property name="cacheSeconds" value="60"/>
+    </bean>
+
 	<context:property-placeholder location="classpath:config.properties" />
 	
 	<!-- 配置数据源 -->

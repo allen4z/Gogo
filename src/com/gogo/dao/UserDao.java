@@ -35,7 +35,7 @@ public class UserDao extends BaseDao<User>{
 		
 		User user = (User) getSession().createCriteria(User.class)
 				.add(Restrictions.eq("userName",userName))
-				.add(Restrictions.eq("password",password))
+				.add(Restrictions.eq("userPassword",password))
 				.setMaxResults(1)
 				.uniqueResult();
 		

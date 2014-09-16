@@ -31,12 +31,12 @@ public class LoginController extends BaseController{
 	@RequestMapping(value="doLogin",method=RequestMethod.POST)
 	public ModelAndView login(HttpSession session, 
 				@RequestParam("userName") String userName,
-				@RequestParam("password") String password) throws Exception{
+				@RequestParam("userPassword") String password) throws Exception{
 		
 		ModelAndView mav = new ModelAndView();
 		User loginUser = new User();
 		loginUser.setUserName(userName);
-		loginUser.setPassword(password);
+		loginUser.setUserPassword(password);
 		
 		String toUrl;
 		User dbUser = userService.UserInfoCheck(loginUser);
@@ -77,13 +77,13 @@ public class LoginController extends BaseController{
 	@ResponseBody
 	public User login4phone(HttpServletRequest req, 
 				@RequestParam("userName") String userName,
-				@RequestParam("password") String password) throws Exception{
+				@RequestParam("userPassword") String password) throws Exception{
 		
 		log.debug("userName:"+userName +"start login");
 		
 		User usr = new User();
 		usr.setUserName(userName);
-		usr.setPassword(password);
+		usr.setUserPassword(password);
 		return usr;
 		
 	}

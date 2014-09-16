@@ -8,10 +8,13 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Version;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.validator.constraints.Length;
 
 @Entity
 @Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
@@ -26,17 +29,19 @@ public class User {
 	private String userId;
 	
 	//用户名称
-	//@Pattern(regexp="w{4,30}")
+//	@Length(min=4,max=30,message="{user.username.legth.error}")
+//	@NotNull(message="{user.username.not.empty}")
+	@Pattern(regexp = "[A-Za-z0-9]{5,20}", message = "{user.username.legth.error}") //java validator验证（用户名字母数字组成，长度为5-10）
 	@Column(name="user_name",length=20,nullable=false)
 	private String userName;
 	
 	//用户密码
-	//@Pattern(regexp="S{6,20}")
+	@Pattern(regexp = "[A-Za-z0-9]{6,32}", message = "{user.password.legth.error}") 
 	@Column(name="user_password",length=32,nullable=false)
-	private String password;
+	private String userPassword;
 	
 	//昵称
-	//@Pattern(regexp="w{4,30}")
+	@Pattern(regexp = "[A-Za-z0-9]{2,20}", message = "{user.alisname.legth.error}") 
 	@Column(name="user_alis_name",length=20)
 	private String alisName;
 	
@@ -71,11 +76,12 @@ public class User {
 	public void setAlisName(String alisName) {
 		this.alisName = alisName;
 	}
-	public String getPassword() {
-		return password;
+
+	public String getUserPassword() {
+		return userPassword;
 	}
-	public void setPassword(String password) {
-		this.password = password;
+	public void setUserPassword(String userPassword) {
+		this.userPassword = userPassword;
 	}
 	public Date getUserRegisterTime() {
 		return userRegisterTime;

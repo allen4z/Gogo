@@ -2,8 +2,14 @@ package com.gogo.ctrl;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.Errors;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -16,6 +22,8 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.gogo.domain.Activity;
 import com.gogo.domain.User;
+import com.gogo.exception.Business4JsonException;
+import com.gogo.exception.BusinessException;
 import com.gogo.helper.CommonConstant;
 import com.gogo.page.Page;
 import com.gogo.service.UserService;
@@ -36,7 +44,17 @@ public class UserController extends BaseController{
 	 */
 	@RequestMapping("doRegister")
 	@ResponseBody
-	public boolean registerUser(@RequestBody User user){	
+	public boolean registerUser(@Valid @RequestBody User user,BindingResult result){
+		
+		//验证用户信息
+		if(result.hasErrors()){
+			List<ObjectError> errorList = result.getAllErrors();
+			StringBuffer errMsg = new StringBuffer();
+			for (ObjectError oe : errorList) {
+				errMsg.append(oe.getDefaultMessage()+"\n");
+			}
+			throw new Business4JsonException(errMsg.toString());
+		}
 		userService.saveUser(user);
 		return true;
 	}
@@ -126,9 +144,33 @@ public class UserController extends BaseController{
 		ModelAndView mav = new ModelAndView();
 		String userId = user.getUserId();
 		Page<Activity> ownAct = userService.loadOwnActivitesByUser(userId);
+		
 		mav.addObject("page",ownAct );
 		mav.setViewName("main");
+		
 		return mav;
 	}
+	
+	
+//    @RequestMapping(value = "/user/add", method = {RequestMethod.GET})
+//    public String toAdd(Model model) {
+//        
+//        if(!model.containsAttribute("command")) {
+//            model.addAttribute("command", new User());
+//        }
+//        return "user/add";
+//    }
+//	
+//	 @RequestMapping(value = "/user/add", method = {RequestMethod.POST})
+//	    public String add(Model model, @ModelAttribute("command") @Valid User command, BindingResult result) {
+//	        
+//	        //如果有验证错误 返回到form页面
+//	        if(result.hasErrors()) {
+//	            model.addAttribute("command", command);
+//	            return toAdd(model);
+//	        }
+//	         userService.saveUser(command);
+//	        return "redirect:/user/success";
+//	    }
 	
 }
