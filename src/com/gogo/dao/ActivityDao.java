@@ -13,6 +13,13 @@ import com.gogo.page.Page;
 
 @Repository
 public class ActivityDao extends BaseDao<Activity>{
+	
+	
+	private static final String HQL_AILS=" activity ";
+	
+	private static final String HQL_LIST="FROM Activity"; 
+	
+	private static final String HQL_COUNT="SELECT COUNT(*) FROM Activity"; 
 
 	public Activity loadActbyActId(String actId){
 		return load(actId);
@@ -33,37 +40,78 @@ public class ActivityDao extends BaseDao<Activity>{
 	public void deleteActivity(Activity act) {
 		remove(act);
 	}
+	
+	
+	
 
+	public List<Activity> loadOwnActivitesByUser(String userId,int curPage,int pagesize) {
+		String hql = "select act from Activity act left join act.ownUser ou where ou.userId='"+userId+"'";
+		List<Activity> list= findByPage(hql,curPage,pagesize);
+		
+		return list;
+	}
+	
+	public int loadOwnActivitesByUserCount(String userId){
+		String hql = "select count(act) from Activity act left join act.ownUser ou where ou.userId='"+userId+"'";
+		return  this.<Number>getCount(hql, null).intValue();
+	}
+	
+	
+	
 	/**
 	 * 根据地区信息查询活动信息
 	 * @param place
 	 * @return
 	 */
-	public Page<Activity> loadActByPlace(Place place) {
+	public List<Activity> loadActByPlace(Place place,int pn,int pageSize) {
+		String hql = getHql4Place(place,false);
+		List<Activity> actList =findByPage(hql, pn, pageSize, null);
+		return actList;
+	}
+
+	
+	
+	public int lodActByPlaceCount(Place place){
+		String hql = getHql4Place(place, true);
+		return  this.<Number>getCount(hql, null).intValue();
+	}
+	
+	
+	private String getHql4Place(Place place,boolean isCount) {
 		float longitude = place.getLongitude();
 		float latitude = place.getLatitude();
+		StringBuffer hql = new StringBuffer();
 		
-		String hql = " select a from Activity a join a.place p "
+		if(isCount){
+			hql.append("select count(a) ");
+		}else{
+			hql.append("select a ");
+		}
+		
+		hql.append("  from Activity a join a.place p "
 				+ " where p.longitude>="+(longitude-GoMapHelper.COORD_RANGE)
 				+ " And p.longitude<="+(longitude+GoMapHelper.COORD_RANGE)
 				+ " And p.latitude="+ (latitude-GoMapHelper.COORD_RANGE)
 				+ " And p.latitude="+ (latitude-GoMapHelper.COORD_RANGE)
-				+ " order by p.hotPoint";
-		
-		Page<Activity> actList = find(hql,1);
-		
-		return actList;
+				+ " order by p.hotPoint");
+		return hql.toString();
 	}
+	
 	
 	/**
 	 * 根据当地热点地区信息查询活动信息
 	 * @return
 	 */
-	public Page<Activity> loadActbyAddr(City city) {
+	public List<Activity> loadActbyAddr(City city,int pn,int pageSize) {
 		
 		String hql=" from Activity ";
-		Page<Activity> actPage = find(hql,1);
+		List<Activity> actPage = findByPage(hql, pn, pageSize, null);
 		return actPage;
+	}
+	
+	public int loadActbyAddrCount(City city){
+		String hql="select count(*) from Activity ";
+		return  this.<Number>getCount(hql, null).intValue();
 	}
 
 	/**
@@ -73,7 +121,7 @@ public class ActivityDao extends BaseDao<Activity>{
 	 */
 	public Page<Activity> loadActByHotPoint() {
 		String hql=" from Activity ";
-		Page<Activity> actPage = find(hql,1);
+		Page<Activity> actPage = null;
 		return actPage;
 	}
 

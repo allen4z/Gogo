@@ -18,6 +18,7 @@ import com.gogo.exception.BusinessException;
 import com.gogo.helper.DomainStateHelper;
 import com.gogo.map.GoMapHelper;
 import com.gogo.page.Page;
+import com.gogo.page.PageUtil;
 import com.gogo.user.role.RoleHelper;
 
 @Service
@@ -93,13 +94,13 @@ public class ActivityService {
 	 * @param place
 	 * @return
 	 */
-	public Page<Activity> loadActByPlace(Place place,String ip){
+	public Page<Activity> loadActByPlace(Place place,String ip,int currPage,int pageSize){
 		Page<Activity> queryList = null;
 		if(place != null && place.getLongitude() != 0 && place.getLongitude() != 0){
-			queryList = actDao.loadActByPlace(place);
+			queryList = PageUtil.getPage(actDao.lodActByPlaceCount(place),currPage , actDao.loadActByPlace(place, currPage, pageSize), pageSize);
 		}else if(ip != null ){
 			City city = GoMapHelper.getCityInfo(ip);
-			queryList = actDao.loadActbyAddr(city);
+			queryList =PageUtil.getPage(actDao.loadActbyAddrCount(city), currPage, actDao.loadActbyAddr(city, currPage, pageSize), pageSize);
 		}else{
 			queryList = actDao.loadActByHotPoint();
 		}

@@ -12,12 +12,6 @@ import org.slf4j.LoggerFactory;
 
 import com.gogo.helper.KeySynchronizer;
 
-
-/**
- * @author  Zhang Kaitao
- * @version 1.0, Sep 17, 2010
- * @since 1.0
- */
 public class PageUtil {
     
     private static final Logger LOGGER = LoggerFactory.getLogger(PageUtil.class);

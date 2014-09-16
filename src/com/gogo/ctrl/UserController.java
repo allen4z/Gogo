@@ -117,8 +117,8 @@ public class UserController extends BaseController{
 	 */
 	@RequestMapping("loadOwnAct/{userId}")
 	@ResponseBody
-	public Page<Activity> loadOwnActivitesByUser(String userId){
-		return userService.loadOwnActivitesByUser(userId);
+	public Page<Activity> loadOwnActivitesByUser(String userId,@RequestParam(defaultValue="0",required=false) int pn){
+		return userService.loadOwnActivitesByUser(userId,pn,CommonConstant.PAGE_SIZE);
 	}
 	
 	
@@ -137,11 +137,12 @@ public class UserController extends BaseController{
 	 * @return
 	 */
 	@RequestMapping(value="main")
-	public ModelAndView backUserMain(@ModelAttribute(CommonConstant.USER_CONTEXT) User user){
+	public ModelAndView backUserMain(
+			@ModelAttribute(CommonConstant.USER_CONTEXT) User user,
+			@RequestParam(value="pn",defaultValue="0",required=false) int currPage){
 		ModelAndView mav = new ModelAndView();
 		String userId = user.getUserId();
-		Page<Activity> ownAct = userService.loadOwnActivitesByUser(userId);
-		
+		Page<Activity> ownAct = userService.loadOwnActivitesByUser(userId,currPage,CommonConstant.PAGE_SIZE);
 		mav.addObject("page",ownAct );
 		mav.setViewName("main");
 		

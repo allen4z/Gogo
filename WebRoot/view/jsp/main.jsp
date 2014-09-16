@@ -61,9 +61,8 @@
 	%>
 	
 </table>
-</div><%-- 
-<pagenav:page url="user/main"></pagenav:page> --%>
-<pagenav:pageV2 url="user/main"></pagenav:pageV2>
+</div>
+<pagenav:pageV2 url="user/main"/>
 <div id="joinActTable">
 <!-- <table>
 	<tr>

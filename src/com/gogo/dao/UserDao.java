@@ -57,12 +57,6 @@ public class UserDao extends BaseDao<User>{
 	}
 
 
-	public Page<Activity> loadOwnActivitesByUser(String userId) {
-		String hql = "select act from Activity act left join act.ownUser ou where ou.userId='"+userId+"'";
-		Page<Activity> actPage = find(hql,1);
-		return actPage;
-	}
-
 
 	public void updateUser(User user) {
 		update(user);

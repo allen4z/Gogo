@@ -94,9 +94,11 @@ public class ActivityController extends BaseController {
 	@RequestMapping(value = "loadActByPlace")
 	@ResponseBody
 //	@GoJsonFilter(mixin=UserFilter.class,target=User.class)
-	public Page<Activity> loadActByPlace(HttpServletRequest request, @RequestParam(required=false) Place place){
+	public Page<Activity> loadActByPlace(HttpServletRequest request, 
+			@RequestParam(required=false) Place place,
+			@RequestParam(defaultValue="0",required=false) int pn){
 		String remoteAddr =request.getRemoteAddr();
-		Page<Activity> queryList =  actService.loadActByPlace(place,remoteAddr);
+		Page<Activity> queryList =  actService.loadActByPlace(place,remoteAddr,pn,CommonConstant.PAGE_SIZE);
 		
 		return queryList;
 	}

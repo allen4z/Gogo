@@ -3,6 +3,7 @@ package com.gogo.dao;
 import java.io.Serializable;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.util.Date;
 import java.util.List;
 
 import org.hibernate.Criteria;
@@ -11,9 +12,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.gogo.page.IPageContext;
-import com.gogo.page.Page;
-import com.gogo.page.QueryPageContext;
+import com.gogo.page.PageUtil;
 
 public class BaseDao<T> {
 	
@@ -97,13 +96,6 @@ public class BaseDao<T> {
 			return queryObject.list();
 	    }
 	    
-	    public Page find(String hql,int i) {
-	        Query queryObject = getSession().createQuery(hql);
-	        List list = queryObject.list();
-	        IPageContext<T> pageContext = new QueryPageContext<T>(list.size(),1, list);
-			return  pageContext.getPage(i);
-	    }
-
 	    /**
 	     * 执行带参的HQL查询
 	     *
@@ -123,17 +115,55 @@ public class BaseDao<T> {
 	    }
 
 
-	    public Session getSession() {
-	        return sessionFactory.getCurrentSession();
+	    
+	 
+	    
+	    /**
+	     * 分页查询
+	     * @param hql
+	     * @param page
+	     * @param pagesize
+	     * @return
+	     */
+	    public List findByPage(String hql, int pn,int pageSize, Object... paramlist){
+	    	
+	    	  Query query = getSession().createQuery(hql);
+	          setParameters(query, paramlist);
+	          if (pn > -1 && pageSize > -1) {
+	              query.setMaxResults(pageSize);
+	              int start = PageUtil.getPageStart(pn, pageSize);
+	              if (start != 0) {
+	                  query.setFirstResult(start);
+	              }
+	          }
+	          if (pn < 0) {
+	              query.setFirstResult(0);
+	          }
+	          List<T> results = query.list();
+	          return results;
 	    }
 	    
-	    //分页查询
-	    public List findByPage(String hql, int page,int pagesize){
-	    	Query q = getSession().createQuery(hql);
-	    	//开始位置
-	    	int start = (page-1)*pagesize+1;
-	    	q.setFirstResult(start);
-	    	q.setMaxResults(pagesize);
-	    	return q.list(); 
+	    
+	    public  <T>T getCount(String hql,Object...paramlist){
+	    	  Query query = getSession().createQuery(hql);
+	          setParameters(query, paramlist);
+	          return (T) query.uniqueResult();
+	    }
+	    
+	    protected void setParameters(Query query, Object[] paramlist) {
+	        if (paramlist != null) {
+	            for (int i = 0; i < paramlist.length; i++) {
+	                if(paramlist[i] instanceof Date) {
+	                    //TODO 难道这是bug 使用setParameter不行？？
+	                    query.setTimestamp(i, (Date)paramlist[i]);
+	                } else {
+	                    query.setParameter(i, paramlist[i]);
+	                }
+	            }
+	        }
+	    }
+	    
+	    public Session getSession() {
+	        return sessionFactory.getCurrentSession();
 	    }
 }

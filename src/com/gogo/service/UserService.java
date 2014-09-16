@@ -7,17 +7,23 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.gogo.dao.ActivityDao;
 import com.gogo.dao.UserDao;
 import com.gogo.domain.Activity;
 import com.gogo.domain.User;
+import com.gogo.helper.CommonConstant;
 import com.gogo.helper.DomainStateHelper;
 import com.gogo.helper.MD5Util;
 import com.gogo.page.Page;
+import com.gogo.page.PageUtil;
 
 @Service
 public class UserService{
 	@Autowired
 	private UserDao userDao;
+	
+	@Autowired
+	private ActivityDao actDao;
 	
 	public void saveUser(User user){
 		user.setUserState(DomainStateHelper.USER_NORMAL_STATE);
@@ -54,8 +60,11 @@ public class UserService{
 		return userDao.loadJoinActivitesByUser(userId);
 	}
 
-	public Page<Activity> loadOwnActivitesByUser(String userId) {
-		return userDao.loadOwnActivitesByUser(userId);
+	public Page<Activity> loadOwnActivitesByUser(String userId,int currPage,int pageSize) {
+		
+		return PageUtil.getPage(actDao.loadOwnActivitesByUserCount(userId), 0, actDao.loadOwnActivitesByUser(userId, currPage, pageSize), pageSize);
+		
+		//return actDao.loadOwnActivitesByUser(userId);
 	}
 	
 	
