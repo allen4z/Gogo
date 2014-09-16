@@ -13,6 +13,13 @@ import com.gogo.exception.BusinessException;
 import com.gogo.exception.ParameterException;
 import com.gogo.helper.CommonConstant;
 
+/**
+ * 控制父类
+ * 提供获得session中用户的方法
+ * 异常拦截方法
+ * @author allen
+ *
+ */
 public class BaseController {
 	protected static final String ERROR_MSG_KEY = "errorMsg";
 	

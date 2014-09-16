@@ -29,7 +29,11 @@ import com.gogo.helper.CommonConstant;
 import com.gogo.page.Page;
 import com.gogo.service.ActivityService;
 
-
+/**
+ * 活动控制类
+ * @author allen
+ *
+ */
 @Controller
 @RequestMapping("/activity")
 @SessionAttributes(CommonConstant.USER_CONTEXT)
@@ -75,8 +79,6 @@ public class ActivityController extends BaseController {
 	 * @param actId
 	 * @return
 	 */
-	
-	
 	@RequestMapping(value = "loadAct/{actId}",produces = "text/html;charset=UTF-8")
 	@ResponseBody
 	@GoJsonFilter(mixin=UserFilter.class,target=User.class)
@@ -103,6 +105,12 @@ public class ActivityController extends BaseController {
 		return queryList;
 	}
 	
+	/**
+	 * 文件上传
+	 * @param file
+	 * @return
+	 * @throws Exception
+	 */
 	@RequestMapping(value="upload",method=RequestMethod.POST)
 	@ResponseBody
 	public String uploadImage(@RequestParam MultipartFile file) throws Exception {
@@ -113,17 +121,16 @@ public class ActivityController extends BaseController {
 		return "faild";
 	}
 	
-	@RequestMapping("addPage")
-	public String addPage() throws Exception{
-		return "act/addActPage";
-	}
+
 	
-	@RequestMapping("allAct")
-	public String allActPage() throws Exception{
-		return "act/showAllPage";
-	}
-	
-	@RequestMapping("showPage/{actId}")
+	/**
+	 * 进入活动信息页
+	 * @param user
+	 * @param actId
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping("toShowActPage/{actId}")
 	public ModelAndView showPage(@ModelAttribute(CommonConstant.USER_CONTEXT) User user,@PathVariable String actId) throws Exception{
 		ModelAndView mav = new ModelAndView();
 		Activity act = actService.loadActbyActId(actId);
@@ -140,4 +147,23 @@ public class ActivityController extends BaseController {
 		return mav;
 	}
 
+	/**
+	 * 进入新增活动页面
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping("toAddActPage")
+	public String addPage() throws Exception{
+		return "act/addActPage";
+	}
+	
+	/**
+	 * 进入附近活动页面
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping("toShowAllPage")
+	public String allActPage() throws Exception{
+		return "act/showAllPage";
+	}
 }

@@ -25,6 +25,11 @@ import com.gogo.helper.CommonConstant;
 import com.gogo.page.Page;
 import com.gogo.service.UserService;
 
+/**
+ * 用户管理控制器
+ * @author allen
+ *
+ */
 @Controller
 @RequestMapping("/user")
 @SessionAttributes(CommonConstant.USER_CONTEXT)

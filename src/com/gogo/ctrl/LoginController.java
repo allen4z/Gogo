@@ -18,6 +18,11 @@ import com.gogo.domain.User;
 import com.gogo.service.UserService;
 
 
+/**
+ * 登录控制器
+ * @author allen
+ *
+ */
 @Controller
 @RequestMapping("/login")
 public class LoginController extends BaseController{

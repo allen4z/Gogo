@@ -25,7 +25,7 @@
 <body>
 <br/>
 <br/>
-<form action="activity/addPage" method="post">
+<form action="activity/toAddActPage" method="post">
 <input id="addActBtn" name="addActBtn"  type="submit" value="新增活動"></input>
 </form>
 
@@ -52,7 +52,7 @@
 			for(Activity act : list){
 		%>
 		<tr>
-			<td><a href="activity/showPage/<%=act.getActId()%>"><%=act.getActName() %></a></td>
+			<td><a href="activity/toShowActPage/<%=act.getActId()%>"><%=act.getActName() %></a></td>
 			<td><%=act.getActContent() %></td>
 		</tr>
 		<%

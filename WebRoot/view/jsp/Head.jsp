@@ -21,7 +21,7 @@
 		});
 
 		$("#searchActBtn").click(function(){
-			location.href = '<%=basePath %>activity/allAct'; 
+			location.href = '<%=basePath %>activity/toShowAllPage'; 
 		});
 		
 	});
