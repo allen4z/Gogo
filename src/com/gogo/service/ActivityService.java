@@ -1,7 +1,6 @@
 package com.gogo.service;
 
 import java.util.Date;
-import java.util.List;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
