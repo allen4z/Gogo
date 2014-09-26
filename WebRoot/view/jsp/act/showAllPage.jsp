@@ -2,6 +2,7 @@
 <%@page import="com.gogo.domain.Role"%>
 <%@page import="com.gogo.domain.Activity"%>
 <%@ page language="java" import="java.util.*" pageEncoding="utf-8"%>
+<%@ taglib prefix="pagenav" uri="/view/tld/commons.tld"%>
 <%@include file="../Head.jsp" %>
 
 <%-- <% 
@@ -11,79 +12,37 @@
 <head>
 <title>Gogo-Main</title>
 <script type="text/javascript">
-function onLoad(){
-	$("#actInfo").hide();	
-	var action = 'activity/loadActByPlace';
+function getNearAct(pn){
+	var action = 'activity/loadActByPlace?pn='+pn;
 	var success = function(page){
 		var acts = page.items;
-		createTable(acts) ;
+		templatefill(acts);
 	};
-	
-	var faild = function(error){
-		alert('error '+error);
-	}
-	send4Json(null,action,success,faild);
+	var failed = function(XMLHttpRequest,textStatus, errorThrown){
+         alert(XMLHttpRequest.responseText);
+    };
+	send4Json(null,action,success,failed);
 }
 
-function createTable(acts) {
-	if(acts.length>0){
-		var t = document.createElement('table');
-	    var b = document.createElement('tbody');
-	    
-	    var r = document.createElement('tr');
-	    for (var j = 0; j < 2; j++) {	
-			 var c = document.createElement('td');
-			 var m ;
-			 switch(j){
-			 case 0:
-				 m = document.createTextNode('活动名称');
-				 break;
-			 case 1:
-				 m = document.createTextNode('活动内容');
-				 break;
-			 }
-		    
-		     c.appendChild(m);
-		     r.appendChild(c);
-		}
-	    b.appendChild(r);
-	    
-	    
-		for(var i=0;i<acts.length;i++){
-			
-			 var r = document.createElement('tr');
-			 for (var j = 0; j < 2; j++) {	
-					 var c = document.createElement('td');
-					 var m ;
-					 var url;
-					 switch(j){
-					 case 0:
-						 m.url = "activity/showPage/"+acts[i].actId;
-						 m = document.createTextNode("<a href='activity/showPage/"+acts[i].actId+"'>"+acts[i].actName+"</a>");
-						 break;
-					 case 1:
-						 m = document.createTextNode(acts[i].actContent);
-						 break;
-					 }
-					 
-				     c.appendChild(m);
-				     r.appendChild(c);
-				
-			 }
-			 b.appendChild(r);
-		}
-		t.appendChild(b);
-		document.getElementById('allAct').appendChild(t);
-		t.setAttribute('border', '1');
-		
-	   
-	}
+function templatefill(acts){
+	var data = {acts:acts};
+	var html = template('acts', data);	
+	document.getElementById('content').innerHTML = html;
+	
 }
 </script>
 </head>
-<body onload="onLoad()">
+<body onload="getNearAct(1)">
 
-<div id="allAct"></div>
+<div id="content"></div>
+
+<script id="acts" type="text/html">
+{{each acts as act index}}
+		<h3><a href="activity/toShowActPage/{{act.actId}}">{{act.actName}}</a><h3>
+		活动内容：<a>{{act.actContent}}</a>
+{{/each}}
+</script>
+
 
 </body>
 </html>

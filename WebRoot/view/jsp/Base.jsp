@@ -1,7 +1,11 @@
+
+<%@ taglib prefix="pagenav" uri="/view/tld/commons.tld"%>
+
 <%
 String path = request.getContextPath();
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
 %>
+
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
   <head>
@@ -14,7 +18,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	
 	<script src="view/js/json2.js"></script>
 	<script src="view/js/jquery.js"></script>
-	
+	<script src="view/js/template.js"></script>
 	<script src="view/js/go_ajax.js"></script>
   </head>
 </html>

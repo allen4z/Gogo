@@ -37,10 +37,11 @@
 					}
 				}
 			},
-			error: function (data, status, e)
-			{
-				alert(e);
-			}
+			error: function(XMLHttpRequest,textStatus, errorThrown){
+		    	// alert(XMLHttpRequest.status);
+                // alert(XMLHttpRequest.readyState);
+		         alert(XMLHttpRequest.responseText);
+		    }
 		})
 		return false;
 	}
@@ -64,9 +65,11 @@
 				location.href = '<%=basePath %>user/main'; 
 			};
 			
-			send4Json(params,actionInfo,success,function(error){
-				alert('error:'+error);
-			});
+			var failed = function(XMLHttpRequest,textStatus, errorThrown){
+		         alert(XMLHttpRequest.responseText);
+		    };
+			
+			send4Json(params,actionInfo,success,failed);
 		});
 		
 	});

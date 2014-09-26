@@ -51,8 +51,9 @@ public class ActivityController extends BaseController {
 	 */
 	@RequestMapping("saveAct")
 	@ResponseBody
-	public void saveActivity(@ModelAttribute(CommonConstant.USER_CONTEXT) User user ,@RequestBody Activity act){
+	public boolean saveActivity(@ModelAttribute(CommonConstant.USER_CONTEXT) User user ,@RequestBody Activity act){
 		actService.saveActivity(act,user);
+		return true;
 	}
 	
 	/**
@@ -98,7 +99,7 @@ public class ActivityController extends BaseController {
 //	@GoJsonFilter(mixin=UserFilter.class,target=User.class)
 	public Page<Activity> loadActByPlace(HttpServletRequest request, 
 			@RequestParam(required=false) Place place,
-			@RequestParam(defaultValue="0",required=false) int pn){
+			@RequestParam(value="pn",required=false) Integer pn){
 		String remoteAddr =request.getRemoteAddr();
 		Page<Activity> queryList =  actService.loadActByPlace(place,remoteAddr,pn,CommonConstant.PAGE_SIZE);
 		
