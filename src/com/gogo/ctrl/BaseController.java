@@ -47,7 +47,14 @@ public class BaseController {
 	}
 	
 	protected User getSessionUser(HttpSession session){
-		return (User)session.getAttribute(CommonConstant.USER_CONTEXT);
+		Object obj4user = session.getAttribute(CommonConstant.USER_CONTEXT);
+		
+		if(obj4user != null){
+			return (User)obj4user;
+		}
+		
+		return null;
+		
 	}
 	
 	protected void setSessionUser(HttpSession session,User user){

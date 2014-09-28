@@ -94,13 +94,13 @@ public class ActivityService {
 	 * @param place
 	 * @return
 	 */
-	public Page<Activity> loadActByPlace(Place place,String ip,int currPage,int pageSize){
+	public Page<Activity> loadActByPlace(User user,Place place,String ip,int currPage,int pageSize){
 		Page<Activity> queryList = null;
 		if(place != null && place.getLongitude() != 0 && place.getLongitude() != 0){
-			queryList = PageUtil.getPage(actDao.lodActByPlaceCount(place),currPage , actDao.loadActByPlace(place, currPage, pageSize), pageSize);
+			queryList = PageUtil.getPage(actDao.lodActByPlaceCount(user,place),currPage , actDao.loadActByPlace(user,place, currPage, pageSize), pageSize);
 		}else if(ip != null ){
 			City city = GoMapHelper.getCityInfo(ip);
-			queryList =PageUtil.getPage(actDao.loadActbyAddrCount(city), currPage, actDao.loadActbyAddr(city, currPage, pageSize), pageSize);
+			queryList =PageUtil.getPage(actDao.loadActbyAddrCount(user,city), currPage, actDao.loadActbyAddr(user,city, currPage, pageSize), pageSize);
 		}else{
 			queryList = actDao.loadActByHotPoint();
 		}

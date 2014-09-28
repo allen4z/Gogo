@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 import com.gogo.domain.Activity;
 import com.gogo.domain.City;
 import com.gogo.domain.Place;
+import com.gogo.domain.User;
 import com.gogo.map.GoMapHelper;
 import com.gogo.page.Page;
 
@@ -63,21 +64,21 @@ public class ActivityDao extends BaseDao<Activity>{
 	 * @param place
 	 * @return
 	 */
-	public List<Activity> loadActByPlace(Place place,int pn,int pageSize) {
-		String hql = getHql4Place(place,false);
+	public List<Activity> loadActByPlace(User user,Place place,int pn,int pageSize) {
+		String hql = getHql4Place(user,place,false);
 		List<Activity> actList =findByPage(hql, pn, pageSize, null);
 		return actList;
 	}
 
 	
 	
-	public int lodActByPlaceCount(Place place){
-		String hql = getHql4Place(place, true);
+	public int lodActByPlaceCount(User user,Place place){
+		String hql = getHql4Place(user,place, true);
 		return  this.<Number>getCount(hql, null).intValue();
 	}
 	
 	
-	private String getHql4Place(Place place,boolean isCount) {
+	private String getHql4Place(User user,Place place,boolean isCount) {
 		float longitude = place.getLongitude();
 		float latitude = place.getLatitude();
 		StringBuffer hql = new StringBuffer();
@@ -102,16 +103,35 @@ public class ActivityDao extends BaseDao<Activity>{
 	 * 根据当地热点地区信息查询活动信息
 	 * @return
 	 */
-	public List<Activity> loadActbyAddr(City city,int pn,int pageSize) {
+	public List<Activity> loadActbyAddr(User user,City city,int pn,int pageSize) {
 		
-		String hql=" from Activity ";
+		String hql=getHql4City(user, city, false);
 		List<Activity> actPage = findByPage(hql, pn, pageSize, null);
 		return actPage;
 	}
 	
-	public int loadActbyAddrCount(City city){
-		String hql="select count(*) from Activity ";
+	public int loadActbyAddrCount(User user,City city){
+		String hql=getHql4City(user, city, true);
 		return  this.<Number>getCount(hql, null).intValue();
+	}
+	
+	private String getHql4City(User user,City city,boolean isCount){
+		StringBuffer hql = new StringBuffer();
+		
+		if(isCount){
+			hql.append("select count(activity) ");
+			
+		}else{
+			hql.append("select activity ");
+		}
+		hql.append(" from Activity activity ");
+		
+		if(user != null){
+			hql.append("where activity.ownUser.userId !='"+user.getUserId()+"'");
+		}
+		
+		
+		return hql.toString();
 	}
 
 	/**

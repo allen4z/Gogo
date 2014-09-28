@@ -11,6 +11,7 @@ import com.gogo.dao.ActivityDao;
 import com.gogo.dao.UserDao;
 import com.gogo.domain.Activity;
 import com.gogo.domain.User;
+import com.gogo.exception.Business4JsonException;
 import com.gogo.helper.CommonConstant;
 import com.gogo.helper.DomainStateHelper;
 import com.gogo.helper.MD5Util;
@@ -79,10 +80,10 @@ public class UserService{
 		String dbPassword = MD5Util.MD5(loginUser.getUserPassword());
 		User user =  userDao.loadUserByNameAndPassword(loginUser.getUserName(),dbPassword);
 		
-		if(user != null ){
-			return user;
+		if(user == null ){
+			throw new Business4JsonException("用户或密码错误");
 		}
 		
-		return null;
+		return user;
 	}
 }

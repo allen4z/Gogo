@@ -97,13 +97,19 @@ public class ActivityController extends BaseController {
 	@RequestMapping(value = "loadActByPlace")
 	@ResponseBody
 //	@GoJsonFilter(mixin=UserFilter.class,target=User.class)
-	public Page<Activity> loadActByPlace(HttpServletRequest request, 
+	public Page<Activity> loadActByPlace(
+			HttpServletRequest request, 
 			@RequestParam(required=false) Place place,
 			@RequestParam(value="pn",required=false) Integer pn){
+		
 		String remoteAddr =request.getRemoteAddr();
-		Page<Activity> queryList =  actService.loadActByPlace(place,remoteAddr,pn,CommonConstant.PAGE_SIZE);
+		
+		User user = getSessionUser(request.getSession());
+		//如果用户不为空，需要去掉用户创建的活动
+		Page<Activity> queryList =  actService.loadActByPlace(user,place,remoteAddr,pn,CommonConstant.PAGE_SIZE);
 		
 		return queryList;
+		
 	}
 	
 	/**

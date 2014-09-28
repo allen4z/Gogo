@@ -59,8 +59,12 @@ public class LoginController extends BaseController{
 	
 	@RequestMapping(value="doLogin4json")
 	@ResponseBody
-	public User login4Json(Model model, @RequestBody User loginUser) throws Exception{
-		return  userService.UserInfoCheck(loginUser);
+	public User login4Json(HttpSession session,Model model, @RequestBody User loginUser) throws Exception{
+		User dbUser = userService.UserInfoCheck(loginUser);
+		if(dbUser!=null){
+			setSessionUser(session, dbUser);
+		}
+		return dbUser;
 	}
 
 	
