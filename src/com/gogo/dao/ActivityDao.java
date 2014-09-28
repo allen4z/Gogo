@@ -84,17 +84,22 @@ public class ActivityDao extends BaseDao<Activity>{
 		StringBuffer hql = new StringBuffer();
 		
 		if(isCount){
-			hql.append("select count(a) ");
+			hql.append("select count("+HQL_AILS+") ");
 		}else{
-			hql.append("select a ");
+			hql.append("select "+HQL_AILS+" ");
 		}
 		
-		hql.append("  from Activity a join a.place p "
+		hql.append(" "+HQL_LIST+" "+HQL_AILS+" join "+HQL_AILS+".place p "
 				+ " where p.longitude>="+(longitude-GoMapHelper.COORD_RANGE)
 				+ " And p.longitude<="+(longitude+GoMapHelper.COORD_RANGE)
 				+ " And p.latitude="+ (latitude-GoMapHelper.COORD_RANGE)
-				+ " And p.latitude="+ (latitude-GoMapHelper.COORD_RANGE)
-				+ " order by p.hotPoint");
+				+ " And p.latitude="+ (latitude-GoMapHelper.COORD_RANGE));
+		
+		if(user != null){
+			hql.append("AND "+HQL_AILS+".ownUser.userId !='"+user.getUserId()+"'");
+		}
+		
+		hql.append(" order by p.hotPoint");
 		return hql.toString();
 	}
 	
@@ -119,15 +124,15 @@ public class ActivityDao extends BaseDao<Activity>{
 		StringBuffer hql = new StringBuffer();
 		
 		if(isCount){
-			hql.append("select count(activity) ");
+			hql.append("select count("+HQL_AILS+") ");
 			
 		}else{
-			hql.append("select activity ");
+			hql.append("select "+HQL_AILS+" ");
 		}
-		hql.append(" from Activity activity ");
+		hql.append(" "+HQL_LIST+" "+HQL_AILS+" ");
 		
 		if(user != null){
-			hql.append("where activity.ownUser.userId !='"+user.getUserId()+"'");
+			hql.append("where "+HQL_AILS+".ownUser.userId !='"+user.getUserId()+"'");
 		}
 		
 		
