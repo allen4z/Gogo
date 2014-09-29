@@ -16,6 +16,7 @@ import com.gogo.domain.Place;
 import com.gogo.domain.Role;
 import com.gogo.domain.User;
 import com.gogo.domain.UserAndRole;
+import com.gogo.exception.Business4JsonException;
 import com.gogo.exception.BusinessException;
 import com.gogo.helper.DomainStateHelper;
 import com.gogo.map.GoMapHelper;
@@ -58,6 +59,8 @@ public class ActivityService {
 		Set<Role> roles= act.getRoles();
 		Iterator<Role> it = roles.iterator();
 		
+		
+		
 		Role joinRole = null;
 		
 		while(it.hasNext()){
@@ -73,6 +76,11 @@ public class ActivityService {
 			joinRole.setRoleCode(RoleHelper.JOIN_CODE);
 			joinRole.setRoleName(RoleHelper.JOIN_NAME);
 			joinRole.setBelongAct(act);
+		}else{
+			User haveUser = userAndRoleDao.loadActUser4Role(user, joinRole);
+			if(haveUser != null){
+				throw new Business4JsonException("您已经报过名了！");
+			}
 		}
 		
 		UserAndRole uar = new UserAndRole();

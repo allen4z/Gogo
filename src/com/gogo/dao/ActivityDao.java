@@ -9,6 +9,7 @@ import com.gogo.domain.Activity;
 import com.gogo.domain.City;
 import com.gogo.domain.Place;
 import com.gogo.domain.User;
+import com.gogo.helper.DomainStateHelper;
 import com.gogo.map.GoMapHelper;
 import com.gogo.page.Page;
 
@@ -125,14 +126,18 @@ public class ActivityDao extends BaseDao<Activity>{
 		
 		if(isCount){
 			hql.append("select count("+HQL_AILS+") ");
-			
 		}else{
 			hql.append("select "+HQL_AILS+" ");
 		}
 		hql.append(" "+HQL_LIST+" "+HQL_AILS+" ");
 		
+		//非公开项目不能被查询到
+		hql.append(" where "+HQL_AILS+".needOpen=true ");
+		//活动状态为发布则可以被查询
+		hql.append(" and "+HQL_AILS+".actState="+DomainStateHelper.ACT_RELEASE);
+		
 		if(user != null){
-			hql.append("where "+HQL_AILS+".ownUser.userId !='"+user.getUserId()+"'");
+			hql.append("  and "+HQL_AILS+".ownUser.userId !='"+user.getUserId()+"'");
 		}
 		
 		

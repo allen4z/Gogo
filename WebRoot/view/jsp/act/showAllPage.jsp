@@ -44,6 +44,18 @@ function templatefill(acts){
 		<a>{{act.actContent}}</a>
 		
 		<br/>
+		{{if act.needInvest}}
+			该项目需要投资人
+		{{/if}}
+		<br/>
+		{{if act.needUndertake}}
+			该项目需要被承办
+		{{/if}}
+		<br/>
+		{{if act.needActor}}
+			该项目需要招募参与者
+		{{/if}}
+		<br/>
 		<br/>
 		<a href="activity/toShowActPage/{{act.actId}}">加入该活动</a>
 		</div>

@@ -28,12 +28,11 @@ function templatefill(data){
 	
 }
 
+
+
 </script>
 </head>
-<body>
 
-<br/>
-<br/>
 <body onload="getAct('<%=actId%>')">
 
 <div id="content" style="float:lift;"></div>
