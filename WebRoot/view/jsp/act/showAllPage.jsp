@@ -30,6 +30,7 @@ function templatefill(acts){
 	document.getElementById('content').innerHTML = html;
 	
 }
+
 </script>
 </head>
 <body onload="getNearAct(1)">

@@ -41,8 +41,41 @@ public class UserAndRole {
 	@JoinColumn(name="role_id")
 	@Cascade(value=org.hibernate.annotations.CascadeType.SAVE_UPDATE)
 	private Role role;
+	
+	//报酬
+	@Column(name="ur_remuneration",length=50)
+	private double remuneration;
+	//投资金额
+	@Column(name="ur_invest_amount",length=50)
+	private double investAmount;
+	//支出（票款）
+	@Column(name="ur_cost",length=50)
+	private double cost;
 
 
+	public double getRemuneration() {
+		return remuneration;
+	}
+
+	public void setRemuneration(double remuneration) {
+		this.remuneration = remuneration;
+	}
+
+	public double getInvestAmount() {
+		return investAmount;
+	}
+
+	public void setInvestAmount(double investAmount) {
+		this.investAmount = investAmount;
+	}
+
+	public double getCost() {
+		return cost;
+	}
+
+	public void setCost(double cost) {
+		this.cost = cost;
+	}
 
 	public String getUserAndRoleId() {
 		return userAndRoleId;

@@ -48,14 +48,19 @@
 
 	$(document).ready(function(){
 		$("#addActBtn").click(function(){
-		
+			
+			
 			var actionInfo = 'activity/saveAct';	
 			var params = {
 				actName : $("#act_name").val(),
 				actContent : $("#act_content").val(),
 				actStartTime : $("#act_starttime").val(),
 				actEndTime : $("#act_endtime").val(),
-				actSignTime : $("#act_signtime").val()
+				actSignTime : $("#act_signtime").val(),
+				needInvest:$("#act_needInvest").attr("checked"),
+				needUndertake:$("#act_needUndertake").attr("checked"),
+				needActor:$("#act_needActor").attr("checked"),
+				isOpen:$("act_isOpen").attr("checked")
 			};
 			
 			var success = function(id){
@@ -82,11 +87,15 @@
 <br/>
 <br/>
 <form>
-活动名称：<input id="act_name" name="act_name" type="text"/>	
-活动内容：<input id="act_content" name="act_content" type="text"/>
-开始时间：<input id="act_starttime" name="act_starttime" type="date"/>
-结束时间：<input id="act_endtime" name="act_endtime" type="date"/>
-报名时间：<input id="act_signtime" name="act_signtime" type="date"/>
+活动名称：<input id="act_name" name="act_name" type="text"/>	<br/>
+活动内容：<textarea id="act_content" name ="act_content" rows="10" cols="50"></textarea> <br/>
+是否需要投资：<input id="act_needInvest" name="act_needInvest" type="checkbox"/><br/>
+是否需要承办：<input id="act_needUndertake" name="act_needUndertake" type="checkbox"/><br/>
+是否应聘参与人：<input id="act_needActor" name="act_needActor" type="checkbox"/><br/>
+是否对外开放：<input id="act_isOpen" name="act_isOpen" type="checkbox"/><br/>
+<!-- 开始时间：<input id="act_starttime" name="act_starttime" type="date"/><br/>
+结束时间：<input id="act_endtime" name="act_endtime" type="date"/><br/>
+报名时间：<input id="act_signtime" name="act_signtime" type="date"/><br/> -->
 
 <img id="loading" src="view/images/loading.gif" style="display:none;">
 <input id="addActBtn" name="addActBtn"  type="button" value="保存"/>

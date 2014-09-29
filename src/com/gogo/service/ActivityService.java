@@ -1,6 +1,8 @@
 package com.gogo.service;
 
 import java.util.Date;
+import java.util.Iterator;
+import java.util.Set;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,6 +52,35 @@ public class ActivityService {
 		userAndRoleDao.save(uar);
 	}
 
+	
+	public void saveSignUpActivity(String actId,User user){
+		Activity act = loadActbyActId(actId);
+		Set<Role> roles= act.getRoles();
+		Iterator<Role> it = roles.iterator();
+		
+		Role joinRole = null;
+		
+		while(it.hasNext()){
+			Role role = it.next();
+			if(role.getRoleCode().equals(RoleHelper.JOIN_CODE)){
+				joinRole = role;
+				break;
+			}
+		}
+		
+		if(joinRole == null){
+			joinRole = new Role();
+			joinRole.setRoleCode(RoleHelper.JOIN_CODE);
+			joinRole.setRoleName(RoleHelper.JOIN_NAME);
+			joinRole.setBelongAct(act);
+		}
+		
+		UserAndRole uar = new UserAndRole();
+		uar.setRole(joinRole);
+		uar.setUser(user);
+		
+		userAndRoleDao.save(uar);
+	}
 	
 	/**
 	 * 删除模块，首先检查模块是否属于当前登录用户

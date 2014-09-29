@@ -42,7 +42,7 @@ public class Role {
 	//角色名称
 	@Column(name="role_name",length=10)
 	private String roleName;
-	
+
 	//角色所在活动
 	@ManyToOne
 	@JoinColumn(name="belongact")

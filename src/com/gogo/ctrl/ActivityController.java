@@ -1,7 +1,6 @@
 package com.gogo.ctrl;
 
 import java.io.File;
-import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -19,12 +18,13 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.gogo.annotation.GoJsonFilter;
+import com.gogo.annotation.GoJsonFilters;
 import com.gogo.dao.UserAndRoleDao;
 import com.gogo.domain.Activity;
 import com.gogo.domain.Place;
 import com.gogo.domain.Role;
 import com.gogo.domain.User;
-import com.gogo.domain.filter.UserFilter;
+import com.gogo.domain.filter.RoleFilter;
 import com.gogo.helper.CommonConstant;
 import com.gogo.page.Page;
 import com.gogo.service.ActivityService;
@@ -57,6 +57,18 @@ public class ActivityController extends BaseController {
 	}
 	
 	/**
+	 * 活动报名
+	 * @param user
+	 * @return
+	 */
+	@RequestMapping("signUp/{actId}")
+	@ResponseBody
+	public boolean signUpActivity(@ModelAttribute(CommonConstant.USER_CONTEXT) User user,@PathVariable String actId){
+		actService.saveSignUpActivity(actId,user);
+		return true;
+	}
+	
+	/**
 	 * 根据ID删除活动
 	 * @param actId
 	 * @return
@@ -80,9 +92,10 @@ public class ActivityController extends BaseController {
 	 * @param actId
 	 * @return
 	 */
-	@RequestMapping(value = "loadAct/{actId}",produces = "text/html;charset=UTF-8")
+	@RequestMapping(value = "loadActByActId/{actId}",produces = "text/html;charset=UTF-8")
 	@ResponseBody
-	@GoJsonFilter(mixin=UserFilter.class,target=User.class)
+	@GoJsonFilters(values={	
+			@GoJsonFilter(mixin=RoleFilter.class,target=Role.class)})
 	public Activity loadActByActId(@PathVariable String actId)throws Exception{
 		Activity act = actService.loadActbyActId(actId);
 		return act;
@@ -96,7 +109,8 @@ public class ActivityController extends BaseController {
 	 */
 	@RequestMapping(value = "loadActByPlace")
 	@ResponseBody
-//	@GoJsonFilter(mixin=UserFilter.class,target=User.class)
+	@GoJsonFilters(values={	
+			@GoJsonFilter(mixin=RoleFilter.class,target=Role.class)})
 	public Page<Activity> loadActByPlace(
 			HttpServletRequest request, 
 			@RequestParam(required=false) Place place,
@@ -138,21 +152,25 @@ public class ActivityController extends BaseController {
 	 * @throws Exception
 	 */
 	@RequestMapping("toShowActPage/{actId}")
-	public ModelAndView showPage(@ModelAttribute(CommonConstant.USER_CONTEXT) User user,@PathVariable String actId) throws Exception{
+	public ModelAndView showPage(@PathVariable String actId) throws Exception{
 		ModelAndView mav = new ModelAndView();
-		Activity act = actService.loadActbyActId(actId);
+		//Activity act = actService.loadActbyActId(actId);
 		
 		//根据User查询当前活动的角色
-		List<Role> roles = uarDao.loadCurUserRole4Act(user, act);
+		//List<Role> roles = uarDao.loadCurUserRole4Act(user, act);
 		
-		if(roles!= null && roles.size()>0){
+		/*if(roles!= null && roles.size()>0){
 			mav.addObject("role", roles.get(0));
-		}
+		}*/
 		
-		mav.addObject("act", act);
+		mav.addObject("actId", actId);
 		mav.setViewName("act/showActPage");
 		return mav;
 	}
+	
+
+	
+	
 
 	/**
 	 * 进入新增活动页面

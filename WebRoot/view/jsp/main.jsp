@@ -30,7 +30,8 @@
 </form>
 
 <br/>
-
+<button id="searchUserBtn" >查找用户信息</button>
+&nbsp;
 <div>
 	<form id='addActForm'>
 	

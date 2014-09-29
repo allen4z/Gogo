@@ -25,11 +25,6 @@ public class CommonInterceptor extends HandlerInterceptorAdapter {
 	public boolean preHandle(HttpServletRequest request,
 			HttpServletResponse response, Object handler) throws Exception {
 		
-		//TODO
-		
-		if(1==1){
-			return true;
-		}
 		
 		String uri = request.getRequestURI();
 		//过滤

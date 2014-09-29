@@ -40,13 +40,18 @@
 &nbsp;
 <button id="searchActBtn" >查找附近活动</button>
 &nbsp;
+<button id="searchActBtn" >加入（赚钱）</button>
+&nbsp;
+<button id="searchActBtn" >投资</button>
+&nbsp;
+<button id="searchActBtn" >承办</button>
+&nbsp;
 <%  
 if(user!= null){
 %>
 <button id="backUserMain"><%=user.getAlisName()%>的主页</button>
 &nbsp;
-<button id="searchUserBtn" >查找用户信息</button>
-&nbsp;
+
 <button id="doLogOut" name="doLogOut" >退出登录</button>
 <%
 }

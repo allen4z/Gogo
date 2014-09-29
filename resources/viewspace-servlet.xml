@@ -50,6 +50,10 @@
 					<value>doLogin</value>
 					<value>doRegister</value>
 					<value>doLogin4json</value>
+					<value>toShowAllPage</value>
+					<value>toShowActPage</value>
+					<value>loadActByPlace</value>
+					<value>loadActByActId</value>
 				</list>
 			</property>
 			<property name="needSuffix">

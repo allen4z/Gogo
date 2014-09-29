@@ -69,10 +69,6 @@ public class Activity {
 	@OrderBy("userName ASC")
 	private User ownUser;
 	
-	//活动拥有角色
-	@OneToMany(mappedBy="belongAct",cascade=CascadeType.ALL)
-	private Set<Role> roles;
-
 	//活动地点
 	@ManyToOne
 	@JoinColumn(name="place_id")
@@ -83,7 +79,37 @@ public class Activity {
 	@Column(name="update_time",length=10,nullable=false)
 	private Date update_time;
 	
+	//活动拥有角色  (发起人、投资人、参与者、观众)
+	@OneToMany(mappedBy="belongAct",cascade=CascadeType.ALL)
+	private Set<Role> roles;
 	
+	//是否需要投资人
+	@Column(name="act_need_invest",length=1)
+	private boolean needInvest;
+	
+	//是否需要承办方
+	@Column(name="act_need_undertake",length=1)
+	private boolean needUndertake;
+	
+	//是否需要参与者
+	@Column(name="act_need_actor",length=1)
+	private boolean needActor;
+	
+	//是否需要观众
+	@Column(name="act_isopen",length=1)
+	private boolean isOpen;
+	
+	//活总需金额
+	@Column(name="act_need_amount",length=50)
+	private double needAmount;
+	//已拥有资金
+	@Column(name="act_have_amount",length=50)
+	private double haveAmount;
+	
+	//活动承办方
+	@ManyToOne
+	@JoinColumn(name="uk_id")
+	private Undertake undertake;
 	
 	public Activity(){
 	}
@@ -172,6 +198,70 @@ public class Activity {
 
 	public void setUpdate_time(Date update_time) {
 		this.update_time = update_time;
+	}
+
+	public Set<Role> getRoles() {
+		return roles;
+	}
+
+	public void setRoles(Set<Role> roles) {
+		this.roles = roles;
+	}
+
+	public boolean isNeedInvest() {
+		return needInvest;
+	}
+
+	public void setNeedInvest(boolean needInvest) {
+		this.needInvest = needInvest;
+	}
+
+	public boolean isNeedUndertake() {
+		return needUndertake;
+	}
+
+	public void setNeedUndertake(boolean needUndertake) {
+		this.needUndertake = needUndertake;
+	}
+
+	public boolean isNeedActor() {
+		return needActor;
+	}
+
+	public void setNeedActor(boolean needActor) {
+		this.needActor = needActor;
+	}
+
+	public boolean isOpen() {
+		return isOpen;
+	}
+
+	public void setOpen(boolean isOpen) {
+		this.isOpen = isOpen;
+	}
+
+	public double getNeedAmount() {
+		return needAmount;
+	}
+
+	public void setNeedAmount(double needAmount) {
+		this.needAmount = needAmount;
+	}
+
+	public double getHaveAmount() {
+		return haveAmount;
+	}
+
+	public void setHaveAmount(double haveAmount) {
+		this.haveAmount = haveAmount;
+	}
+
+	public Undertake getUndertake() {
+		return undertake;
+	}
+
+	public void setUndertake(Undertake undertake) {
+		this.undertake = undertake;
 	}
 	
 }
