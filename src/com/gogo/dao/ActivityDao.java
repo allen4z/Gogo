@@ -58,6 +58,19 @@ public class ActivityDao extends BaseDao<Activity>{
 	}
 	
 	
+	public List<Activity> loadJoinActivitesByUser(String userId,int curPage,int pagesize) {
+		String hql = "select act from UserAndRole uar left join uar.role r  left join r.belongAct act where uar.user.userId='"+userId+"'";
+		List<Activity> list= findByPage(hql,curPage,pagesize);
+		
+		return list;
+	}
+	
+	public int loadJoinActivitesByUserCount(String userId){
+		String hql = "select count(act) from UserAndRole uar left join uar.role r  left join r.belongAct act where uar.user.userId='"+userId+"'";
+		return  this.<Number>getCount(hql, null).intValue();
+	}
+	
+	
 	
 	/**
 	 * 根据地区信息查询活动信息

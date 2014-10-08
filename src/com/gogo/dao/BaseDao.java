@@ -66,6 +66,14 @@ public class BaseDao<T> {
 	    public Serializable save(T entity) {
 	    	return getSession().save(entity);
 	    }
+	    
+	    /**
+	     * 保存或更新
+	     * @param entity
+	     */
+	    public void saveOrUpdate(T entity){
+	    	getSession().saveOrUpdate(entity);
+	    }
 
 	    /**
 	     * 删除PO

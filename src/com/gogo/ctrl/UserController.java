@@ -109,11 +109,11 @@ public class UserController extends BaseController{
 	 * @param userId
 	 * @return
 	 */
-	@RequestMapping("loadJoinAct/{userId}")
+	/*@RequestMapping("loadJoinAct/{userId}")
 	@ResponseBody
 	public List<Activity> loadJoinActivitesByUser(int userId){
 		return userService.loadJoinActivitesByUser(userId);
-	}
+	}*/
 	
 	/**
 	 * 根据用户ID获得用户拥有的所有活动信息
@@ -147,8 +147,15 @@ public class UserController extends BaseController{
 			@RequestParam(value="pn",defaultValue="0",required=false) int currPage){
 		ModelAndView mav = new ModelAndView();
 		String userId = user.getUserId();
+		//查询拥有活动
 		Page<Activity> ownAct = userService.loadOwnActivitesByUser(userId,currPage,CommonConstant.PAGE_SIZE);
+		//查询相关活动
+		Page<Activity> joinAct = userService.loadJoinActivitesByUser(userId,currPage,CommonConstant.PAGE_SIZE);
+		//查询需要支付信息
+		List<String> payInfo = userService.loadPayInfo(userId);							
 		mav.addObject("page",ownAct );
+		mav.addObject("joinpage",joinAct );
+		mav.addObject("payinfo",payInfo );
 		mav.setViewName("main");
 		
 		return mav;

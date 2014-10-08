@@ -1,14 +1,11 @@
 package com.gogo.domain;
 
 import java.util.Date;
-import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Version;
 import javax.validation.constraints.Pattern;
@@ -62,10 +59,6 @@ public class User {
 	//是否是参与者
 	@Column(name="user_isactor",length=1)
 	private boolean isActor;
-	
-	/*//用户拥有角色
-	@OneToMany(mappedBy="user",cascade=CascadeType.ALL)
-	private Set<UserAndRole> belongRole;*/
 
 	public boolean isActor() {
 		return isActor;
@@ -73,12 +66,6 @@ public class User {
 	public void setActor(boolean isActor) {
 		this.isActor = isActor;
 	}
-	/*public Set<UserAndRole> getBelongRole() {
-		return belongRole;
-	}
-	public void setBelongRole(Set<UserAndRole> belongRole) {
-		this.belongRole = belongRole;
-	}*/
 	public String getUserId() {
 		return userId;
 	}

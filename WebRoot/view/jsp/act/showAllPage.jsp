@@ -40,12 +40,12 @@ function templatefill(acts){
 <script id="acts" type="text/html">
 {{each acts as act index}}
 		<div  id="contentDiv" style="width:400px;height:300px;border:1px solid red;text-align:center;padding-top:20px;">
-		<h3><a href="activity/toShowActPage/{{act.actId}}">{{act.actName}}</a><h3>
+		<h3><a href="activity/toShowActPage/1/{{act.actId}}">{{act.actName}}</a><h3>
 		<a>{{act.actContent}}</a>
 		
 		<br/>
 		<br/>
-		<a href="activity/toShowActPage/{{act.actId}}">加入该活动</a>
+		<a href="activity/toShowActPage/1/{{act.actId}}">加入该活动</a>
 		</div>
 {{/each}}
 </script>

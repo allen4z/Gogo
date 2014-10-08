@@ -42,16 +42,29 @@ public class UserAndRole {
 	@Cascade(value=org.hibernate.annotations.CascadeType.SAVE_UPDATE)
 	private Role role;
 	
+	//支出（票款）
+	@Column(name="ur_cost",length=50)
+	private double cost;
+	//待支付（票款）
+	@Column(name="ur_waitcost",length=50)
+	private double waitCost;
+	
 	//报酬
 	@Column(name="ur_remuneration",length=50)
 	private double remuneration;
 	//投资金额
 	@Column(name="ur_invest_amount",length=50)
 	private double investAmount;
-	//支出（票款）
-	@Column(name="ur_cost",length=50)
-	private double cost;
+	
+	
+	
+	public double getWaitCost() {
+		return waitCost;
+	}
 
+	public void setWaitCost(double waitCost) {
+		this.waitCost = waitCost;
+	}
 
 	public double getRemuneration() {
 		return remuneration;

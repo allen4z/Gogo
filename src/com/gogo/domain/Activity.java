@@ -111,9 +111,208 @@ public class Activity {
 	@JoinColumn(name="uk_id")
 	private Undertake undertake;
 	
+	//参与者最多
+	@Column(name="act_max_join",length=50)
+	private int maxJoin;
+	
+	//观众最多
+	@Column(name="act_max_signup",length=50)
+	private int maxSignUp;
+	//每名参与者需要支付
+	@Column(name="act_join_needpay",length=50)
+	private double joinNeedPay;
+	//每名观众需要支付
+	@Column(name="act_signup_needpay",length=50)
+	private double signUpNeedPay;
+	
 	public Activity(){
 	}
 	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	public double getJoinNeedPay() {
+		return joinNeedPay;
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	public void setJoinNeedPay(double joinNeedPay) {
+		this.joinNeedPay = joinNeedPay;
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	public double getSignUpNeedPay() {
+		return signUpNeedPay;
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	public void setSignUpNeedPay(double signUpNeedPay) {
+		this.signUpNeedPay = signUpNeedPay;
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	public int getMaxJoin() {
+		return maxJoin;
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	public void setMaxJoin(int maxJoin) {
+		this.maxJoin = maxJoin;
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	public int getMaxSignUp() {
+		return maxSignUp;
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	public void setMaxSignUp(int maxSignUp) {
+		this.maxSignUp = maxSignUp;
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 	public String getActId() {
 		return actId;
 	}

@@ -25,6 +25,7 @@ import com.gogo.domain.Place;
 import com.gogo.domain.Role;
 import com.gogo.domain.User;
 import com.gogo.domain.filter.RoleFilter;
+import com.gogo.domain.helper.RoleHelper;
 import com.gogo.helper.CommonConstant;
 import com.gogo.page.Page;
 import com.gogo.service.ActivityService;
@@ -56,15 +57,40 @@ public class ActivityController extends BaseController {
 		return true;
 	}
 	
+	
 	/**
-	 * 活动报名
+	 * 加入活动小组
 	 * @param user
 	 * @return
 	 */
-	@RequestMapping("signUp/{actId}")
+	@RequestMapping("visitor/{actId}")
 	@ResponseBody
-	public boolean signUpActivity(@ModelAttribute(CommonConstant.USER_CONTEXT) User user,@PathVariable String actId){
-		actService.saveSignUpActivity(actId,user);
+	public boolean visitorActivity(@ModelAttribute(CommonConstant.USER_CONTEXT) User user,@PathVariable String actId){
+		actService.saveActivity4RoleState(actId,user,RoleHelper.VISITOR_CODE);
+		return true;
+	}
+	
+	/**
+	 * 参与活动
+	 * @param user
+	 * @return
+	 */
+	@RequestMapping("join/{actId}")
+	@ResponseBody
+	public boolean joinActivity(@ModelAttribute(CommonConstant.USER_CONTEXT) User user,@PathVariable String actId){
+		actService.saveActivity4RoleState(actId,user,RoleHelper.JOIN_CODE);
+		return true;
+	}
+	
+	/**
+	 * 观看活动
+	 * @param user
+	 * @return
+	 */
+	@RequestMapping("signup/{actId}")
+	@ResponseBody
+	public boolean signupActivity(@ModelAttribute(CommonConstant.USER_CONTEXT) User user,@PathVariable String actId){
+		actService.saveActivity4RoleState(actId,user,RoleHelper.SIGNUP_CODE);
 		return true;
 	}
 	
@@ -151,8 +177,8 @@ public class ActivityController extends BaseController {
 	 * @return
 	 * @throws Exception
 	 */
-	@RequestMapping("toShowActPage/{actId}")
-	public ModelAndView showPage(@PathVariable String actId) throws Exception{
+	@RequestMapping("toShowActPage/{state}/{actId}")
+	public ModelAndView showPage(@PathVariable String state,@PathVariable String actId) throws Exception{
 		ModelAndView mav = new ModelAndView();
 		//Activity act = actService.loadActbyActId(actId);
 		
@@ -162,7 +188,7 @@ public class ActivityController extends BaseController {
 		/*if(roles!= null && roles.size()>0){
 			mav.addObject("role", roles.get(0));
 		}*/
-		
+		mav.addObject("state", state);
 		mav.addObject("actId", actId);
 		mav.setViewName("act/showActPage");
 		return mav;

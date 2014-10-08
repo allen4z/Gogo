@@ -4,6 +4,8 @@
 <%@include file="../Head.jsp" %>
 <%
 	String actId = (String)request.getAttribute("actId");
+
+	String state = (String)request.getAttribute("state");
 %>
 
 <html>
@@ -44,7 +46,21 @@ function templatefill(data){
 		<h3>{{actName}}<h3>
 		<a>{{actContent}}</a>
 		<br/>
-		<a href="activity/signUp/{{actId}}">报名</a>
+
+		<%
+			if(state.equals("0")){
+		%>
+		
+		<%
+			}else if(state.equals("1")){
+				%><a href="activity/visitor/{{actId}}">加入活动小组</a><%
+			}else if(state.equals("2")){
+				%>
+				  <a href="activity/join/{{actId}}">报名参加活动</a><br/>
+				  <a href="activity/signup/{{actId}}">报名观看活动</a>
+				<%
+			}
+		%>
 		</div>
 		
 </script>

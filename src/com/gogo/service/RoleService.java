@@ -16,7 +16,7 @@ public class RoleService {
 	private UserAndRoleDao uarDao;
 	
 	public List<Role> loadCurUserRole4Act(User user,Activity act){
-		List<Role> roles = uarDao.loadCurUserRole4Act(user, act);
+		List<Role> roles = uarDao.loadRoleByUserAndAct(user, act);
 		return roles;
 	}
 
