@@ -7,7 +7,7 @@ import org.junit.runner.RunWith;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.gogo.domain.Activity;
-import com.gogo.helper.DomainStateHelper;
+import com.gogo.domain.helper.DomainStateHelper;
 import com.gogo.service.ActivityService;
 import com.gogo.test.AbstractContextTests;
 

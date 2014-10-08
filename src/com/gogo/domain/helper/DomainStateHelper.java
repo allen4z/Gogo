@@ -1,4 +1,4 @@
-package com.gogo.helper;
+package com.gogo.domain.helper;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -28,6 +28,16 @@ public class DomainStateHelper {
 	// 活动停止结束
 	public static final int ACT_FINASH = 4;
 
+	/**
+	 * 属性复制方法 -- 主要用于更新方法
+	 * @param source
+	 * @param target
+	 * @throws SecurityException
+	 * @throws NoSuchMethodException
+	 * @throws IllegalArgumentException
+	 * @throws IllegalAccessException
+	 * @throws InvocationTargetException
+	 */
 	public static void copyPriperties(Object source, Object target)
 			throws SecurityException, NoSuchMethodException,
 			IllegalArgumentException, IllegalAccessException,
