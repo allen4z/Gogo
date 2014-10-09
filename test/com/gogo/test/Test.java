@@ -30,9 +30,7 @@ public static void main(String[] args) {
 			ObjectMapper objectMapper=new ObjectMapper();
 			objectMapper.writeValue(os,list);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}	
-		System.out.println(str);
 	}
 }

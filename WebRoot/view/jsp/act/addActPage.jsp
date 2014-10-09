@@ -48,8 +48,6 @@
 
 	$(document).ready(function(){
 		$("#addActBtn").click(function(){
-			
-			
 			var actionInfo = 'activity/saveAct';	
 			var params = {
 				actName : $("#act_name").val(),
@@ -60,7 +58,7 @@
 				needInvest:$("#act_needInvest").attr("checked"),
 				needUndertake:$("#act_needUndertake").attr("checked"),
 				needActor:$("#act_needActor").attr("checked"),
-				isOpen:$("act_isOpen").attr("checked")
+				needOpen:$("#act_isOpen").attr("checked")
 			};
 			
 			var success = function(id){

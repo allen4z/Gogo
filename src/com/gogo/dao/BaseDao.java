@@ -162,7 +162,6 @@ public class BaseDao<T> {
 	        if (paramlist != null) {
 	            for (int i = 0; i < paramlist.length; i++) {
 	                if(paramlist[i] instanceof Date) {
-	                    //TODO 难道这是bug 使用setParameter不行？？
 	                    query.setTimestamp(i, (Date)paramlist[i]);
 	                } else {
 	                    query.setParameter(i, paramlist[i]);
