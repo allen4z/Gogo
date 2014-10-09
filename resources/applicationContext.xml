@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
 	xmlns:p="http://www.springframework.org/schema/p"
@@ -14,103 +13,104 @@
     http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
     http://www.springframework.org/schema/tx
     http://www.springframework.org/schema/tx/spring-tx-4.0.xsd">
-    
+
 	<context:component-scan base-package="com.gogo.*">
-		<context:include-filter type="annotation"   
-            expression="org.aspectj.lang.annotation.Aspect"/> 
+		<context:include-filter type="annotation"
+			expression="org.aspectj.lang.annotation.Aspect" />
 	</context:component-scan>
 
-	<context:annotation-config /> 
-	
-	<bean id="localeResolver" class="org.springframework.web.servlet.i18n.CookieLocaleResolver" /> 
+	<context:annotation-config />
 
- <!-- 国际化的消息资源文件 -->
-    <bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
-        <property name="basenames">
-            <list>
-                <!-- 在web环境中一定要定位到classpath 否则默认到当前web应用下找  -->
-                <value>classpath:messages</value>
-                <value>classpath:exception</value>
-            </list>
-        </property>
-        <property name="defaultEncoding" value="UTF-8"/>
-        <property name="cacheSeconds" value="60"/>
-    </bean>
+	<bean id="localeResolver"
+		class="org.springframework.web.servlet.i18n.CookieLocaleResolver" />
+
+	<!-- 国际化的消息资源文件 -->
+	<bean id="messageSource"
+		class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+		<property name="basenames">
+			<list>
+				<!-- 在web环境中一定要定位到classpath 否则默认到当前web应用下找 -->
+				<value>classpath:messages</value>
+				<value>classpath:exception</value>
+			</list>
+		</property>
+		<property name="defaultEncoding" value="UTF-8" />
+		<property name="cacheSeconds" value="60" />
+	</bean>
 
 	<context:property-placeholder location="classpath:config.properties" />
-	
+
 	<!-- 配置数据源 -->
-	<bean id="dataSource"  class="org.logicalcobwebs.proxool.ProxoolDataSource">
-		<property name="alias" value="proxoolDataSource"/>
+	<bean id="dataSource" class="org.logicalcobwebs.proxool.ProxoolDataSource">
+		<property name="alias" value="proxoolDataSource" />
 		<property name="driver" value="${connection.driver_class}" />
 		<property name="driverUrl" value="${connection.url}" />
 		<property name="user" value="${connection.username}" />
 		<property name="password" value="${connection.password}" />
-		<property name="maximumConnectionCount" value="${proxool.maximum.connection.count}"/>
+		<property name="maximumConnectionCount" value="${proxool.maximum.connection.count}" />
 		<property name="minimumConnectionCount" value="${proxool.minimum.connection.count}" />
 		<property name="statistics" value="${proxool.statistics}" />
-		<property name="simultaneousBuildThrottle" value="${proxool.simultaneous.build.throttle}"/>
+		<property name="simultaneousBuildThrottle" value="${proxool.simultaneous.build.throttle}" />
 	</bean>
-    
-    
-    <bean id="sessionFactory"  
-        class="org.springframework.orm.hibernate4.LocalSessionFactoryBean"
-        p:dataSource-ref="dataSource"
-        >  
-        <property name="packagesToScan" value="com.gogo.domain"/>
-        
-        <property name="hibernateProperties">  
-        	<props>
-        		<!-- <prop key="current_session_context_class">thread</prop> -->
-        		<prop key="hibernate.dialect">${hibernate.dialect}</prop>
-        		<prop key="hibernate.show_sql">${hibernate.show_sql}</prop>
-        		<prop key="hibernate.format_sql">true</prop>
-        		<prop key="hibernate.query.substitutions">${hibernate.query.substitutions}</prop>
-        		<prop key="hibernate.default_batch_fetch_size">${hibernate.default_batch_fetch_size}</prop>
-        		<prop key="hibernate.max_fetch_depth">${hibernate.max_fetch_depth}</prop>
-        		<prop key="hibernate.generate_statistics">${hibernate.generate_statistics}</prop>
-        		<prop key="hibernate.bytecode.use_reflection_optimizer">${hibernate.bytecode.use_reflection_optimizer}</prop>
-        		<prop key="hibernate.hbm2ddl.auto">${hibernate.hbm2ddl.auto}</prop>
-        		<prop key="hibernate.cache.use_second_level_cache">${hibernate.cache.use_second_level_cache}</prop>
-        		<prop key="hibernate.cache.use_query_cache">${hibernate.cache.use_query_cache}</prop>
-        		<prop key="hibernate.cache.region.factory_class">${hibernate.cache.region.factory_class}</prop>
-        		<prop key="net.sf.ehcache.configurationResourceName">${net.sf.ehcache.configurationResourceName}</prop>
-                <prop key="hibernate.cache.use_structured_entries">${hibernate.cache.use_structured_entries}</prop>
-        	</props>
-        </property>  
-    </bean>  
-    
-    <aop:aspectj-autoproxy proxy-target-class="true" />
-    
-	<!-- 配置Jdbc模板  -->
-	<!-- <bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate"
+
+
+	<bean id="sessionFactory"
+		class="org.springframework.orm.hibernate4.LocalSessionFactoryBean"
+		p:dataSource-ref="dataSource">
+		<property name="packagesToScan" value="com.gogo.domain" />
+
+		<property name="hibernateProperties">
+			<props>
+				<!-- <prop key="current_session_context_class">thread</prop> -->
+				<prop key="hibernate.dialect">${hibernate.dialect}</prop>
+				<prop key="hibernate.show_sql">${hibernate.show_sql}</prop>
+				<prop key="hibernate.format_sql">true</prop>
+				<prop key="hibernate.query.substitutions">${hibernate.query.substitutions}</prop>
+				<prop key="hibernate.default_batch_fetch_size">${hibernate.default_batch_fetch_size}</prop>
+				<prop key="hibernate.max_fetch_depth">${hibernate.max_fetch_depth}</prop>
+				<prop key="hibernate.generate_statistics">${hibernate.generate_statistics}</prop>
+				<prop key="hibernate.bytecode.use_reflection_optimizer">${hibernate.bytecode.use_reflection_optimizer}</prop>
+				<prop key="hibernate.hbm2ddl.auto">${hibernate.hbm2ddl.auto}</prop>
+				<prop key="hibernate.cache.use_second_level_cache">${hibernate.cache.use_second_level_cache}</prop>
+				<prop key="hibernate.cache.use_query_cache">${hibernate.cache.use_query_cache}</prop>
+				<prop key="hibernate.cache.region.factory_class">${hibernate.cache.region.factory_class}</prop>
+				<prop key="net.sf.ehcache.configurationResourceName">${net.sf.ehcache.configurationResourceName}</prop>
+				<prop key="hibernate.cache.use_structured_entries">${hibernate.cache.use_structured_entries}</prop>
+			</props>
+		</property>
+	</bean>
+
+	<aop:aspectj-autoproxy proxy-target-class="true" />
+
+	<!-- 配置Jdbc模板 -->
+	<!-- <bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate" 
 		p:dataSource-ref="dataSource" /> -->
-		
+
 	<!-- 开启注解事务 只对当前配置文件有效 -->
-  	<tx:annotation-driven transaction-manager="transactionManager"/>
-  	
+	<tx:annotation-driven transaction-manager="transactionManager" />
+
 	<!-- 配置事务管理器 -->
-    <bean id="transactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">
-        <property name="sessionFactory" ref="sessionFactory"/>
-    </bean>	
-    
-		
+	<bean id="transactionManager"
+		class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+
 	<!-- 通过AOP配置提供事务增强，让service包下所有Bean的所有方法拥有事务 -->
 	<aop:config proxy-target-class="true">
-		<aop:pointcut id="serviceMethod"
-			expression=" execution(* com.gogo.service..*(..))" />
+		<aop:pointcut id="serviceMethod" expression=" execution(* com.gogo.service..*(..))" />
 		<aop:advisor pointcut-ref="serviceMethod" advice-ref="txAdvice" />
 	</aop:config>
-	
+
 	<tx:advice id="txAdvice" transaction-manager="transactionManager">
 		<tx:attributes>
-			<tx:method name="save*" propagation="REQUIRED"/> 
-			<tx:method name="add*" propagation="REQUIRED"/>  
-            <tx:method name="update*" propagation="REQUIRED"/>  
-            <tx:method name="delete*" propagation="REQUIRED"/>  
-            <!--hibernate4必须配置为开启事务 否则 getCurrentSession()获取不到-->
-            <tx:method name="*" propagation="REQUIRED" read-only="true"/>
+			<tx:method name="save*" propagation="REQUIRED" />
+			<tx:method name="add*" propagation="REQUIRED" />
+			<tx:method name="update*" propagation="REQUIRED" />
+			<tx:method name="delete*" propagation="REQUIRED" />
+			<!--hibernate4必须配置为开启事务 否则 getCurrentSession()获取不到 -->
+			<tx:method name="*" propagation="REQUIRED" read-only="true" />
 		</tx:attributes>
 	</tx:advice>
-	
+
 </beans>

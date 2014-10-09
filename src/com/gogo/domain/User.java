@@ -52,6 +52,14 @@ public class User {
 	@Column(name="user_alis_name",length=20,nullable=false)
 	private String alisName;
 	
+	@Pattern(regexp="[0-9]*",message="{user.phonenum.regexp.error}")
+	@Column(name="user_phonenum",length=20,nullable=true)
+	private int phoneNum;
+	
+	@Pattern(regexp="^([a-zA-Z0-9-._]*)+@+([a-zA-Z0-9]*)+.+([a-zA-Z0-9]{1,4})$",message="{user.email.regexp.error}")
+	@Column(name="user_email",length=30,nullable=true)
+	private String email;
+	
 	//注册时间
 	@Column(name="user_register_time",length=10,nullable=false)
 	private Date userRegisterTime;
@@ -75,6 +83,18 @@ public class User {
 	private Set<FriendGroup> firneds;
 
 	
+	public int getPhoneNum() {
+		return phoneNum;
+	}
+	public void setPhoneNum(int phoneNum) {
+		this.phoneNum = phoneNum;
+	}
+	public String getEmail() {
+		return email;
+	}
+	public void setEmail(String email) {
+		this.email = email;
+	}
 	public Set<FriendGroup> getFirneds() {
 		return firneds;
 	}
