@@ -30,6 +30,7 @@
             <list>
                 <!-- 在web环境中一定要定位到classpath 否则默认到当前web应用下找  -->
                 <value>classpath:messages</value>
+                <value>classpath:exception</value>
             </list>
         </property>
         <property name="defaultEncoding" value="UTF-8"/>

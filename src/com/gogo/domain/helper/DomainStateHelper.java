@@ -27,6 +27,12 @@ public class DomainStateHelper {
 	public static final int ACT_STOP = 3;
 	// 活动停止结束
 	public static final int ACT_FINASH = 4;
+	
+	//好友请求
+	//好友请求通过
+	public static final boolean FIREND_PASSED=true;
+	//好友请求未通过
+	public static final boolean FIREND_UNPASSED=false;
 
 	/**
 	 * 属性复制方法 -- 主要用于更新方法

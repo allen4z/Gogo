@@ -1,18 +1,23 @@
 package com.gogo.domain;
 
 import java.util.Date;
+import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Version;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.validator.constraints.Length;
 
 @Entity
 @Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
@@ -25,22 +30,26 @@ public class User {
 	@GeneratedValue(generator = "idGenerator")
 	@Column(name="user_id",length=32)
 	private String userId;
+
 	
 	//用户名称
-//	@Length(min=4,max=30,message="{user.username.legth.error}")
-//	@NotNull(message="{user.username.not.empty}")
-	@Pattern(regexp = "[A-Za-z0-9]{5,20}", message = "{user.username.legth.error}") //java validator验证（用户名字母数字组成，长度为5-10）
+	@Length(min=4,max=20,message="{user.username.length.error}")
+	@NotNull(message="{user.username.not.empty}")
+	@Pattern(regexp = "[A-Za-z0-9]*", message = "{user.username.regexp.error}")
 	@Column(name="user_name",length=20,nullable=false)
 	private String userName;
 	
 	//用户密码
-	@Pattern(regexp = "[A-Za-z0-9]{6,32}", message = "{user.password.legth.error}") 
+	@Length(min=6,max=32,message="{user.password,length.error}")
+	@NotNull(message="{user.password.not,empty}")
 	@Column(name="user_password",length=32,nullable=false)
 	private String userPassword;
 	
 	//昵称
-	@Pattern(regexp = "[A-Za-z0-9]{2,20}", message = "{user.alisname.legth.error}") 
-	@Column(name="user_alis_name",length=20)
+	@NotNull(message="{user.alisname.not.empty}")
+	@Length(min=4,max=20,message="{user.alisname.length.error}")
+	@Pattern(regexp = "[A-Za-z0-9]*", message = "{user.alisname.regexp.error}") 
+	@Column(name="user_alis_name",length=20,nullable=false)
 	private String alisName;
 	
 	//注册时间
@@ -51,15 +60,27 @@ public class User {
 	@Column(name="user_state",length=1,nullable=false)
 	private int userState;
 	
+	
 	//版本信息
 	@Version
 	@Column(name="update_time",length=10,nullable=false)
 	private Date update_time;
 	
-	//是否是参与者
+	//是否是演员 -- 雇佣相关（暂时没有用）
 	@Column(name="user_isactor",length=1)
 	private boolean isActor;
+	
+	//角色所有人员
+	@OneToMany(mappedBy="belongUser",cascade=CascadeType.ALL)
+	private Set<FriendGroup> firneds;
 
+	
+	public Set<FriendGroup> getFirneds() {
+		return firneds;
+	}
+	public void setFirneds(Set<FriendGroup> firneds) {
+		this.firneds = firneds;
+	}
 	public boolean isActor() {
 		return isActor;
 	}

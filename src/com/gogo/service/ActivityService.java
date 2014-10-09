@@ -82,7 +82,7 @@ public class ActivityService {
 		if(!RoleCode.equals(RoleHelper.VISITOR_CODE)){
 			uar = userAndRoleDao.loadUserAndRoleByUserAndAct(user, act);
 			if(uar == null){
-				throw new Business4JsonException("用户不是当前小组成员，请先加入小组");
+				throw new Business4JsonException("act_join_group_first","user not in current group,plase join first");
 			}
 		}else{
 			uar = new UserAndRole();
@@ -107,7 +107,7 @@ public class ActivityService {
 		}else{
 			User haveUser = userAndRoleDao.loadActUser4Role(user, joinRole);
 			if(haveUser != null){
-				throw new Business4JsonException("您已经报过名了！");
+				throw new Business4JsonException("act_you_have_registered","You have registered");
 			}
 		}
 		
@@ -118,7 +118,7 @@ public class ActivityService {
 		//5.判断报名人数 增加代付款金额
 		if(RoleCode.equals(RoleHelper.JOIN_CODE)){
 			if(hasUserCount>= act.getMaxJoin()){
-				throw new Business4JsonException("参与活动报名人数已满！");
+				throw new Business4JsonException("act_join_full","Participate in the activity of the enrollment is full");
 			}
 			//更新用户参加活动待支付金额
 			if(act.getJoinNeedPay() != 0){
@@ -126,7 +126,7 @@ public class ActivityService {
 			}
 		}else if(RoleCode.equals(RoleHelper.SIGNUP_CODE)){
 			if(hasUserCount>= act.getMaxSignUp()){
-				throw new Business4JsonException("观看活动报名人数已满！");
+				throw new Business4JsonException("act_signup_full","Watching activity enrollment is full");
 			}
 			//更新用户观看活动待支付金额
 			if(act.getSignUpNeedPay() != 0){

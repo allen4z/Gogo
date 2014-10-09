@@ -1,11 +1,16 @@
 package com.gogo.ctrl;
 
+import java.util.Locale;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.support.RequestContextUtils;
 
 import com.gogo.domain.User;
 import com.gogo.exception.Business4JsonException;
@@ -21,6 +26,9 @@ import com.gogo.helper.CommonConstant;
  *
  */
 public class BaseController {
+	@Autowired
+	private MessageSource messageSource;
+	
 	protected static final String ERROR_MSG_KEY = "errorMsg";
 	
 	Logger log = Logger.getLogger(BaseController.class);
@@ -42,8 +50,17 @@ public class BaseController {
 	
 	@ExceptionHandler(value=Business4JsonException.class)
 	@ResponseBody
-	public String exp4Json(Exception ex){
-		return ex.getMessage();
+	public String exp4Json(Exception ex,HttpServletRequest request){
+		Locale locale = RequestContextUtils.getLocale(request);
+		Business4JsonException e = (Business4JsonException) ex;
+		String returnMsg = null;
+		String loaclMsg = messageSource.getMessage(e.getCode(), null, e.getMessage(), locale);
+		if(loaclMsg == null || loaclMsg.equals("")){
+			returnMsg = e.getMessage();
+		}else{
+			returnMsg = loaclMsg;
+		}
+		return returnMsg;
 	}
 	
 	protected User getSessionUser(HttpSession session){
@@ -78,4 +95,16 @@ public class BaseController {
 	protected int getPageSize(Integer pagesize){
 		return (pagesize == null || pagesize == 0) ? CommonConstant.PAGE_SIZE : pagesize;
 	}
+
+
+	public MessageSource getMessageSource() {
+		return messageSource;
+	}
+
+
+	public void setMessageSource(MessageSource messageSource) {
+		this.messageSource = messageSource;
+	}
+	
+	
 }

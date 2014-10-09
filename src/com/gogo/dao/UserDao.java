@@ -7,15 +7,11 @@ import org.springframework.stereotype.Repository;
 
 import com.gogo.domain.Activity;
 import com.gogo.domain.User;
-import com.gogo.page.Page;
 
 @Repository
 public class UserDao extends BaseDao<User>{
 	
-	public void saveUser(User user){
-		save(user);
-	}
-	
+
 	
 	public User loadUserById(int userId){
 		return load(userId);

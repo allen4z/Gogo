@@ -144,7 +144,7 @@ public class UserController extends BaseController{
 	@RequestMapping(value="main")
 	public ModelAndView backUserMain(
 			@ModelAttribute(CommonConstant.USER_CONTEXT) User user,
-			@RequestParam(value="pn",defaultValue="0",required=false) int currPage){
+			@RequestParam(value="pn",defaultValue="0",required=false) int currPage) throws Exception{
 		ModelAndView mav = new ModelAndView();
 		String userId = user.getUserId();
 		//查询拥有活动
@@ -152,10 +152,17 @@ public class UserController extends BaseController{
 		//查询相关活动
 		Page<Activity> joinAct = userService.loadJoinActivitesByUser(userId,currPage,CommonConstant.PAGE_SIZE);
 		//查询需要支付信息
-		List<String> payInfo = userService.loadPayInfo(userId);							
+		List<String> payInfo = userService.loadPayInfo(userId);			
+		//查询好友列表
+		
+		List<User> friends = userService.loadFriends(userId);
+		
+		
 		mav.addObject("page",ownAct );
 		mav.addObject("joinpage",joinAct );
 		mav.addObject("payinfo",payInfo );
+		mav.addObject("friends", friends);
+		
 		mav.setViewName("main");
 		
 		return mav;

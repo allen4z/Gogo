@@ -14,10 +14,13 @@ import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
 import javax.persistence.Table;
 import javax.persistence.Version;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.validator.constraints.Length;
 
 @Entity
 @Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
@@ -28,26 +31,39 @@ public class Activity {
 	@Id
 	@GenericGenerator(name = "idGenerator", strategy = "uuid")
 	@GeneratedValue(generator = "idGenerator")
-	@Column(name="act_id",length=32)
+	@Column(name="act_id",length=32,nullable=false)
 	private String actId;
 	
 	//活动名称
-	@Column(name="act_name",length=20)
+	@NotNull(message="{act.actname.not.empty}")
+	@Length(min=4,max=20,message="{act.actname.length.error}")
+	@Pattern(regexp = "[A-Za-z0-9_]*", message = "{act.actname.regexp.error}") 
+	@Column(name="act_name",length=20,nullable=false)
 	private String actName;
 	
 	//活动内容
+	@NotNull(message="{act.actcount.not.empty}")
+	@Length(min=0,max=200,message="{act.actcount.length.error}")
+	//@Pattern(regexp = "[A-Za-z0-9_]*", message = "{act.actcount.regexp.error}") 
 	@Column(name="act_contents",length=200)
 	private String actContent;
 	
 	//创建时间
+	@NotNull(message="{act.actcreatetime.not.empty}")
 	@Column(name="act_create_time",length=10)
 	private Date actCreateTime;
 	
+	//是否循环任务
+	@Column(name="act_isloop",length=1)
+	private boolean isLoop;
+	
 	//开始时间
+	@NotNull(message="{act.actstarttime.not.empty}")
 	@Column(name="act_start_time",length=10)
 	private Date actStartTime;
 	
 	//结束时间
+	@NotNull(message="{act.actendtime.not.empty}")
 	@Column(name="act_end_time",length=10)
 	private Date actEndTime;
 	
@@ -118,201 +134,47 @@ public class Activity {
 	//观众最多
 	@Column(name="act_max_signup",length=50)
 	private int maxSignUp;
+	
 	//每名参与者需要支付
 	@Column(name="act_join_needpay",length=50)
 	private double joinNeedPay;
+	
 	//每名观众需要支付
 	@Column(name="act_signup_needpay",length=50)
 	private double signUpNeedPay;
 	
 	public Activity(){
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	public double getJoinNeedPay() {
 		return joinNeedPay;
 	}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 	public void setJoinNeedPay(double joinNeedPay) {
 		this.joinNeedPay = joinNeedPay;
 	}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 	public double getSignUpNeedPay() {
 		return signUpNeedPay;
 	}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 	public void setSignUpNeedPay(double signUpNeedPay) {
 		this.signUpNeedPay = signUpNeedPay;
 	}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 	public int getMaxJoin() {
 		return maxJoin;
 	}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 	public void setMaxJoin(int maxJoin) {
 		this.maxJoin = maxJoin;
 	}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 	public int getMaxSignUp() {
 		return maxSignUp;
 	}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 	public void setMaxSignUp(int maxSignUp) {
 		this.maxSignUp = maxSignUp;
 	}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+	public boolean isLoop() {
+		return isLoop;
+	}
+	public void setLoop(boolean isLoop) {
+		this.isLoop = isLoop;
+	}
 	public String getActId() {
 		return actId;
 	}

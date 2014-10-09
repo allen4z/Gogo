@@ -20,7 +20,6 @@ public class ActivityDao extends BaseDao<Activity>{
 	
 	private static final String HQL_LIST="FROM Activity"; 
 	
-	private static final String HQL_COUNT="SELECT COUNT(*) FROM Activity"; 
 
 	public Activity loadActbyActId(String actId){
 		return load(actId);

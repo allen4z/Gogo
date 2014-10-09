@@ -9,9 +9,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.gogo.dao.ActivityDao;
+import com.gogo.dao.FriendGroupDao;
 import com.gogo.dao.UserAndRoleDao;
 import com.gogo.dao.UserDao;
 import com.gogo.domain.Activity;
+import com.gogo.domain.FriendGroup;
 import com.gogo.domain.Role;
 import com.gogo.domain.User;
 import com.gogo.domain.UserAndRole;
@@ -33,6 +35,9 @@ public class UserService{
 	@Autowired
 	private UserAndRoleDao userAndRoleDao;
 	
+	@Autowired
+	private FriendGroupDao friendGroupDao;
+	
 	public void saveUser(User user){
 		user.setUserState(DomainStateHelper.USER_NORMAL_STATE);
 		user.setUserRegisterTime(new Date());
@@ -41,7 +46,11 @@ public class UserService{
 		String password = user.getUserPassword();
 		user.setUserPassword(MD5Util.MD5(password));
 		
-		userDao.saveUser(user);
+		FriendGroup fg = new FriendGroup();
+		fg.setBelongUser(user);
+
+		userDao.save(user);
+		friendGroupDao.save(fg);
 	}
 	
 	@Transactional
@@ -112,9 +121,14 @@ public class UserService{
 		User user =  userDao.loadUserByNameAndPassword(loginUser.getUserName(),dbPassword);
 		
 		if(user == null ){
-			throw new Business4JsonException("用户或密码错误");
+			throw new Business4JsonException("user_username_or_password_error","username or password error");
 		}
 		
 		return user;
+	}
+	
+	public List<User> loadFriends(String userId) throws Exception{
+		 List<User> friends = friendGroupDao.loadAllFriends(userId);
+		 return friends;
 	}
 }
