@@ -16,7 +16,6 @@ import com.gogo.page.Page;
 @Repository
 public class ActivityDao extends BaseDao<Activity>{
 	
-	
 	private static final String HQL_AILS=" activity ";
 	
 	private static final String HQL_LIST="FROM Activity"; 
