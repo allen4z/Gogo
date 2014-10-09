@@ -52,9 +52,9 @@ public class User {
 	@Column(name="user_alis_name",length=20,nullable=false)
 	private String alisName;
 	
-	@Pattern(regexp="[0-9]*",message="{user.phonenum.regexp.error}")
+	@Pattern(regexp ="[0-9]{9,11}", message = "{user.phonenum.regexp.error}") 
 	@Column(name="user_phonenum",length=20,nullable=true)
-	private int phoneNum;
+	private String phoneNum;
 	
 	@Pattern(regexp="^([a-zA-Z0-9-._]*)+@+([a-zA-Z0-9]*)+.+([a-zA-Z0-9]{1,4})$",message="{user.email.regexp.error}")
 	@Column(name="user_email",length=30,nullable=true)
@@ -66,8 +66,7 @@ public class User {
 	
 	//用户状态：删除、正常
 	@Column(name="user_state",length=1,nullable=false)
-	private int userState;
-	
+	private int userState;	
 	
 	//版本信息
 	@Version
@@ -79,14 +78,14 @@ public class User {
 	private boolean isActor;
 	
 	//角色所有人员
-	@OneToMany(mappedBy="belongUser",cascade=CascadeType.ALL)
-	private Set<FriendGroup> firneds;
+	/*@OneToMany(mappedBy="belongUser",cascade=CascadeType.ALL)
+	private Set<FriendGroup> firneds;*/
 
 	
-	public int getPhoneNum() {
+	public String getPhoneNum() {
 		return phoneNum;
 	}
-	public void setPhoneNum(int phoneNum) {
+	public void setPhoneNum(String phoneNum) {
 		this.phoneNum = phoneNum;
 	}
 	public String getEmail() {
@@ -95,12 +94,12 @@ public class User {
 	public void setEmail(String email) {
 		this.email = email;
 	}
-	public Set<FriendGroup> getFirneds() {
+	/*public Set<FriendGroup> getFirneds() {
 		return firneds;
 	}
 	public void setFirneds(Set<FriendGroup> firneds) {
 		this.firneds = firneds;
-	}
+	}*/
 	public boolean isActor() {
 		return isActor;
 	}

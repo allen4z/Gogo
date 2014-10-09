@@ -9,11 +9,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.gogo.dao.ActivityDao;
-import com.gogo.dao.FriendGroupDao;
+import com.gogo.dao.FriendListDao;
 import com.gogo.dao.UserAndRoleDao;
 import com.gogo.dao.UserDao;
 import com.gogo.domain.Activity;
-import com.gogo.domain.FriendGroup;
+import com.gogo.domain.FriendList;
 import com.gogo.domain.Role;
 import com.gogo.domain.User;
 import com.gogo.domain.UserAndRole;
@@ -36,7 +36,7 @@ public class UserService{
 	private UserAndRoleDao userAndRoleDao;
 	
 	@Autowired
-	private FriendGroupDao friendGroupDao;
+	private FriendListDao friendGroupDao;
 	
 	public void saveUser(User user){
 		user.setUserState(DomainStateHelper.USER_NORMAL_STATE);
@@ -46,11 +46,11 @@ public class UserService{
 		String password = user.getUserPassword();
 		user.setUserPassword(MD5Util.MD5(password));
 		
-		FriendGroup fg = new FriendGroup();
-		fg.setBelongUser(user);
+		/*FriendList fg = new FriendList();
+		fg.setBelongUser(user);*/
 
 		userDao.save(user);
-		friendGroupDao.save(fg);
+//		friendGroupDao.save(fg);
 	}
 	
 	@Transactional

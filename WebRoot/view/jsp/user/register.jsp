@@ -10,7 +10,10 @@
 			var f_userName = $("#u_userName").val();
 			var f_password = $("#u_password").val();
 			var f_alisName = $("#u_alisName").val();
-			var params = {userName:f_userName,userPassword:f_password,alisName:f_alisName};
+			var f_phone = $("#u_phone").val();
+			var f_email = $("#u_email").val();
+			
+			var params = {userName:f_userName,userPassword:f_password,alisName:f_alisName,phoneNum:f_phone,email:f_email};
 			var actionInfo = 'user/doRegister';
 			var success = function(result) { 
 					if(result == true){
@@ -39,6 +42,11 @@
    	passwod:<input id="u_password" type="password"/><br/>
    	 
    	alisname：<input id="u_alisName" type="text" /><br/>
+   	
+   	phone：<input id="u_phone" type="text" /><br/>
+   	
+   	email：<input id="u_email" type="text" /><br/>	
+   		
    	
    	<input id="registerBtn" value="注册" type="button"><br/>
    </form>

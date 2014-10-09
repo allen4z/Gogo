@@ -15,8 +15,8 @@ import org.hibernate.annotations.GenericGenerator;
 
 @Entity
 @Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
-@Table(name="t_friendgroup")
-public class FriendGroup {
+@Table(name="t_friendlist")
+public class FriendList {
 
 	//主键
 	@Id

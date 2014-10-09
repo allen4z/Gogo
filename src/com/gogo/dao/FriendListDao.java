@@ -4,11 +4,11 @@ import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
-import com.gogo.domain.FriendGroup;
+import com.gogo.domain.FriendList;
 import com.gogo.domain.User;
 
 @Repository
-public class FriendGroupDao extends BaseDao<FriendGroup> {
+public class FriendListDao extends BaseDao<FriendList> {
 
 	/**
 	 * 查询所有好友
@@ -17,8 +17,8 @@ public class FriendGroupDao extends BaseDao<FriendGroup> {
 	 */
 	public List<User> loadAllFriends(String userId){
 		
-		String hql = " select friendGroup.friendUser from FriendGroup friendGroup where friendGroup.belongUser.userId:=userId and friendGroup.passed:=passed "
-				+ " order by friendGroup.friendUser.alisName ";
+		String hql = " select friendList.friendUser from FriendList friendList where friendList.belongUser.userId=:userId and friendList.passed=:passed "
+			;
 		
 		List firends = getSession().createQuery(hql)
 				.setString("userId", userId)

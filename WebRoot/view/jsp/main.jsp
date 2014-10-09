@@ -12,6 +12,9 @@
 	
 	List<String> payInfo = (List)request.getAttribute("payinfo");
 	
+	List<User> friends = (List)request.getAttribute("friends");
+	
+	
 %>
 <html>
 <head>
@@ -44,9 +47,27 @@
 </div>
 
 <div>
+<table border="1">
+<tr >
+		<td colspan="2" align="center">好友列表</td>
+	</tr>
+<%
+	if(friends!= null && friends.size()>0){
+		for(User friend : friends){
+			%><tr><td><%=friend.getAlisName()
+			
+			%></td><%
+			
+			%><td><a href="#">发送消息</a></td></tr><%
+		}
+	}
+	%>
+</table>
 
 <table border="1">
-	
+	<tr >
+		<td colspan="2" align="center">待支付列表</td>
+	</tr>
 	<%
 	if(payInfo!= null && payInfo.size()>0){
 		for(String msg : payInfo){
