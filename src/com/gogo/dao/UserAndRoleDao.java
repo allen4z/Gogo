@@ -3,6 +3,7 @@ package com.gogo.dao;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.hibernate.Query;
 import org.springframework.stereotype.Repository;
 
 import com.gogo.domain.Activity;
@@ -33,6 +34,16 @@ public class UserAndRoleDao extends BaseDao<UserAndRole> {
 		return roles;
 	}
 	
+	public User loadActUser4Role(User user, Role role){
+		StringBuffer hql = new StringBuffer();
+		hql.append(" select userAndRole.user from UserAndRole userAndRole where userAndRole.role.roleId=:roleId and userAndRole.user.userId=:userId ");
+		Query query = getSession().createQuery(hql.toString())
+				.setString("userId", user.getUserId())
+				.setString("roleId", role.getRoleId());
+		
+		return  (User)query.uniqueResult();
+	}
+	
 	public UserAndRole loadUserAndRoleByUserAndAct(User user,Activity act){
 	
 		String hql = "select ur from UserAndRole ur join ur.role.belongAct a where ur.user.userId = :userId and a.actId=:actId";
@@ -56,6 +67,4 @@ public class UserAndRoleDao extends BaseDao<UserAndRole> {
 		
 		return uars;
 	}
-	
-	
 }

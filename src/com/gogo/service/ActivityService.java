@@ -74,6 +74,8 @@ public class ActivityService {
 		Set<Role> roles= act.getRoles();
 		Iterator<Role> it = roles.iterator();
 		
+		
+		
 		Role joinRole = null;
 		UserAndRole uar = null;
 		//1.如果用户以游客身份关联，则必须有其他的身份
@@ -102,6 +104,11 @@ public class ActivityService {
 			joinRole.setRoleCode(RoleCode);
 			joinRole.setRoleName(RoleHelper.getRoleInfo().get(RoleCode));
 			joinRole.setBelongAct(act);
+		}else{
+			User haveUser = userAndRoleDao.loadActUser4Role(user, joinRole);
+			if(haveUser != null){
+				throw new Business4JsonException("您已经报过名了！");
+			}
 		}
 		
 		

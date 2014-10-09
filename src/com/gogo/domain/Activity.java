@@ -97,7 +97,7 @@ public class Activity {
 	
 	//是否需要观众
 	@Column(name="act_isopen",length=1)
-	private boolean isOpen;
+	private boolean needOpen;
 	
 	//活总需金额
 	@Column(name="act_need_amount",length=50)
@@ -431,12 +431,14 @@ public class Activity {
 		this.needActor = needActor;
 	}
 
-	public boolean isOpen() {
-		return isOpen;
+
+
+	public boolean isNeedOpen() {
+		return needOpen;
 	}
 
-	public void setOpen(boolean isOpen) {
-		this.isOpen = isOpen;
+	public void setNeedOpen(boolean needOpen) {
+		this.needOpen = needOpen;
 	}
 
 	public double getNeedAmount() {
