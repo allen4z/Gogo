@@ -94,7 +94,10 @@ public class ActivityController extends BaseController {
 	@RequestMapping("join/{actId}")
 	@ResponseBody
 	public boolean joinActivity(@ModelAttribute(CommonConstant.USER_CONTEXT) User user,@PathVariable String actId){
-		actService.saveActivity4RoleState(actId,user,RoleHelper.JOIN_CODE);
+//		actService.saveActivity4RoleState(actId,user,RoleHelper.JOIN_CODE);
+		
+		actService.updateActivity4UARState(actId,user,RoleHelper.UAR_JOIN_ACTIVITY);
+		
 		return true;
 	}
 	
@@ -106,7 +109,10 @@ public class ActivityController extends BaseController {
 	@RequestMapping("signup/{actId}")
 	@ResponseBody
 	public boolean signupActivity(@ModelAttribute(CommonConstant.USER_CONTEXT) User user,@PathVariable String actId){
-		actService.saveActivity4RoleState(actId,user,RoleHelper.SIGNUP_CODE);
+//		actService.saveActivity4RoleState(actId,user,RoleHelper.SIGNUP_CODE);
+		
+		actService.updateActivity4UARState(actId,user,RoleHelper.UAR_SINGUP_ACTIVITY);
+		
 		return true;
 	}
 	

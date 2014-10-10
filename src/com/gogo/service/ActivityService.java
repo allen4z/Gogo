@@ -2,6 +2,7 @@ package com.gogo.service;
 
 import java.util.Date;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
@@ -69,31 +70,22 @@ public class ActivityService {
 	 * 
 	 * 使用了同步方法！！！！
 	 */
-	public synchronized void saveActivity4RoleState(String actId,User user,String RoleCode){
+	public void saveActivity4RoleState(String actId,User user,String roleCode){
 		
 		Activity act = loadActbyActId(actId);
 		Set<Role> roles= act.getRoles();
 		Iterator<Role> it = roles.iterator();
 		
-		
-		
 		Role joinRole = null;
 		UserAndRole uar = null;
-		//1.如果用户以游客身份关联，则必须有其他的身份
-		if(!RoleCode.equals(RoleHelper.VISITOR_CODE)){
-			uar = userAndRoleDao.loadUserAndRoleByUserAndAct(user, act);
-			if(uar == null){
-				throw new Business4JsonException("act_join_group_first","user not in current group,plase join first");
-			}
-		}else{
-			uar = new UserAndRole();
-			uar.setUser(user);
-		}
-		
-		//2.查询当前活动是否已经有所需角色
+		//1.用户第一次分配角色
+		uar = new UserAndRole();
+		uar.setUser(user);
+	
+		//2.查询当前活动是否已经有游客角色
 		while(it.hasNext()){
 			Role role = it.next();
-			if(role.getRoleCode().equals(RoleCode)){
+			if(role.getRoleCode().equals(roleCode)){
 				joinRole = role;
 				break;
 			}
@@ -102,8 +94,8 @@ public class ActivityService {
 		//3.如果没有则新建角色信息
 		if(joinRole == null){
 			joinRole = new Role();
-			joinRole.setRoleCode(RoleCode);
-			joinRole.setRoleName(RoleHelper.getRoleInfo().get(RoleCode));
+			joinRole.setRoleCode(roleCode);
+			joinRole.setRoleName(RoleHelper.getRoleInfo().get(roleCode));
 			joinRole.setBelongAct(act);
 		}else{
 			User haveUser = userAndRoleDao.loadActUser4Role(user, joinRole);
@@ -111,48 +103,89 @@ public class ActivityService {
 				throw new Business4JsonException("act_you_have_registered","You have registered");
 			}
 		}
+		uar.setRole(joinRole);
 		
-		
-		//当前角色已经拥有的人数
-		int hasUserCount = joinRole.getBelongUser() == null ? 0 :joinRole.getBelongUser().size();
-		
-		//5.判断报名人数 增加代付款金额
-		if(RoleCode.equals(RoleHelper.JOIN_CODE)){
-			if(hasUserCount>= act.getMaxJoin()){
-				throw new Business4JsonException("act_join_full","Participate in the activity of the enrollment is full");
-			}
-			//更新用户参加活动待支付金额
-			if(act.getJoinNeedPay() != 0){
-				uar.setWaitCost(act.getJoinNeedPay());
-			}
-		}else if(RoleCode.equals(RoleHelper.SIGNUP_CODE)){
-			if(hasUserCount>= act.getMaxSignUp()){
-				throw new Business4JsonException("act_signup_full","Watching activity enrollment is full");
-			}
-			//更新用户观看活动待支付金额
-			if(act.getSignUpNeedPay() != 0){
-				uar.setWaitCost(act.getSignUpNeedPay());
-			}
-		}
-		
-		
-		//4.更新用户与角色的关联关系
-		if(uar.getRole()== null || !uar.getRole().getRoleCode().equals(RoleHelper.MANAGER_CODE)){
-			uar.setRole(joinRole);
-		}
-		
-		
+		//5、判断是否重复加入
 		if(joinRole.getBelongUser() !=null){
 			if(joinRole.getBelongUser().contains(uar)){
 				throw new Business4JsonException("you joined this activity!");
 			}
 		}
 		
-		notifyPayProcess(user);
-		
 		actDao.update(act);
 		userAndRoleDao.saveOrUpdate(uar);
 	}
+	
+	
+	
+	
+	/**
+	 *  更新用户关联关系的状态 
+	 * @param actId
+	 * @param user
+	 * @param uarState
+	 */
+	public synchronized void updateActivity4UARState(String actId,User user,int uarState){
+		Activity act = loadActbyActId(actId);
+		//1、得到活动所有的角色用户关系
+		List<UserAndRole> uars = userAndRoleDao.loadUserAndRoleByAct(act);
+		//2.得到已经报名的人数
+		int hasUserCount = 0;
+		//3.得到当前用户与活动角色的关系
+		UserAndRole uar = null;
+		for (UserAndRole userAndRole : uars) {
+			//当前用户的关联关系
+			if(userAndRole.getUser().getUserId().equals(user.getUserId())){
+				uar = userAndRoleDao.loadUserAndRoleByUserAndAct(user, act);
+				//如果当前用户的权限包含了需要变更的权限，则为重复加入
+				if(RoleHelper.judgeState(uar.getUarState(), uarState)){
+					throw new Business4JsonException("you joined this activity!");
+				}
+			}
+			int curState = uar.getUarState();
+			if(RoleHelper.judgeState(curState, uarState)){
+				hasUserCount += 1;
+			}
+		}	
+		
+		//如果用户没有关联人和该活动的角色，则提示用户先加入活动小组
+		if(uar == null){
+			throw new Business4JsonException("act_join_group_first","user not in current group,plase join first");
+		}
+		
+		//4、分配权限，合并已有权限和变更权限
+		int chagedState=RoleHelper.mergeState(uar.getUarState(), uarState);
+		uar.setUarState(chagedState);
+		//是否需要付款通知
+		boolean payFlag = false;
+		
+		//5.判断报名人数 增加代付款金额
+		if(uarState == RoleHelper.UAR_JOIN_ACTIVITY){
+			if(hasUserCount>= act.getMaxJoin()){
+				throw new Business4JsonException("act_join_full","Participate in the activity of the enrollment is full");
+			}
+			
+			//更新用户参加活动待支付金额
+			if(act.getJoinNeedPay() != 0){
+				uar.setWaitCost(act.getJoinNeedPay());
+				payFlag = true;
+			}
+		}else if(uarState == RoleHelper.UAR_SINGUP_ACTIVITY){
+			if(hasUserCount>= act.getMaxSignUp()){
+				throw new Business4JsonException("act_signup_full","Watching activity enrollment is full");
+			}
+			//更新用户观看活动待支付金额
+			if(act.getSignUpNeedPay() != 0){
+				uar.setWaitCost(act.getSignUpNeedPay());
+				payFlag = true;
+			}
+		}
+		if(payFlag){
+			notifyPayProcess(user);
+		}
+		userAndRoleDao.update(uar);
+	}
+	
 	
 	/**
 	 * 通知用户支付

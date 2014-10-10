@@ -56,6 +56,17 @@ public class UserAndRoleDao extends BaseDao<UserAndRole> {
 		return uar;
 	}
 	
+	public List<UserAndRole> loadUserAndRoleByAct(Activity act){
+
+		String hql = "select ur from UserAndRole ur join ur.role.belongAct a where a.actId=:actId";
+		
+		List<UserAndRole> uars = getSession().createQuery(hql)
+		.setString("actId", act.getActId())
+		.list();
+		
+		return uars;
+	}
+	
 	
 	public List<UserAndRole> loadUserAndRoleByUser(String userId){
 		
