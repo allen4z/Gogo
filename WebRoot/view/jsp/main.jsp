@@ -14,6 +14,7 @@
 	
 	List<User> friends = (List)request.getAttribute("friends");
 	
+	List<User> requestFriend = (List)request.getAttribute("requestFriend");
 	
 %>
 <html>
@@ -38,7 +39,6 @@
 </form>
 
 <br/>
-<button id="searchUserBtn" >查找用户信息</button>
 &nbsp;
 <div>
 	<form id='addActForm'>
@@ -47,6 +47,24 @@
 </div>
 
 <div>
+
+<table border="1">
+<tr >
+		<td colspan="2" align="center">好友请求列表</td>
+	</tr>
+<%
+	if(requestFriend!= null && requestFriend.size()>0){
+		for(User rfInfo : requestFriend){
+			%><tr><td><%=rfInfo.getAlisName()
+			
+			%></td><%
+			
+			%><td><a href="friend/agreeApply/<%=rfInfo.getUserId() %>">同意请求</a></td></tr><%
+		}
+	}
+	%>
+</table>
+
 <table border="1">
 <tr >
 		<td colspan="2" align="center">好友列表</td>
@@ -113,7 +131,7 @@
 
 <table border="1">
 	<tr >
-		<td colspan="2" align="center">加入活动</td>
+		<td colspan="2" align="center">加入的活动小组活动</td>
 	</tr>
 	<tr>
 		<td>活动名称</td>

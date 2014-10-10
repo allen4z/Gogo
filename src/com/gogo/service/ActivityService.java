@@ -52,6 +52,7 @@ public class ActivityService {
 		UserAndRole uar = new UserAndRole();
 		uar.setRole(mrole);
 		uar.setUser(user);
+		uar.setUarState(RoleHelper.UAR_NONE_ACTIVITY);
 		
 		userAndRoleDao.save(uar);
 	}
@@ -211,9 +212,11 @@ public class ActivityService {
 			queryList = PageUtil.getPage(actDao.lodActByPlaceCount(user,place),currPage , actDao.loadActByPlace(user,place, currPage, pageSize), pageSize);
 		}else if(ip != null ){
 			City city = GoMapHelper.getCityInfo(ip);
-			queryList =PageUtil.getPage(actDao.loadActbyAddrCount(user,city), currPage, actDao.loadActbyAddr(user,city, currPage, pageSize), pageSize);
-		}else{
-			queryList = actDao.loadActByHotPoint();
+			if(city != null){
+				queryList =PageUtil.getPage(actDao.loadActbyAddrCount(user,city), currPage, actDao.loadActbyAddr(user,city, currPage, pageSize), pageSize);
+			}else{
+				queryList =PageUtil.getPage(actDao.loadActByHotPointCount(user), currPage, actDao.loadActByHotPoint(user, currPage, pageSize), pageSize);
+			}
 		}
 		return queryList;
 	}

@@ -1,11 +1,15 @@
 package com.gogo.ctrl;
 
 import java.io.File;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -26,6 +30,7 @@ import com.gogo.domain.Role;
 import com.gogo.domain.User;
 import com.gogo.domain.filter.RoleFilter;
 import com.gogo.domain.helper.RoleHelper;
+import com.gogo.exception.Business4JsonException;
 import com.gogo.helper.CommonConstant;
 import com.gogo.page.Page;
 import com.gogo.service.ActivityService;
@@ -52,7 +57,18 @@ public class ActivityController extends BaseController {
 	 */
 	@RequestMapping("saveAct")
 	@ResponseBody
-	public boolean saveActivity(@ModelAttribute(CommonConstant.USER_CONTEXT) User user ,@RequestBody Activity act){
+	public boolean saveActivity(@ModelAttribute(CommonConstant.USER_CONTEXT) User user ,@Valid @RequestBody Activity act,BindingResult result){
+		
+		//验证用户信息
+		if(result.hasErrors()){
+			List<ObjectError> errorList = result.getAllErrors();
+			StringBuffer errMsg = new StringBuffer();
+			for (ObjectError oe : errorList) {
+				errMsg.append(oe.getDefaultMessage()+"\n");
+			}
+			throw new Business4JsonException(errMsg.toString());
+		}
+		
 		actService.saveActivity(act,user);
 		return true;
 	}
@@ -153,7 +169,7 @@ public class ActivityController extends BaseController {
 	}
 	
 	/**
-	 * 文件上传
+	 * 活动LOGO图片上传
 	 * @param file
 	 * @return
 	 * @throws Exception
@@ -178,7 +194,7 @@ public class ActivityController extends BaseController {
 	 * @throws Exception
 	 */
 	@RequestMapping("toShowActPage/{state}/{actId}")
-	public ModelAndView showPage(@PathVariable String state,@PathVariable String actId) throws Exception{
+	public ModelAndView toShowActPage(@PathVariable String state,@PathVariable String actId) throws Exception{
 		ModelAndView mav = new ModelAndView();
 		//Activity act = actService.loadActbyActId(actId);
 		
@@ -194,17 +210,13 @@ public class ActivityController extends BaseController {
 		return mav;
 	}
 	
-
-	
-	
-
 	/**
 	 * 进入新增活动页面
 	 * @return
 	 * @throws Exception
 	 */
 	@RequestMapping("toAddActPage")
-	public String addPage() throws Exception{
+	public String toAddActPage() throws Exception{
 		return "act/addActPage";
 	}
 	
@@ -214,7 +226,7 @@ public class ActivityController extends BaseController {
 	 * @throws Exception
 	 */
 	@RequestMapping("toShowAllPage")
-	public String allActPage() throws Exception{
-		return "act/showAllPage";
+	public String toShowAllPage() throws Exception{
+		return "act/showAllActPage";
 	}
 }

@@ -1,14 +1,11 @@
 package com.gogo.domain;
 
 import java.util.Date;
-import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Version;
 import javax.validation.constraints.NotNull;
@@ -31,7 +28,6 @@ public class User {
 	@Column(name="user_id",length=32)
 	private String userId;
 
-	
 	//用户名称
 	@Length(min=4,max=20,message="{user.username.length.error}")
 	@NotNull(message="{user.username.not.empty}")
@@ -51,6 +47,16 @@ public class User {
 	@Pattern(regexp = "[A-Za-z0-9]*", message = "{user.alisname.regexp.error}") 
 	@Column(name="user_alis_name",length=20,nullable=false)
 	private String alisName;
+	
+	//头像
+	@Column(name="user_image_url",length=100)
+	private String imageUrl;
+	
+	//个性签名
+	@Column(name="user_signature",length=100)
+	@Length(min=0,max=100,message="{user.signature.length.error}")
+	private String signature;
+	
 	
 	@Pattern(regexp ="[0-9]{9,11}", message = "{user.phonenum.regexp.error}") 
 	@Column(name="user_phonenum",length=20,nullable=true)
@@ -84,6 +90,18 @@ public class User {
 	
 	public String getPhoneNum() {
 		return phoneNum;
+	}
+	public String getImageUrl() {
+		return imageUrl;
+	}
+	public void setImageUrl(String imageUrl) {
+		this.imageUrl = imageUrl;
+	}
+	public String getSignature() {
+		return signature;
+	}
+	public void setSignature(String signature) {
+		this.signature = signature;
 	}
 	public void setPhoneNum(String phoneNum) {
 		this.phoneNum = phoneNum;

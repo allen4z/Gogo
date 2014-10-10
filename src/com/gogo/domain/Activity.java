@@ -37,25 +37,26 @@ public class Activity {
 	//活动名称
 	@NotNull(message="{act.actname.not.empty}")
 	@Length(min=4,max=20,message="{act.actname.length.error}")
-	@Pattern(regexp = "[A-Za-z0-9_]*", message = "{act.actname.regexp.error}") 
 	@Column(name="act_name",length=20,nullable=false)
 	private String actName;
 	
 	//活动内容
 	@NotNull(message="{act.actcount.not.empty}")
 	@Length(min=0,max=200,message="{act.actcount.length.error}")
-	//@Pattern(regexp = "[A-Za-z0-9_]*", message = "{act.actcount.regexp.error}") 
 	@Column(name="act_contents",length=200)
 	private String actContent;
 	
+	//活动logo
+	@Column(name="act_image_url",length=100)
+	private String imageUrl;
+	
 	//创建时间
-	@NotNull(message="{act.actcreatetime.not.empty}")
 	@Column(name="act_create_time",length=10)
 	private Date actCreateTime;
 	
 	//是否循环任务
 	@Column(name="act_isloop",length=1)
-	private boolean isLoop;
+	private boolean needLoop;
 	
 	//开始时间
 	@NotNull(message="{act.actstarttime.not.empty}")
@@ -145,6 +146,18 @@ public class Activity {
 	
 	public Activity(){
 	}
+	
+	
+	public String getImageUrl() {
+		return imageUrl;
+	}
+
+
+	public void setImageUrl(String imageUrl) {
+		this.imageUrl = imageUrl;
+	}
+
+
 	public double getJoinNeedPay() {
 		return joinNeedPay;
 	}
@@ -169,12 +182,15 @@ public class Activity {
 	public void setMaxSignUp(int maxSignUp) {
 		this.maxSignUp = maxSignUp;
 	}
-	public boolean isLoop() {
-		return isLoop;
+
+	public boolean isNeedLoop() {
+		return needLoop;
 	}
-	public void setLoop(boolean isLoop) {
-		this.isLoop = isLoop;
+
+	public void setNeedLoop(boolean needLoop) {
+		this.needLoop = needLoop;
 	}
+
 	public String getActId() {
 		return actId;
 	}

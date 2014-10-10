@@ -26,6 +26,15 @@ public class RoleHelper {
 	public static final String VISITOR_NAME= "VISITOR";
 	
 	
+	public static final int UAR_NONE_ACTIVITY=0;  //  000
+	
+	public static final int UAR_JOIN_ACTIVITY=1;  //  001
+	
+	public static final int UAR_SINGUP_ACTIVITY=2; // 010
+	
+	public static final int UAR_INVEST_ACTIVITY=4; // 100
+	
+	
 	public static Map<String,String> getRoleInfo(){
 		Map<String,String> map = new HashMap<String,String>();
 		

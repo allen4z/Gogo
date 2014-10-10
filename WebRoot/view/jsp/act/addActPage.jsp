@@ -48,6 +48,7 @@
 
 	$(document).ready(function(){
 		$("#addActBtn").click(function(){
+			//alert($("#act_isLoop").attr("checked"));
 			var actionInfo = 'activity/saveAct';	
 			var params = {
 				actName : $("#act_name").val(),
@@ -57,9 +58,18 @@
 				actSignTime : $("#act_signtime").val(),
 				needInvest:$("#act_needInvest").attr("checked"),
 				needUndertake:$("#act_needUndertake").attr("checked"),
+				
+				
 				needActor:$("#act_needActor").attr("checked"),
+				maxJoin : $("#act_maxJoin").val(),
+				joinNeedPay : $("#act_joinNeedPay").val(),
+				
+				
 				needOpen:$("#act_isOpen").attr("checked"),
-				isLoop:$("#act_isLoop").attr("checked")
+				maxSignUp : $("#act_maxSignUp").val(),
+				signUpNeedPay : $("#act_signUpNeedPay").val(),
+				
+				needLoop:$("#act_isLoop").attr("checked")
 			};
 			
 			var success = function(id){
@@ -90,8 +100,16 @@
 活动内容：<textarea id="act_content" name ="act_content" rows="10" cols="50"></textarea> <br/>
 <!-- 是否需要投资：<input id="act_needInvest" name="act_needInvest" type="checkbox"/><br/>
 是否需要承办：<input id="act_needUndertake" name="act_needUndertake" type="checkbox"/><br/>
-是否应聘参与人：<input id="act_needActor" name="act_needActor" type="checkbox"/><br/> -->
+-->
+是否需要参与人：<input id="act_needActor" name="act_needActor" type="checkbox"/><br/> 
+参与人最多：<input id="act_maxJoin" name="act_maxJoin" type="text"/>	<br/>
+参与人需要交费：<input id="act_joinNeedPay" name="act_joinNeedPay" type="text"/>	<br/>
+
 是否对外开放：<input id="act_isOpen" name="act_isOpen" type="checkbox"/><br/>
+观众最多：<input id="act_maxSignUp" name="act_maxSignUp" type="text"/>	<br/>
+观众需要交费：<input id="act_signUpNeedPay" name="act_signUpNeedPay" type="text"/>	<br/>
+
+
 是否为循环任务：<input id="act_isLoop" name="act_isLoop" type="checkbox"/><br/>
 开始时间：<input id="act_starttime" name="act_starttime" type="date"/><br/>
 结束时间：<input id="act_endtime" name="act_endtime" type="date"/><br/>

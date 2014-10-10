@@ -70,7 +70,7 @@ public class LoginController extends BaseController{
 	
 	@RequestMapping("doRegister")
 	public String goRegister() throws Exception{
-		return "user/register";
+		return "user/registerUserPage";
 	}
 	
 	@RequestMapping("doLogout")

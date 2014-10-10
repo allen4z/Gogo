@@ -31,6 +31,14 @@
 			location.href = '<%=basePath %>activity/toShowAllPage'; 
 		});
 		
+		$("#searchUserBtn").click(function(){
+			location.href = '<%=basePath %>friend/toFriendPage'; 
+		});
+		
+		$("#setterBtn").click(function(){
+			location.href = '<%=basePath %>user/toSetterPage'; 
+		});
+		
 	});
 </script>
 </head>
@@ -40,17 +48,29 @@
 &nbsp;
 <button id="searchActBtn" >查找附近活动</button>
 &nbsp;
-<button id="searchActBtn" >加入（赚钱）</button>
+
+<%  
+if(user!= null){
+%>
+
+<button id="searchUserBtn" >附近的人</button>
+&nbsp;
+<button id="backUserMain"><%=user.getAlisName()%>的主页</button>
+<%
+}
+%>
+&nbsp;
+<button id="setterBtn" >个人设置</button>
+&nbsp;
+<!-- <button id="searchActBtn" >加入（赚钱）</button>
 &nbsp;
 <button id="searchActBtn" >投资</button>
 &nbsp;
 <button id="searchActBtn" >承办</button>
-&nbsp;
+&nbsp; -->
 <%  
 if(user!= null){
 %>
-<button id="backUserMain"><%=user.getAlisName()%>的主页</button>
-&nbsp;
 
 <button id="doLogOut" name="doLogOut" >退出登录</button>
 <%

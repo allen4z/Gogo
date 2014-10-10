@@ -12,6 +12,7 @@ public class GoMapHelper {
 	 * @return
 	 */
 	public static City getCityInfo(String addr){
+		//TODO 通过ip获得城市信息
 		return null;
 	}
 }

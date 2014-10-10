@@ -10,6 +10,7 @@ import com.gogo.domain.City;
 import com.gogo.domain.Place;
 import com.gogo.domain.User;
 import com.gogo.domain.helper.DomainStateHelper;
+import com.gogo.domain.helper.RoleHelper;
 import com.gogo.map.GoMapHelper;
 import com.gogo.page.Page;
 
@@ -58,14 +59,17 @@ public class ActivityDao extends BaseDao<Activity>{
 	
 	
 	public List<Activity> loadJoinActivitesByUser(String userId,int curPage,int pagesize) {
-		String hql = "select act from UserAndRole uar left join uar.role r  left join r.belongAct act where uar.user.userId='"+userId+"'";
+		String hql = "select act from UserAndRole uar left join uar.role r  left join r.belongAct act where uar.user.userId='"+userId+"' "
+				+ " and r.roleCode!='"+ RoleHelper.MANAGER_CODE+"'";
 		List<Activity> list= findByPage(hql,curPage,pagesize);
 		
 		return list;
 	}
 	
 	public int loadJoinActivitesByUserCount(String userId){
-		String hql = "select count(act) from UserAndRole uar left join uar.role r  left join r.belongAct act where uar.user.userId='"+userId+"'";
+		String hql = "select count(act) from UserAndRole uar left join uar.role r  left join r.belongAct act "
+				+ " where uar.user.userId='"+userId+"' "
+				+ " and r.roleCode!='"+ RoleHelper.MANAGER_CODE+"'";
 		return  this.<Number>getCount(hql, null).intValue();
 	}
 	
@@ -121,18 +125,32 @@ public class ActivityDao extends BaseDao<Activity>{
 	 * @return
 	 */
 	public List<Activity> loadActbyAddr(User user,City city,int pn,int pageSize) {
+		return null;
+	}
+	
+	public int loadActbyAddrCount(User user,City city) {
+		return 0;
+	}
+	
+
+	/**
+	 * 根据活动热点情况，查询活动信息
+	 * @param ip
+	 * @return
+	 */
+	public List<Activity> loadActByHotPoint(User user,int pn,int pageSize) {
 		
-		String hql=getHql4City(user, city, false);
+		String hql=getHql4City(user, false);
 		List<Activity> actPage = findByPage(hql, pn, pageSize, null);
 		return actPage;
 	}
 	
-	public int loadActbyAddrCount(User user,City city){
-		String hql=getHql4City(user, city, true);
+	public int loadActByHotPointCount(User user){
+		String hql=getHql4City(user, true);
 		return  this.<Number>getCount(hql, null).intValue();
 	}
 	
-	private String getHql4City(User user,City city,boolean isCount){
+	private String getHql4City(User user,boolean isCount){
 		StringBuffer hql = new StringBuffer();
 		
 		if(isCount){
@@ -154,18 +172,5 @@ public class ActivityDao extends BaseDao<Activity>{
 		
 		return hql.toString();
 	}
-
-	/**
-	 * 根据活动热点情况，查询活动信息
-	 * @param ip
-	 * @return
-	 */
-	public Page<Activity> loadActByHotPoint() {
-		String hql=" from Activity ";
-		Page<Activity> actPage = null;
-		return actPage;
-	}
-
-
 	
 }

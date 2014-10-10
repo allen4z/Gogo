@@ -23,6 +23,7 @@ import com.gogo.domain.User;
 import com.gogo.exception.Business4JsonException;
 import com.gogo.helper.CommonConstant;
 import com.gogo.page.Page;
+import com.gogo.service.FriendService;
 import com.gogo.service.UserService;
 
 /**
@@ -39,6 +40,8 @@ public class UserController extends BaseController{
 	@Autowired
 	private UserService userService;
 	
+	@Autowired
+	private FriendService friendService;
 	/**
 	 * 用户注册
 	 * @param user
@@ -152,42 +155,23 @@ public class UserController extends BaseController{
 		//查询相关活动
 		Page<Activity> joinAct = userService.loadJoinActivitesByUser(userId,currPage,CommonConstant.PAGE_SIZE);
 		//查询需要支付信息
-		List<String> payInfo = userService.loadPayInfo(userId);			
-		//查询好友列表
+		List<String> payInfo = userService.loadPayInfo(userId);	
 		
-		List<User> friends = userService.loadFriends(userId);
+		//查询请求列表
+		List<User> requestFriend = friendService.loadFriendRequestList(userId);
+		//查询好友列表
+		List<User> friends = friendService.loadFriends(userId);
 		
 		
 		mav.addObject("page",ownAct );
 		mav.addObject("joinpage",joinAct );
 		mav.addObject("payinfo",payInfo );
 		mav.addObject("friends", friends);
+		mav.addObject("requestFriend", requestFriend);
 		
 		mav.setViewName("main");
 		
 		return mav;
 	}
-	
-	
-//    @RequestMapping(value = "/user/add", method = {RequestMethod.GET})
-//    public String toAdd(Model model) {
-//        
-//        if(!model.containsAttribute("command")) {
-//            model.addAttribute("command", new User());
-//        }
-//        return "user/add";
-//    }
-//	
-//	 @RequestMapping(value = "/user/add", method = {RequestMethod.POST})
-//	    public String add(Model model, @ModelAttribute("command") @Valid User command, BindingResult result) {
-//	        
-//	        //如果有验证错误 返回到form页面
-//	        if(result.hasErrors()) {
-//	            model.addAttribute("command", command);
-//	            return toAdd(model);
-//	        }
-//	         userService.saveUser(command);
-//	        return "redirect:/user/success";
-//	    }
 	
 }

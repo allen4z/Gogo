@@ -45,6 +45,11 @@ public class UserAndRole {
 	//支出（票款）
 	@Column(name="ur_cost",length=50)
 	private double cost;
+	
+	//用户在当前活动的状态 
+	@Column(name="ur_cost",length=1)
+	private int uarState;
+	
 	//待支付（票款）
 	@Column(name="ur_waitcost",length=50)
 	private double waitCost;
@@ -58,6 +63,14 @@ public class UserAndRole {
 	
 	
 	
+	public int getUarState() {
+		return uarState;
+	}
+
+	public void setUarState(int uarState) {
+		this.uarState = uarState;
+	}
+
 	public double getWaitCost() {
 		return waitCost;
 	}
