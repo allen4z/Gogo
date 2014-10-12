@@ -47,7 +47,7 @@ public class UserAndRole {
 	private double cost;
 	
 	//用户在当前活动的状态 
-	@Column(name="ur_cost",length=1)
+	@Column(name="ur_state",length=1)
 	private int uarState;
 	
 	//待支付（票款）
