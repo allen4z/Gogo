@@ -89,9 +89,9 @@ public class UserService{
 			payInfo.append("you must pay ");
 			payInfo.append(userAndRole.getWaitCost());
 			payInfo.append(" yuan for");
-			if(role.getRoleCode().equals(RoleHelper.JOIN_CODE)){
+			if(RoleHelper.judgeState(userAndRole.getUarState(), RoleHelper.UAR_JOIN_ACTIVITY)){
 				payInfo.append(" join ");
-			}else if(role.getRoleCode().equals(RoleHelper.SIGNUP_CODE)){
+			}else if(RoleHelper.judgeState(userAndRole.getUarState(), RoleHelper.UAR_SINGUP_ACTIVITY)){
 				payInfo.append(" signup ");
 			}
 			payInfo.append("activity -- "+act.getActName());
