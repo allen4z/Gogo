@@ -15,7 +15,6 @@ import javax.persistence.OrderBy;
 import javax.persistence.Table;
 import javax.persistence.Version;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
@@ -96,58 +95,101 @@ public class Activity {
 	@Column(name="update_time",length=10,nullable=false)
 	private Date update_time;
 	
-	//活动拥有角色  (发起人、投资人、参与者、观众)
-	@OneToMany(mappedBy="belongAct",cascade=CascadeType.ALL)
-	private Set<Role> roles;
-	
-	//是否需要投资人
-	@Column(name="act_need_invest",length=1)
-	private boolean needInvest;
-	
-	//是否需要承办方
-	@Column(name="act_need_undertake",length=1)
-	private boolean needUndertake;
-	
-	//是否需要参与者
-	@Column(name="act_need_actor",length=1)
-	private boolean needActor;
-	
-	//是否需要观众
+	//是否对外开放
 	@Column(name="act_isopen",length=1)
 	private boolean needOpen;
+	
+	//活动拥有角色  (管理员、成员)
+	@OneToMany(mappedBy="belongAct",cascade=CascadeType.ALL)
+	private Set<Role> roles;
 	
 	//活总需金额
 	@Column(name="act_need_amount",length=50)
 	private double needAmount;
+	
 	//已拥有资金
 	@Column(name="act_have_amount",length=50)
 	private double haveAmount;
 	
-	//活动承办方
-	@ManyToOne
-	@JoinColumn(name="uk_id")
-	private Undertake undertake;
+	
+	//-------------------JOIN INFO ------------------------
+	//是否需要参与者
+	@Column(name="act_need_actor",length=1)
+	private boolean needActor;
+	
+	//参与者最少
+	@Column(name="act_min_join",length=50)
+	private int minJoin;
 	
 	//参与者最多
 	@Column(name="act_max_join",length=50)
 	private int maxJoin;
 	
-	//观众最多
-	@Column(name="act_max_signup",length=50)
-	private int maxSignUp;
-	
 	//每名参与者需要支付
 	@Column(name="act_join_needpay",length=50)
 	private double joinNeedPay;
+	//-------------------JOIN INFO END------------------------
 	
+	//-------------------SINGUP INFO END------------------------
+	//是否需要观众
+	@Column(name="act_need_signup",length=1)
+	private boolean needSignup;
+	//观众最少
+	@Column(name="act_min_signup",length=50)
+	private int minSignUp;
+	//观众最多
+	@Column(name="act_max_signup",length=50)
+	private int maxSignUp;
 	//每名观众需要支付
 	@Column(name="act_signup_needpay",length=50)
 	private double signUpNeedPay;
+	//-------------------SINGUP INFO END------------------------
 	
+	//-------------------Undertake INFO------------------------
+	//是否需要承办方
+	@Column(name="act_need_undertake",length=1)
+	private boolean needUndertake;
+	//活动承办方
+	@ManyToOne
+	@JoinColumn(name="uk_id")
+	private Undertake undertake;
+	//-------------------Undertake INFO END------------------------
+	
+	//是否需要投资人
+	@Column(name="act_need_invest",length=1)
+	private boolean needInvest;
+	
+
+	/**
+	 * 构造方法
+	 */
 	public Activity(){
 	}
 	
-	
+	public int getMinJoin() {
+		return minJoin;
+	}
+
+	public void setMinJoin(int minJoin) {
+		this.minJoin = minJoin;
+	}
+
+	public int getMinSignUp() {
+		return minSignUp;
+	}
+
+	public void setMinSignUp(int minSignUp) {
+		this.minSignUp = minSignUp;
+	}
+
+	public boolean isNeedSignup() {
+		return needSignup;
+	}
+
+	public void setNeedSignup(boolean needSignup) {
+		this.needSignup = needSignup;
+	}
+
 	public String getImageUrl() {
 		return imageUrl;
 	}

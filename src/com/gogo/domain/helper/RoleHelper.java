@@ -3,35 +3,38 @@ package com.gogo.domain.helper;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * 角色权限
+ * @author Allen
+ *
+ */
 public class RoleHelper {
 
-	//发起人
+	//角色相关信息
+	//管理员
 	public static final String MANAGER_CODE= "01";
 	public static final String MANAGER_NAME= "MANGER";
-	
 	//投资人
 	public static final String INVEST_CODE= "02";
 	public static final String INVEST_NAME= "INVESTOR";
-	
 	//参与者
 	public static final String JOIN_CODE= "03";
 	public static final String JOIN_NAME= "JOIN";
-	
 	//观众
 	public static final String SIGNUP_CODE= "04";
 	public static final String SIGNUP_NAME= "SIGNUP";
-	
-	//访客
+	//成员
 	public static final String VISITOR_CODE= "05";
 	public static final String VISITOR_NAME= "VISITOR";
 	
-	
+	//权限相关信息--使用二进制进行判断
+	//用户在当前活动没有权限
 	public static final int UAR_NONE_ACTIVITY=0;  //  000
-	
+	//用户在当前活动为参与者权限
 	public static final int UAR_JOIN_ACTIVITY=1;  //  001
-	
+	//用户在当前活动为观众权限
 	public static final int UAR_SINGUP_ACTIVITY=2; // 010
-	
+	//用户在当前活动为投资人权限
 	public static final int UAR_INVEST_ACTIVITY=4; // 100
 	
 	/**

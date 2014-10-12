@@ -58,14 +58,15 @@
 				actSignTime : $("#act_signtime").val(),
 				needInvest:$("#act_needInvest").attr("checked"),
 				needUndertake:$("#act_needUndertake").attr("checked"),
-				
+				needOpen:$("#act_isOpen").attr("checked"),
 				
 				needActor:$("#act_needActor").attr("checked"),
+				minJoin : $("#act_minJoin").val(),
 				maxJoin : $("#act_maxJoin").val(),
 				joinNeedPay : $("#act_joinNeedPay").val(),
 				
-				
-				needOpen:$("#act_isOpen").attr("checked"),
+				needSignup:$("#act_needSignup").attr("checked"),
+				minSignUp : $("#act_minSignUp").val(),
 				maxSignUp : $("#act_maxSignUp").val(),
 				signUpNeedPay : $("#act_signUpNeedPay").val(),
 				
@@ -101,12 +102,19 @@
 <!-- 是否需要投资：<input id="act_needInvest" name="act_needInvest" type="checkbox"/><br/>
 是否需要承办：<input id="act_needUndertake" name="act_needUndertake" type="checkbox"/><br/>
 -->
-是否需要参与人：<input id="act_needActor" name="act_needActor" type="checkbox"/><br/> 
-参与人最多：<input id="act_maxJoin" name="act_maxJoin" type="text"/>	<br/>
+是否对外开放：<input id="act_isOpen" name="act_isOpen" type="checkbox"/><br/>
+
+
+活动是否需要有人参加：<input id="act_needActor" name="act_needActor" type="checkbox"/><br/> 
+最少参加人数：<input id="act_minJoin" name="act_minJoin" type="text"/>
+&nbsp;
+最多参加人数：<input id="act_maxJoin" name="act_maxJoin" type="text"/>	<br/>
 参与人需要交费：<input id="act_joinNeedPay" name="act_joinNeedPay" type="text"/>	<br/>
 
-是否对外开放：<input id="act_isOpen" name="act_isOpen" type="checkbox"/><br/>
-观众最多：<input id="act_maxSignUp" name="act_maxSignUp" type="text"/>	<br/>
+活动是否需要观众：<input id="act_needSignup" name="act_needSignup" type="checkbox"/><br/>
+最少观众人数：<input id="act_minSignUp" name="act_minSignUp" type="text"/>
+&nbsp;
+最多观众人数：<input id="act_maxSignUp" name="act_maxSignUp" type="text"/><br/>
 观众需要交费：<input id="act_signUpNeedPay" name="act_signUpNeedPay" type="text"/>	<br/>
 
 
