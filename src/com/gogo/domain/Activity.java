@@ -15,7 +15,6 @@ import javax.persistence.OrderBy;
 import javax.persistence.Table;
 import javax.persistence.Version;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
