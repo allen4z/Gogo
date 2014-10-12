@@ -1,5 +1,6 @@
 package com.gogo.service;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,13 +48,18 @@ public class FriendService{
 	 */
 	public void saveFriendRequest(User belongUser,String friendUserId){
 		User friendUser = userDao.load(friendUserId);
+	
+		FriendList fl = friendListDao.loadFriendListByUserId(belongUser.getUserId(), friendUserId);
 
-		FriendList fl = new FriendList();
-		fl.setBelongUser(belongUser);
-		fl.setFriendUser(friendUser);
-		fl.setfAlisName(friendUser.getAlisName());
-		fl.setPassed(false);
-		
+		if(fl== null){
+			fl = new FriendList();
+			fl.setBelongUser(belongUser);
+			fl.setFriendUser(friendUser);
+			fl.setfAlisName(friendUser.getAlisName());
+			fl.setPassed(false);
+		}else{
+			fl.setUpdate_time(new Date());
+		}
 		friendListDao.save(fl);
 	}
 	
@@ -73,8 +79,6 @@ public class FriendService{
 		fl.setFriendUser(friendUser);
 		fl.setfAlisName(friendUser.getAlisName());
 		fl.setPassed(true);
-		
-//		friendListDao.update(applyList);
 		
 		friendListDao.save(fl);
 	}

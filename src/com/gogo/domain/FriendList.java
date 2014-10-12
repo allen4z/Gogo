@@ -1,5 +1,7 @@
 package com.gogo.domain;
 
+import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -7,6 +9,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Version;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
@@ -48,10 +51,12 @@ public class FriendList {
 	//是否通过认证
 	@Column(name="fg_passed",length=1)
 	private boolean passed;
+	
+	//版本
+	@Version
+	@Column(name="update_time",length=10,nullable=false)
+	private Date update_time;
 
-	
-	
-	
 	public String getfAlisName() {
 		return fAlisName;
 	}
@@ -90,5 +95,13 @@ public class FriendList {
 
 	public void setPassed(boolean passed) {
 		this.passed = passed;
+	}
+
+	public Date getUpdate_time() {
+		return update_time;
+	}
+
+	public void setUpdate_time(Date update_time) {
+		this.update_time = update_time;
 	}
 }

@@ -52,13 +52,17 @@ function templatefill(data){
 		
 		<%
 			}else if(state.equals("1")){
-				%><a href="activity/visitor/{{actId}}">加入活动小组</a><%
+				%><a href="activity/visitor/{{actId}}">加入活动小组</a><br/><%
 			}else if(state.equals("2")){
 				%>
-				  <a href="activity/join/{{actId}}">报名参加活动</a><br/>
-				  <a href="activity/signup/{{actId}}">报名观看活动</a>
+				  <a href="activity/join/{{actId}}">报名参加活动</a>&nbsp;&nbsp;<a href="activity/showSpecialActUserPage/1/{{actId}}">查看参加用户</a><br/>
+				  <a href="activity/signup/{{actId}}">报名观看活动</a>&nbsp;&nbsp;<a href="activity/showSpecialActUserPage/2/{{actId}}">查看观看用户</a><br/>
 				<%
 			}
+		
+			%>
+			 <a href="activity/showActAllUserPage/{{actId}}">查看活动小组所有用户</a><br/>
+			<%
 		%>
 		</div>
 		

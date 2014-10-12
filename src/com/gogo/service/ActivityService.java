@@ -43,6 +43,7 @@ public class ActivityService {
 	public void saveActivity(Activity act,User user) {
 		act.setActCreateTime(new Date());
 		act.setOwnUser(user);
+		act.setActState(DomainStateHelper.ACT_NEW);
 		
 		//设置为超级管理员
 		Role mrole = new Role();
@@ -98,7 +99,7 @@ public class ActivityService {
 			joinRole.setRoleName(RoleHelper.getRoleInfo().get(roleCode));
 			joinRole.setBelongAct(act);
 		}else{
-			User haveUser = userAndRoleDao.loadActUser4Role(user, joinRole);
+			User haveUser = userAndRoleDao.loadActUserByRole(user, joinRole);
 			if(haveUser != null){
 				throw new Business4JsonException("act_you_have_registered","You have registered");
 			}
@@ -126,9 +127,17 @@ public class ActivityService {
 	 * @param uarState
 	 */
 	public synchronized void updateActivity4UARState(String actId,User user,int uarState){
+		
 		Activity act = loadActbyActId(actId);
+		
+		if(uarState == RoleHelper.UAR_JOIN_ACTIVITY && !act.isNeedActor()){
+			throw new Business4JsonException("act_join_false","The activity don't need Participants");	
+		}else if(uarState == RoleHelper.UAR_SINGUP_ACTIVITY && !act.isNeedSignup()){
+			throw new Business4JsonException("act_signup_false","The activity don't need Audience");	
+		}
+		
 		//1、得到活动所有的角色用户关系
-		List<UserAndRole> uars = userAndRoleDao.loadUserAndRoleByAct(act);
+		List<UserAndRole> uars = userAndRoleDao.loadUserAndRoleByAct(act.getActId());
 		//2.得到已经报名的人数
 		int hasUserCount = 0;
 		//3.得到当前用户与活动角色的关系
@@ -139,10 +148,10 @@ public class ActivityService {
 				uar = userAndRoleDao.loadUserAndRoleByUserAndAct(user, act);
 				//如果当前用户的权限包含了需要变更的权限，则为重复加入
 				if(RoleHelper.judgeState(uar.getUarState(), uarState)){
-					throw new Business4JsonException("you joined this activity!");
+					throw new Business4JsonException("act_you_joined_this_activity","you joined this activity!");
 				}
 			}
-			int curState = uar.getUarState();
+			int curState = userAndRole.getUarState();
 			if(RoleHelper.judgeState(curState, uarState)){
 				hasUserCount += 1;
 			}
@@ -253,4 +262,27 @@ public class ActivityService {
 		}
 		return queryList;
 	}
+
+	/**
+	 * 获得当前活动的所有用户
+	 * @param actId
+	 * @param currPage
+	 * @param pageSize
+	 * @return
+	 */
+	public Page<User> loadAllUserFromAct(String actId,int currPage,int pageSize) {
+		return PageUtil.getPage(userAndRoleDao.loadUserAndRoleByActCount(actId), 0, userAndRoleDao.loadActUserByAct(actId, currPage, pageSize), pageSize);
+	}
+	/**
+	 * 获得当前活动制定用户
+	 * @param actId
+	 * @param currPage
+	 * @param pageSize
+	 * @param uarState 权限状态标志
+	 * @return
+	 */
+	public Page<User> loadSpecialUserFromAct(String actId, int currPage,int pageSize,int uarState) {
+		return PageUtil.getPage(userAndRoleDao.loadUserAndRoleByActCount(actId,uarState), 0, userAndRoleDao.loadActUserByAct(actId, currPage, pageSize,uarState), pageSize);
+	}
+
 }

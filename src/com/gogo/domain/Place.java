@@ -15,10 +15,13 @@ import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.GenericGenerator;
 
+import com.gogo.annotation.GoJsonFilter;
+import com.gogo.domain.filter.ActivityFilter;
+
 @Entity
 @Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
 @Table(name="t_place")
-public class Place {
+public class Place{
 
 	//主键
 	@Id

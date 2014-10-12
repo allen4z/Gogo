@@ -79,9 +79,13 @@ public class UserService{
 		
 		List<String> payInfos = new ArrayList<String>();
 		
+		//查询所有用户拥有角色信息
 		List<UserAndRole> uars = userAndRoleDao.loadUserAndRoleByUser(userId);
 		
 		for (UserAndRole userAndRole : uars) {
+			if(userAndRole.getWaitCost() == 0){
+				continue;
+			}
 			Role role = userAndRole.getRole();
 			Activity act = role.getBelongAct();
 			

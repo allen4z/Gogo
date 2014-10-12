@@ -28,6 +28,7 @@ import com.gogo.domain.Activity;
 import com.gogo.domain.Place;
 import com.gogo.domain.Role;
 import com.gogo.domain.User;
+import com.gogo.domain.filter.ActivityFilter;
 import com.gogo.domain.filter.RoleFilter;
 import com.gogo.domain.helper.RoleHelper;
 import com.gogo.exception.Business4JsonException;
@@ -94,8 +95,6 @@ public class ActivityController extends BaseController {
 	@RequestMapping("join/{actId}")
 	@ResponseBody
 	public boolean joinActivity(@ModelAttribute(CommonConstant.USER_CONTEXT) User user,@PathVariable String actId){
-//		actService.saveActivity4RoleState(actId,user,RoleHelper.JOIN_CODE);
-		
 		actService.updateActivity4UARState(actId,user,RoleHelper.UAR_JOIN_ACTIVITY);
 		
 		return true;
@@ -109,10 +108,7 @@ public class ActivityController extends BaseController {
 	@RequestMapping("signup/{actId}")
 	@ResponseBody
 	public boolean signupActivity(@ModelAttribute(CommonConstant.USER_CONTEXT) User user,@PathVariable String actId){
-//		actService.saveActivity4RoleState(actId,user,RoleHelper.SIGNUP_CODE);
-		
 		actService.updateActivity4UARState(actId,user,RoleHelper.UAR_SINGUP_ACTIVITY);
-		
 		return true;
 	}
 	
@@ -142,12 +138,12 @@ public class ActivityController extends BaseController {
 	 */
 	@RequestMapping(value = "loadActByActId/{actId}",produces = "text/html;charset=UTF-8")
 	@ResponseBody
-	@GoJsonFilters(values={	
-			@GoJsonFilter(mixin=RoleFilter.class,target=Role.class)})
+	@GoJsonFilters(values={@GoJsonFilter(mixin=RoleFilter.class,target=Role.class)})
 	public Activity loadActByActId(@PathVariable String actId)throws Exception{
 		Activity act = actService.loadActbyActId(actId);
 		return act;
 	}
+	
 	
 	/**
 	 * 查找附近所有的活动信息
@@ -157,8 +153,7 @@ public class ActivityController extends BaseController {
 	 */
 	@RequestMapping(value = "loadActByPlace")
 	@ResponseBody
-	@GoJsonFilters(values={	
-			@GoJsonFilter(mixin=RoleFilter.class,target=Role.class)})
+	@GoJsonFilters(values={@GoJsonFilter(mixin=ActivityFilter.class,target=Activity.class)})
 	public Page<Activity> loadActByPlace(
 			HttpServletRequest request, 
 			@RequestParam(required=false) Place place,
@@ -172,6 +167,41 @@ public class ActivityController extends BaseController {
 		
 		return queryList;
 		
+	}
+	
+	/**
+	 * 查询活动相关的所有人员
+	 * @param actId
+	 * @return
+	 */
+	@RequestMapping(value = "loadAllUserFromAct/{actId}")
+	@ResponseBody
+	public Page<User> loadAllUserFromAct(@PathVariable String actId,@RequestParam int pn){
+		 Page<User> page = actService.loadAllUserFromAct(actId,pn,CommonConstant.PAGE_SIZE);
+		 return page;
+	}
+	/**
+	 * 查询参加活动的用户
+	 * @param actId
+	 * @param curPage
+	 * @return
+	 */
+	@RequestMapping(value = "loadJoinUserFromAct/{actId}")
+	@ResponseBody
+	public Page<User> loadJoinUserFromAct(@PathVariable String actId,@RequestParam int pn){
+		return actService.loadSpecialUserFromAct(actId,pn,CommonConstant.PAGE_SIZE,RoleHelper.UAR_JOIN_ACTIVITY);
+	}
+	
+	/**
+	 * 查询观看活动的用户
+	 * @param actId
+	 * @param curPage
+	 * @return
+	 */
+	@RequestMapping(value = "loadSingUpUserFromAct/{actId}")
+	@ResponseBody
+	public Page<User> loadSingUpUserFromAct(@PathVariable String actId,@RequestParam int pn){
+		return actService.loadSpecialUserFromAct(actId, pn,CommonConstant.PAGE_SIZE,RoleHelper.UAR_SINGUP_ACTIVITY);
 	}
 	
 	/**
@@ -234,5 +264,22 @@ public class ActivityController extends BaseController {
 	@RequestMapping("toShowAllPage")
 	public String toShowAllPage() throws Exception{
 		return "act/showAllActPage";
+	}
+	
+	@RequestMapping("showActAllUserPage/{actId}")
+	public ModelAndView toShowActAllUserPage(@PathVariable String actId) throws Exception{
+		ModelAndView mav = new ModelAndView();
+		mav.addObject("actId", actId);
+		mav.setViewName("act/user/showActAllUserPage");
+		return mav;
+	}
+	
+	@RequestMapping("showSpecialActUserPage/{state}/{actId}")
+	public ModelAndView showSpecialActUserPage(@PathVariable int state,@PathVariable String actId) throws Exception{
+		ModelAndView mav = new ModelAndView();
+		mav.addObject("actId", actId);
+		mav.addObject("state",state);
+		mav.setViewName("act/user/showSpecialActUserPage");
+		return mav;
 	}
 }

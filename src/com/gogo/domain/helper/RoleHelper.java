@@ -37,6 +37,9 @@ public class RoleHelper {
 	//用户在当前活动为投资人权限
 	public static final int UAR_INVEST_ACTIVITY=4; // 100
 	
+	//最大值
+	public static final int MAX_ACTITVITY=UAR_INVEST_ACTIVITY;
+	
 	/**
 	 * 判断是否已经包含了此权限
 	 * @param curState 当前权限
