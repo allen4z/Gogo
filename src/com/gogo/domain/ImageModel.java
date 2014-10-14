@@ -16,11 +16,11 @@ public class ImageModel {
 	private String imageModelID;
 	
 	//指纹信息
-	@Column(name="act_name",length=32,nullable=false)
+	@Column(name="im_md5",length=32,nullable=false)
 	private String md5;
 	
 	//路径信息
-	@Column(name="act_name",length=200,nullable=false)
+	@Column(name="im_url",length=200,nullable=false)
 	private String url;
 
 	public String getImageModelID() {
