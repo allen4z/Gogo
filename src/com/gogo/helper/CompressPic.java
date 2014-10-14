@@ -79,9 +79,65 @@ import com.sun.image.codec.jpeg.JPEGImageEncoder;
 		 return file.length(); 
 	 }
 	 
+	 public String compressPic (File inuptFile,String outputDir,  String outputFileName) throws IOException { 
+	 		// 输出图路径 
+	 		this.outputDir = outputDir; 
+	 		// 输出图文件名
+	 		this.outputFileName = outputFileName; 
+	 	 		
+	 		//获得源文件 
+			this.file = inuptFile;
+			if (!file.exists()) { 
+				 return "filei not's exists"; 
+			}
+	 		Image img = ImageIO.read(file); 
+	 		
+	 		int imgWidth = img.getWidth(null);
+	 		int imgHeight = img.getHeight(null);
+	 		
+	 		
+	 		int temp = 0;
+	 		if(imgWidth > imgHeight){
+	 			temp = imgWidth;
+	 			imgWidth = imgHeight;
+	 			imgHeight = temp;
+	 			this.proportion = CompressPic.PROPORTION_TYPE_HEIGHT;
+	 			
+	 		}else{
+	 			this.proportion = CompressPic.PROPORTION_TYPE_WIDTH;
+	 			
+	 		}
+	 		if(imgWidth <= this.outputWidth){
+				return reNameFile();
+			}
+	 		return compressPic(img); 
+	 	} 
+	 	
+	 	public String reNameFile(){
+	 		file.renameTo(new File(file.getParent()+File.separator+outputFileName));
+			return "success";
+	 	}
+	 	
+	public String compressPic (String inputDir, String outputDir, String inputFileName, String outputFileName,int gp) throws IOException { 
+		// 输出图路径 
+		this.outputDir = outputDir; 
+		// 输出图文件名
+		this.outputFileName = outputFileName; 
+	 		
+		//获得源文件 
+		file = new File(inputDir + inputFileName); 
+		if (!file.exists()) { 
+			 return "faild,filei not's exists"; 
+		}
+		Image img = ImageIO.read(file); 
+		
+		this.proportion = gp;
+		
+		return compressPic(img); 
+	}
+	 
 	 // 图片处理 
-	 public String compressPic(Image img) throws IOException { 
-		 
+	public String compressPic(Image img) throws IOException { 
 		 FileOutputStream out = null;
 		 try { 
 			 // 判断图片格式是否正确 
@@ -129,79 +185,7 @@ import com.sun.image.codec.jpeg.JPEGImageEncoder;
 				out.close(); 
 			}
 		 }
-		 return "ok"; 
+		 return "success"; 
 	} 
- 	public String compressPic (String inputDir, String outputDir, String inputFileName, String outputFileName) throws IOException { 
- 		// 输出图路径 
- 		this.outputDir = outputDir; 
- 		// 输出图文件名
- 		this.outputFileName = outputFileName; 
- 	 		
- 		//获得源文件 
-		file = new File(inputDir + inputFileName); 
-		if (!file.exists()) { 
-			 return "filei not's exists"; 
-		}
- 		Image img = ImageIO.read(file); 
- 		
- 		int imgWidth = img.getWidth(null);
- 		int imgHeight = img.getHeight(null);
- 		
- 		
- 		int temp = 0;
- 		if(imgWidth > imgHeight){
- 			temp = imgWidth;
- 			imgWidth = imgHeight;
- 			imgHeight = temp;
- 			this.proportion = CompressPic.PROPORTION_TYPE_HEIGHT;
- 			
- 		}else{
- 			this.proportion = CompressPic.PROPORTION_TYPE_WIDTH;
- 			
- 		}
- 		if(imgWidth <= this.outputWidth){
-			return reNameFile();
-		}
- 		return compressPic(img); 
- 	} 
- 	
- 	public String reNameFile(){
- 		file.renameTo(new File(file.getParent()+File.separator+outputFileName));
-		return "ok";
- 	}
- 	
- 	public String compressPic (String inputDir, String outputDir, String inputFileName, String outputFileName,int gp) throws IOException { 
- 		// 输出图路径 
- 		this.outputDir = outputDir; 
- 		// 输出图文件名
- 		this.outputFileName = outputFileName; 
- 	 		
- 		//获得源文件 
-		file = new File(inputDir + inputFileName); 
-		if (!file.exists()) { 
-			 return "faild,filei not's exists"; 
-		}
- 		Image img = ImageIO.read(file); 
- 		
- 		this.proportion = gp;
- 		
- 		return compressPic(img); 
- 	} 
 
- 	// main测试 
- 	// compressPic(大图片路径,生成小图片路径,大图片文件名,生成小图片文名,生成小图片宽度,生成小图片高度,是否等比缩放(默认为true))
- 	public static void main(String[] arg) { 
- 		CompressPic mypic = new CompressPic(); 
- 		System.out.println("输入的图片大小：" + mypic.getPicSize("e:\\1.jpg")/1024 + "KB"); 
- 		int count = 0; // 记录全部图片压缩所用时间
- 		for (int i = 0; i < 100; i++) { 
- 			int start = (int) System.currentTimeMillis();	// 开始时间 
- 			//mypic.compressPic("e:\\", "e:\\test\\", "1.jpg", "r1"+i+".jpg", 120, 120, 0); 
- 			int end = (int) System.currentTimeMillis(); // 结束时间 
- 			int re = end-start; // 但图片生成处理时间 
- 			count += re; System.out.println("第" + (i+1) + "张图片压缩处理使用了: " + re + "毫秒"); 
- 			System.out.println("输出的图片大小：" + mypic.getPicSize("e:\\test\\r1"+i+".jpg")/1024 + "KB"); 
- 		}
- 		System.out.println("总共用了：" + count + "毫秒"); 
- 	} 
  }
