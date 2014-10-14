@@ -8,6 +8,7 @@ import javax.servlet.http.HttpSession;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
+import org.springframework.http.HttpRequest;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.support.RequestContextUtils;
@@ -92,6 +93,10 @@ public class BaseController {
 		session.invalidate();
 	}
 	
+	
+	protected String getServletPath(HttpServletRequest request) {
+		return request.getServletPath();
+	}
 	protected int getPageSize(Integer pagesize){
 		return (pagesize == null || pagesize == 0) ? CommonConstant.PAGE_SIZE : pagesize;
 	}
