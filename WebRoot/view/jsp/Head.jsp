@@ -44,16 +44,6 @@
 </head>
 <body>
 
-<%  
-if(user!= null){
-	%>
-
-	<img height="44" width="44" src="<%=user.getImageUrl()%>"> 
-	<%
-	
-	out.print(user.getAlisName()+"  欢迎您！"); 
-} 	
-%>
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 <button id="backMain">返回主页</button>
@@ -67,7 +57,8 @@ if(user!= null){
 
 <button id="searchUserBtn" >附近的人</button>
 &nbsp;
-<button id="backUserMain"><%=user.getAlisName()%>的主页</button>
+<div id="backUserMain" style="display:inline;"> <img  height="44" width="44" src="<%=user.getImageUrl()%>"> <%=user.getAlisName()%>的主页 </div>
+
 <%
 }
 %>
