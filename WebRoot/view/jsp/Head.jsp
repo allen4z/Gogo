@@ -43,6 +43,18 @@
 </script>
 </head>
 <body>
+
+<%  
+if(user!= null){
+	%>
+
+	<img height="44" width="44" src="<%=user.getImageUrl()%>"> 
+	<%
+	
+	out.print(user.getAlisName()+"  欢迎您！"); 
+} 	
+%>
+
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 <button id="backMain">返回主页</button>
 &nbsp;

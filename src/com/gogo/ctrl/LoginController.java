@@ -1,5 +1,9 @@
 package com.gogo.ctrl;
 
+import java.io.File;
+import java.util.Random;
+import java.util.ResourceBundle;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -69,8 +73,24 @@ public class LoginController extends BaseController{
 
 	
 	@RequestMapping("doRegister")
-	public String goRegister() throws Exception{
-		return "user/registerUserPage";
+	public ModelAndView goRegister() throws Exception{
+		ModelAndView mav = new ModelAndView();
+		String serverPath = System.getProperty("myappfuse.root");
+		//随机获得图片
+		ResourceBundle rb = ResourceBundle.getBundle("imageConfig");
+		String defaultUserHeadPath =rb.getString("image.default.userhead.path");
+		String imageServer= rb.getString("image.upload.imageserver");
+		
+		File pathFile = new File(serverPath+defaultUserHeadPath);
+		File[] imgs = pathFile.listFiles();
+		int fileSize = imgs.length;
+		
+		Random r = new Random();
+		File imageFile = imgs[r.nextInt(fileSize)];
+		
+		mav.addObject("userhead", imageServer+defaultUserHeadPath +imageFile.getName());
+		mav.setViewName("user/registerUserPage");
+		return mav;
 	}
 	
 	@RequestMapping("doLogout")
