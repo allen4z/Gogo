@@ -9,6 +9,9 @@
 <html>
   <head>
     <title>GOGO-用户注册</title>
+    
+    <link rel="stylesheet" type="text/css" href="view/css/default.css">
+    
 	<script type="text/javascript">
 	$(document).ready(function(){
 
@@ -36,6 +39,11 @@
 		        
 		    send4Json(params,actionInfo,success,failed);
 		});
+		
+		$("#u_userhead_upload").change(function(){
+			var fn=("#u_userhead_upload").val();
+			alert(fn);
+		});
 	});
 	</script>
   </head>
@@ -44,7 +52,7 @@
   <div>
   <h1>用户注册</h1>  
  <div><img id="u_userhead" alt="用户头像" src="<%=userhead%>"></div> 
- <div><button>更换头像</button></div>
+ <div>更换头像：<input id="u_userhead_upload" name="u_userhead_upload" type="file" /></div>
 
    <form id="registerForm" >
    	name:<input id="u_userName" type="text" /> <br/>

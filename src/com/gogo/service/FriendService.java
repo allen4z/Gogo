@@ -12,6 +12,7 @@ import com.gogo.domain.City;
 import com.gogo.domain.FriendList;
 import com.gogo.domain.Place;
 import com.gogo.domain.User;
+import com.gogo.exception.Business4JsonException;
 import com.gogo.map.GoMapHelper;
 import com.gogo.page.Page;
 import com.gogo.page.PageUtil;
@@ -47,10 +48,15 @@ public class FriendService{
 	 * @param friendUserId
 	 */
 	public void saveFriendRequest(User belongUser,String friendUserId){
+		
+		if(belongUser.getUserId().equals(friendUserId)){
+			throw new Business4JsonException("friend_request_yourself","don't request yourself!");
+		}
+		
 		User friendUser = userDao.load(friendUserId);
 	
 		FriendList fl = friendListDao.loadFriendListByUserId(belongUser.getUserId(), friendUserId);
-
+		
 		if(fl== null){
 			fl = new FriendList();
 			fl.setBelongUser(belongUser);
@@ -58,7 +64,14 @@ public class FriendService{
 			fl.setfAlisName(friendUser.getAlisName());
 			fl.setPassed(false);
 		}else{
-			fl.setUpdate_time(new Date());
+			
+			if(fl.isPassed()){
+				throw new Business4JsonException("friend_already_friends","You are already friends!");
+			}else{
+				fl.setUpdate_time(new Date());
+			}
+			
+			
 		}
 		friendListDao.save(fl);
 	}
@@ -69,6 +82,10 @@ public class FriendService{
 	 * @param friendUserId
 	 */
 	public void saveAgreeApply(User belongUser,String friendUserId){
+		
+		if(belongUser.getUserId().equals(friendUserId)){
+			throw new Business4JsonException("friend_request_yourself","don't request yourself!");
+		}
 		
 		FriendList applyList = friendListDao.loadFriendListByUserId(friendUserId,belongUser.getUserId());
 		applyList.setPassed(true);

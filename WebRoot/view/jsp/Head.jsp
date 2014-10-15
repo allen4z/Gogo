@@ -56,8 +56,6 @@ if(user!= null){
 %>
 
 <button id="searchUserBtn" >附近的人</button>
-&nbsp;
-<div id="backUserMain" style="display:inline;"> <img  height="44" width="44" src="<%=user.getImageUrl()%>"> <%=user.getAlisName()%>的主页 </div>
 
 <%
 }
@@ -76,6 +74,10 @@ if(user!= null){
 %>
 
 <button id="doLogOut" name="doLogOut" >退出登录</button>
+
+&nbsp;
+<div id="backUserMain" style="float:right;display:inline;"> <img  height="44" width="44" src="<%=user.getImageUrl()%>"> <%=user.getAlisName()%>的主页 </div>
+
 <%
 }
 %>
