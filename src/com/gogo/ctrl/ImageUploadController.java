@@ -42,15 +42,21 @@ public class ImageUploadController extends BaseController {
 		}
 		return null;
 	}
+	
+	
 	/**
-	 * 图片上传
+	 * 用户头像图片上传
 	 * @param file
 	 * @return
 	 * @throws Exception
 	 */
-	@RequestMapping(value = "uploadimage", method = RequestMethod.POST)
+	@RequestMapping(value = "uploadUserHead", method = RequestMethod.POST)
 	@ResponseBody
-	public String uploadImage(@RequestParam MultipartFile file, @RequestParam int type)
+	public String uploadImage4UserHead(@RequestParam MultipartFile userHeadFile) throws Exception{
+		return this.uploadImage(userHeadFile, 0);
+	}
+
+	private String uploadImage(@RequestParam MultipartFile file, @RequestParam int type)
 			throws Exception {
 		// 返回的路径信息
 		String uploadAndCompressPath = null;

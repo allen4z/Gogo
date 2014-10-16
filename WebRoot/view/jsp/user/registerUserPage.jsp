@@ -5,13 +5,12 @@
 	String userhead = (String)request.getAttribute("userhead");
 	String imgPath= request.getContextPath()+userhead;
 %>
-
 <html>
   <head>
     <title>GOGO-用户注册</title>
     
-    <link rel="stylesheet" type="text/css" href="view/css/default.css">
-    
+	<script src="view/js/ajaxfileupload.js"></script>
+	
 	<script type="text/javascript">
 	$(document).ready(function(){
 
@@ -39,12 +38,38 @@
 		        
 		    send4Json(params,actionInfo,success,failed);
 		});
-		
-		$("#u_userhead_upload").change(function(){
-			var fn=("#u_userhead_upload").val();
-			alert(fn);
-		});
 	});
+	
+	
+	function ajaxFileUpload(){
+		    //开始上传文件时显示一个图片,文件上传完成将图片隐藏
+		    //$("#loading").ajaxStart(function(){$(this).show();}).ajaxComplete(function(){$(this).hide();});
+		    //执行上传文件操作的函数
+		
+			var upload_url = getBasePathInfo()+'/upload/uploadUserHead'
+			var params= {type:"0"}
+		    $.ajaxFileUpload({
+		        //处理文件上传操作的服务器端地址(可以传参数,已亲测可用)
+		        //url:'${pageContext.request.contextPath}/test/fileUpload?uname=玄玉',
+				url:upload_url,
+				//data:params,
+		        secureuri:false,                       //是否启用安全提交,默认为false
+		        fileElementId:'myBlogImage',           //文件选择框的id属性
+		        dataType:'text',                       //服务器返回的格式,可以是json或xml等
+		        success:function(data, status){        //服务器响应成功时的处理函数
+		           if(data!='faild'){
+		                $("img[id='u_userhead']").attr("src", data);
+		                $('#result').html("图片上传成功<br/>");
+		            }else{
+		                $('#result').html('图片上传失败，请重试！！');
+		            }
+		        },
+		        error:function(data, status, e){ //服务器响应失败时的处理函数
+		            $('#result').html('图片上传失败，请重试！！');
+		        }
+		    });
+		}
+	
 	</script>
   </head>
   
@@ -52,7 +77,11 @@
   <div>
   <h1>用户注册</h1>  
  <div><img id="u_userhead" alt="用户头像" src="<%=userhead%>"></div> 
- <div>更换头像：<input id="u_userhead_upload" name="u_userhead_upload" type="file" /></div>
+ <div>
+ <div id="result"></div>
+ <input type="file" id="myBlogImage" name="userHeadFile"/>
+<input type="button" value="更换头像" onclick="ajaxFileUpload()"/>
+</div>
 
    <form id="registerForm" >
    	name:<input id="u_userName" type="text" /> <br/>
