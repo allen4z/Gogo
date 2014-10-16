@@ -5,6 +5,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.ResourceBundle;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.commons.fileupload.disk.DiskFileItem;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -16,9 +18,11 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 import com.gogo.domain.ImageModel;
+import com.gogo.domain.User;
 import com.gogo.exception.Business4JsonException;
 import com.gogo.helper.CommonConstant;
 import com.gogo.helper.CompressPic;
+import com.gogo.helper.MD5Util;
 import com.gogo.helper.UUIDHelper;
 import com.gogo.service.ImageUploadService;
 
@@ -52,7 +56,7 @@ public class ImageUploadController extends BaseController {
 	 */
 	@RequestMapping(value = "uploadUserHead", method = RequestMethod.POST)
 	@ResponseBody
-	public String uploadImage4UserHead(@RequestParam MultipartFile userHeadFile) throws Exception{
+	public String uploadImage4UserHead(HttpServletRequest request,@RequestParam MultipartFile userHeadFile) throws Exception{
 		return this.uploadImage(userHeadFile, CommonConstant.IMAGE_TYPE_USERHEAD);
 	}
 
@@ -68,7 +72,10 @@ public class ImageUploadController extends BaseController {
 		String outFileName = null;
 		
 		int defaultRatio = 0;
+		SimpleDateFormat fomate = new SimpleDateFormat("yyyyMMdd");
+		
 		if (type == CommonConstant.IMAGE_TYPE_USERHEAD) {
+			
 			formalPath = rb.getString("image.formal.user");
 			defaultRatio = Integer.valueOf(rb.getString("image.default.ratio.middle"));
 			outFileName = "uh";
@@ -78,6 +85,7 @@ public class ImageUploadController extends BaseController {
 			outFileName = "al";
 		} else if (type == CommonConstant.IMAGE_TYPE_ACTIVITYSHARE) {
 			formalPath = rb.getString("image.formal.act.share");
+			formalPath += fomate.format(new Date()) + File.separator ;
 			defaultRatio = Integer.valueOf(rb.getString("image.default.ratio.large"));
 			outFileName = "as";
 		}
@@ -91,8 +99,7 @@ public class ImageUploadController extends BaseController {
 		// 1.获得文件信息
 		if (file != null && !file.isEmpty()) {
 			// 2.1 创建相关目录
-			SimpleDateFormat fomate = new SimpleDateFormat("yyyyMMdd");
-			formalPath += fomate.format(new Date()) + File.separator ;
+			
 			String imageCompressPath = serverPath + formalPath;
 			File imageCompressPathFile = new File(imageCompressPath);
 			createDir(imageCompressPathFile);

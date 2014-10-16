@@ -30,4 +30,9 @@ public class MD5Util {
 			return null;
 		}
 	}
+	
+	public static String shortMD5(String s){
+		String md5 = MD5Util.MD5(s);
+		return md5.substring(8, 24);
+	}
 }
