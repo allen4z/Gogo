@@ -1,6 +1,7 @@
 package com.gogo.ctrl;
 
 import java.io.File;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -55,10 +56,11 @@ public class ActivityController extends BaseController {
 	 * 创建活动
 	 * @param act
 	 * @return
+	 * @throws Exception 
 	 */
 	@RequestMapping("saveAct")
 	@ResponseBody
-	public boolean saveActivity(@ModelAttribute(CommonConstant.USER_CONTEXT) User user ,@Valid @RequestBody Activity act,BindingResult result){
+	public boolean saveActivity(@ModelAttribute(CommonConstant.USER_CONTEXT) User user ,@Valid @RequestBody Activity act,BindingResult result) throws Exception{
 		
 		//验证用户信息
 		if(result.hasErrors()){
@@ -70,11 +72,53 @@ public class ActivityController extends BaseController {
 			throw new Business4JsonException(errMsg.toString());
 		}
 		
-		actService.saveActivity(act,user);
+		if(checkActInfo(act)){
+			actService.saveActivity(act,user);
+		}
+		
 		return true;
 	}
 	
-	
+	/**
+	 * 验证活动信息是否正确
+	 * @param act
+	 * @return
+	 */
+	private boolean checkActInfo(Activity act) throws Exception {
+		
+		if(act.isNeedActor()){
+			//最小参与人数大于最大参与人数
+			if(act.getMinJoin()>act.getMaxJoin()){
+				throw new Business4JsonException("act_savecheck_minjoin_morethen_maxjoin","min join people more then max join people!");
+			}
+		}
+		if(act.isNeedSignup()){
+			//最小观众大于最大观众
+			if(act.getMinSignUp()>act.getMaxSignUp()){
+				throw new Business4JsonException("act_savecheck_minsingup_morethen_maxsignup","min signup people more then max signup people!");
+			}
+		}
+		
+		Date signDate =act.getActSignTime();
+		Date startDate = act.getActStartTime();
+		Date endDate =act.getActEndTime();
+		
+		if(startDate.compareTo(signDate)<=0){
+			throw new Business4JsonException("act_savecheck_startdate_earlythen_signupDate","start date early then signup date");
+		}
+		
+		if(endDate.compareTo(signDate) <=0){
+			throw new Business4JsonException("act_savecheck_enddate_earlythen_signupDate","end date early then signup date");
+		}
+		
+		if(endDate.compareTo(startDate) <=0){
+			throw new Business4JsonException("act_savecheck_enddate_earlythen_startDate","end date early then start date");
+		}
+		
+		return true;
+	}
+
+
 	/**
 	 * 加入活动小组
 	 * @param user

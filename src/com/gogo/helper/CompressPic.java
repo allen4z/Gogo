@@ -114,7 +114,7 @@ import com.sun.image.codec.jpeg.JPEGImageEncoder;
 	 	} 
 	 	
 	 	public String reNameFile(){
-	 		file.renameTo(new File(file.getParent()+File.separator+outputFileName));
+	 		file.renameTo(new File(outputDir+outputFileName));
 			return "success";
 	 	}
 	 	

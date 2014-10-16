@@ -53,7 +53,7 @@ public class ImageUploadController extends BaseController {
 	@RequestMapping(value = "uploadUserHead", method = RequestMethod.POST)
 	@ResponseBody
 	public String uploadImage4UserHead(@RequestParam MultipartFile userHeadFile) throws Exception{
-		return this.uploadImage(userHeadFile, 0);
+		return this.uploadImage(userHeadFile, CommonConstant.IMAGE_TYPE_USERHEAD);
 	}
 
 	private String uploadImage(@RequestParam MultipartFile file, @RequestParam int type)
@@ -66,18 +66,23 @@ public class ImageUploadController extends BaseController {
 		String formalPath = null;
 		// 图片名字
 		String outFileName = null;
+		
+		int defaultRatio = 0;
 		if (type == CommonConstant.IMAGE_TYPE_USERHEAD) {
 			formalPath = rb.getString("image.formal.user");
+			defaultRatio = Integer.valueOf(rb.getString("image.default.ratio.middle"));
 			outFileName = "uh";
 		} else if (type == CommonConstant.IMAGE_TYPE_ACTIVITYLOGO) {
 			formalPath = rb.getString("image.formal.act.logo");
+			defaultRatio = Integer.valueOf(rb.getString("image.default.ratio.middle"));
 			outFileName = "al";
 		} else if (type == CommonConstant.IMAGE_TYPE_ACTIVITYSHARE) {
 			formalPath = rb.getString("image.formal.act.share");
+			defaultRatio = Integer.valueOf(rb.getString("image.default.ratio.large"));
 			outFileName = "as";
 		}
 		// 默认参考尺寸
-		int defaultRatio = Integer.valueOf(rb.getString("image.default.ratio"));
+		
 		// TODO 图片服务器地址 暂时为本服务器
 		String imageServer = rb.getString("image.upload.imageserver");
 		// 服务器真路径信息
@@ -86,7 +91,7 @@ public class ImageUploadController extends BaseController {
 		// 1.获得文件信息
 		if (file != null && !file.isEmpty()) {
 			// 2.1 创建相关目录
-			SimpleDateFormat fomate = new SimpleDateFormat("yyMMdd");
+			SimpleDateFormat fomate = new SimpleDateFormat("yyyyMMdd");
 			formalPath += fomate.format(new Date()) + File.separator ;
 			String imageCompressPath = serverPath + formalPath;
 			File imageCompressPathFile = new File(imageCompressPath);
@@ -102,6 +107,7 @@ public class ImageUploadController extends BaseController {
 			// 生成随机的名字
 			String uuid = UUIDHelper.generateShortUuid();
 			outFileName += uuid + ".png";
+			//按大图缩放
 			CompressPic compressPic = new CompressPic(defaultRatio);
 			String result = compressPic.compressPic(sourceImageFile, imageCompressPath, outFileName);
 			if (result.equals("success")) {
