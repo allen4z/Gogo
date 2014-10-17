@@ -35,28 +35,45 @@ public class UserAndRoleDao extends BaseDao<UserAndRole> {
 		return roles;
 	}
 	
-	public User loadActUserByRole(User user, Role role){
+	/**
+	 * 根据用户ID和角色ID查询用户与角色的关联关系
+	 * @param user
+	 * @param role
+	 * @return
+	 */
+	public User loadActUserByRole(String userID, String roleId){
 		StringBuffer hql = new StringBuffer();
 		hql.append(" select userAndRole.user from UserAndRole userAndRole where userAndRole.role.roleId=:roleId and userAndRole.user.userId=:userId ");
 		Query query = getSession().createQuery(hql.toString())
-				.setString("userId", user.getUserId())
-				.setString("roleId", role.getRoleId());
+				.setString("userId", userID)
+				.setString("roleId", roleId);
 		
 		return  (User)query.uniqueResult();
 	}
 	
-	public UserAndRole loadUserAndRoleByUserAndAct(User user,Activity act){
+	/**
+	 * 根据用户和活动ID查询用户角色的关联关系
+	 * @param userID
+	 * @param actID
+	 * @return
+	 */
+	public UserAndRole loadUserAndRoleByUserAndAct(String userID,String actID){
 	
 		String hql = "select ur from UserAndRole ur join ur.role.belongAct a where ur.user.userId = :userId and a.actId=:actId";
 		
 		UserAndRole uar = (UserAndRole) getSession().createQuery(hql)
-		.setString("userId", user.getUserId())
-		.setString("actId", act.getActId())
+		.setString("userId", userID)
+		.setString("actId", actID)
 		.uniqueResult();
 		
 		return uar;
 	}
 	
+	/**
+	 * 根据活动ID查询该活动所有的用户角色关系
+	 * @param actId
+	 * @return
+	 */
 	public List<UserAndRole> loadUserAndRoleByAct(String actId){
 		String hql = "select ur from UserAndRole ur join ur.role.belongAct a where a.actId=:actId";
 		List<UserAndRole> uars = getSession().createQuery(hql)
@@ -65,6 +82,25 @@ public class UserAndRoleDao extends BaseDao<UserAndRole> {
 		return uars;
 	}
 	
+	/**
+	 * 根据活动ID和“角色用户状态”查询所有该状态用户角色关系
+	 * @param actId
+	 * @param uarState
+	 * @return
+	 */
+	public List<UserAndRole> loadUserAndRoleByActAndState(String actId,int uarState){
+		String hql = "select ur from UserAndRole ur join ur.role.belongAct a where a.actId=:actId and ur.uarState=:uarState ";
+		List<UserAndRole> uars = getSession().createQuery(hql)
+		.setString("actId", actId).setInteger("uarState", uarState)
+		.list();
+		return uars;
+	}
+	
+	/**
+	 * 根据用户ID查询所有该用户的用户角色关系
+	 * @param userId
+	 * @return
+	 */
 	public List<UserAndRole> loadUserAndRoleByUser(String userId){
 		String hql = "select ur from UserAndRole ur where ur.user.userId = :userId";
 		List<UserAndRole> uars = getSession().createQuery(hql)
@@ -74,9 +110,9 @@ public class UserAndRoleDao extends BaseDao<UserAndRole> {
 	}
 	
 	/**
-	 * 根据活动ID查询活动用户Sql
+	 * 根据活动ID查询活动用户Sql  查询参与用户，观众用户...
 	 * @param isCount
-	 * @param paramlist 权限状态（只能传入一个值）
+	 * @param paramlist 权限状态（最多传入一个值，为空则查询所有用户）
 	 * @return
 	 */
 	private String getActUserByActSql(boolean isCount,Object... paramlist){
@@ -102,16 +138,29 @@ public class UserAndRoleDao extends BaseDao<UserAndRole> {
 			}
 			sqlBuffer.append(" )");
 		}
-		
 		return sqlBuffer.toString();
 	}
 	
+	/**
+	 * 根据活动ID查询跟该活动有关的所有用户
+	 * @param actId
+	 * @param currPage
+	 * @param pageSize
+	 * @param params
+	 * @return
+	 */
 	public List<User> loadActUserByAct(String actId,int currPage,int pageSize,Object...params){
 		String hql = getActUserByActSql(false,params);
 		List<User> userList = findByPage(hql,currPage,pageSize,actId);
 		return userList;
 	}
 	
+	/**
+	 * 根据活动ID查询跟该活动有关的所有用户的数量
+	 * @param actId
+	 * @param params
+	 * @return
+	 */
 	public int loadUserAndRoleByActCount (String actId,Object...params){
 		String hql = getActUserByActSql(true,params);
 		return  this.<Number>getCount(hql,actId).intValue();

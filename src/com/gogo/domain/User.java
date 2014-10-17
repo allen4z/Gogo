@@ -11,6 +11,9 @@ import javax.persistence.Version;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
+import org.codehaus.jackson.annotate.JsonAnySetter;
+import org.codehaus.jackson.annotate.JsonIgnore;
+import org.codehaus.jackson.map.annotate.JsonFilter;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.GenericGenerator;
@@ -29,6 +32,7 @@ public class User {
 	private String userId;
 
 	//用户名称
+	
 	@Length(min=4,max=20,message="{user.username.length.error}")
 	@NotNull(message="{user.username.not.empty}")
 	@Pattern(regexp = "[A-Za-z0-9]*", message = "{user.username.regexp.error}")
@@ -78,16 +82,7 @@ public class User {
 	@Version
 	@Column(name="update_time",length=10,nullable=false)
 	private Date update_time;
-	
-	//是否是演员 -- 雇佣相关（暂时没有用）
-	@Column(name="user_isactor",length=1)
-	private boolean isActor;
-	
-	//角色所有人员
-	/*@OneToMany(mappedBy="belongUser",cascade=CascadeType.ALL)
-	private Set<FriendGroup> firneds;*/
-
-	
+		
 	public String getPhoneNum() {
 		return phoneNum;
 	}
@@ -112,24 +107,14 @@ public class User {
 	public void setEmail(String email) {
 		this.email = email;
 	}
-	/*public Set<FriendGroup> getFirneds() {
-		return firneds;
-	}
-	public void setFirneds(Set<FriendGroup> firneds) {
-		this.firneds = firneds;
-	}*/
-	public boolean isActor() {
-		return isActor;
-	}
-	public void setActor(boolean isActor) {
-		this.isActor = isActor;
-	}
+
 	public String getUserId() {
 		return userId;
 	}
 	public void setUserId(String userId) {
 		this.userId = userId;
 	}
+	
 	public String getUserName() {
 		return userName;
 	}
@@ -142,7 +127,6 @@ public class User {
 	public void setAlisName(String alisName) {
 		this.alisName = alisName;
 	}
-
 	public String getUserPassword() {
 		return userPassword;
 	}

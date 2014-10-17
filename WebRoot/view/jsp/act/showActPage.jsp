@@ -55,8 +55,7 @@ function templatefill(data){
 				%><a href="activity/visitor/{{actId}}">加入活动小组</a><br/><%
 			}else if(state.equals("2")){
 				%>
-				  <a href="activity/join/{{actId}}">报名参加活动</a>&nbsp;&nbsp;<a href="activity/showSpecialActUserPage/1/{{actId}}">查看参加用户</a><br/>
-				  <a href="activity/signup/{{actId}}">报名观看活动</a>&nbsp;&nbsp;<a href="activity/showSpecialActUserPage/2/{{actId}}">查看观看用户</a><br/>
+				  <a href="activity/join/{{actId}}">报名参加活动</a>&nbsp;&nbsp;<a href="activity/cancelJoin/{{actId}}">取消报名&nbsp;&nbsp;<a href="activity/showSpecialActUserPage/1/{{actId}}">查看参加用户</a>&nbsp;&nbsp;<a href="activity/showSpecialActUserPage/2/{{actId}}">查看排队用户</a><br/>
 				<%
 			}
 		

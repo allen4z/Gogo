@@ -1,6 +1,5 @@
 package com.gogo.ctrl;
 
-import java.io.File;
 import java.util.Date;
 import java.util.List;
 
@@ -15,11 +14,9 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.gogo.annotation.GoJsonFilter;
@@ -92,13 +89,13 @@ public class ActivityController extends BaseController {
 				throw new Business4JsonException("act_savecheck_minjoin_morethen_maxjoin","min join people more then max join people!");
 			}
 		}
-		if(act.isNeedSignup()){
+		/*if(act.isNeedSignup()){
 			//最小观众大于最大观众
 			if(act.getMinSignUp()>act.getMaxSignUp()){
 				throw new Business4JsonException("act_savecheck_minsingup_morethen_maxsignup","min signup people more then max signup people!");
 			}
 		}
-		
+		*/
 		Date signDate =act.getActSignTime();
 		Date startDate = act.getActStartTime();
 		Date endDate =act.getActEndTime();
@@ -139,20 +136,26 @@ public class ActivityController extends BaseController {
 	@RequestMapping("join/{actId}")
 	@ResponseBody
 	public boolean joinActivity(@ModelAttribute(CommonConstant.USER_CONTEXT) User user,@PathVariable String actId){
-		actService.updateActivity4UARState(actId,user,RoleHelper.UAR_JOIN_ACTIVITY);
+		int result = actService.updateAddActivity4UARState(actId,user,RoleHelper.UAR_JOIN_ACTIVITY);
+		if(result ==  RoleHelper.JOIN_QUEUE){
+			throw new Business4JsonException("act_join_full","Participate in the activity of the enrollment is full");
+		}
 		
 		return true;
 	}
 	
 	/**
-	 * 观看活动
+	 * 取消报名
 	 * @param user
+	 * @param actId
 	 * @return
 	 */
-	@RequestMapping("signup/{actId}")
+	@RequestMapping("cancelJoin/{actId}")
 	@ResponseBody
-	public boolean signupActivity(@ModelAttribute(CommonConstant.USER_CONTEXT) User user,@PathVariable String actId){
-		actService.updateActivity4UARState(actId,user,RoleHelper.UAR_SINGUP_ACTIVITY);
+	public boolean cancelJoinActivity(@ModelAttribute(CommonConstant.USER_CONTEXT) User user,@PathVariable String actId){
+		
+		actService.updateDropActivity4UARState(actId,user,RoleHelper.UAR_JOIN_ACTIVITY);
+		
 		return true;
 	}
 	
@@ -236,35 +239,11 @@ public class ActivityController extends BaseController {
 		return actService.loadSpecialUserFromAct(actId,pn,CommonConstant.PAGE_SIZE,RoleHelper.UAR_JOIN_ACTIVITY);
 	}
 	
-	/**
-	 * 查询观看活动的用户
-	 * @param actId
-	 * @param curPage
-	 * @return
-	 */
-	@RequestMapping(value = "loadSingUpUserFromAct/{actId}")
+	@RequestMapping(value = "loadQueueUserFromAct/{actId}")
 	@ResponseBody
-	public Page<User> loadSingUpUserFromAct(@PathVariable String actId,@RequestParam int pn){
-		return actService.loadSpecialUserFromAct(actId, pn,CommonConstant.PAGE_SIZE,RoleHelper.UAR_SINGUP_ACTIVITY);
+	public Page<User> loadQueueUserFromAct(@PathVariable String actId,@RequestParam int pn){
+		return actService.loadSpecialUserFromAct(actId,pn,CommonConstant.PAGE_SIZE,RoleHelper.UAR_QUEUE_ACTIVITY);
 	}
-	
-	/**
-	 * 活动LOGO图片上传
-	 * @param file
-	 * @return
-	 * @throws Exception
-	 */
-	@RequestMapping(value="upload",method=RequestMethod.POST)
-	@ResponseBody
-	public String uploadImage(@RequestParam MultipartFile file) throws Exception {
-		if(!file.isEmpty()){
-			file.transferTo(new File("d:/tmp/"+file.getOriginalFilename()));
-			return "success";
-		}
-		return "faild";
-	}
-	
-
 	
 	/**
 	 * 进入活动信息页
@@ -276,14 +255,6 @@ public class ActivityController extends BaseController {
 	@RequestMapping("toShowActPage/{state}/{actId}")
 	public ModelAndView toShowActPage(@PathVariable String state,@PathVariable String actId) throws Exception{
 		ModelAndView mav = new ModelAndView();
-		//Activity act = actService.loadActbyActId(actId);
-		
-		//根据User查询当前活动的角色
-		//List<Role> roles = uarDao.loadCurUserRole4Act(user, act);
-		
-		/*if(roles!= null && roles.size()>0){
-			mav.addObject("role", roles.get(0));
-		}*/
 		mav.addObject("state", state);
 		mav.addObject("actId", actId);
 		mav.setViewName("act/showActPage");
@@ -310,6 +281,12 @@ public class ActivityController extends BaseController {
 		return "act/showAllActPage";
 	}
 	
+	/**
+	 * 跳转到活动所有用户展示页
+	 * @param actId
+	 * @return
+	 * @throws Exception
+	 */
 	@RequestMapping("showActAllUserPage/{actId}")
 	public ModelAndView toShowActAllUserPage(@PathVariable String actId) throws Exception{
 		ModelAndView mav = new ModelAndView();
@@ -318,6 +295,13 @@ public class ActivityController extends BaseController {
 		return mav;
 	}
 	
+	/**
+	 * 跳转到特殊用户展示页（参加活动的用户，排队的用户）
+	 * @param state
+	 * @param actId
+	 * @return
+	 * @throws Exception
+	 */
 	@RequestMapping("showSpecialActUserPage/{state}/{actId}")
 	public ModelAndView showSpecialActUserPage(@PathVariable int state,@PathVariable String actId) throws Exception{
 		ModelAndView mav = new ModelAndView();

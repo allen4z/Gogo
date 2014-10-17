@@ -21,8 +21,8 @@ function getActAllUser(pn,state){
 	var action;
 	if(state==<%=RoleHelper.UAR_JOIN_ACTIVITY%>){
 		action = 'activity/loadJoinUserFromAct/<%=actId%>?pn='+pn;
-	}else if(state==<%=RoleHelper.UAR_SINGUP_ACTIVITY%>){
-		action = 'activity/loadSingUpUserFromAct/<%=actId%>?pn='+pn;
+	}else if(state==<%=RoleHelper.UAR_QUEUE_ACTIVITY%>){
+		action = 'activity/loadQueueUserFromAct/<%=actId%>?pn='+pn;
 	}
 	
 	var success = function(page){
@@ -48,8 +48,8 @@ function templatefill(users){
 <%
 if(state == RoleHelper.UAR_JOIN_ACTIVITY){
 	%><h1>参与活动用户</h1><%
-}else if(state == RoleHelper.UAR_SINGUP_ACTIVITY){
-	%><h1>观看活动用户</h1><%
+}else if(state == RoleHelper.UAR_QUEUE_ACTIVITY){
+	%><h1>活动排队用户</h1><%
 }
 %>
 

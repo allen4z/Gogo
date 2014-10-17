@@ -1,5 +1,7 @@
 package com.gogo.domain;
 
+import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -7,6 +9,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Version;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
@@ -54,14 +57,17 @@ public class UserAndRole {
 	@Column(name="ur_waitcost",length=50)
 	private double waitCost;
 	
-	//报酬
+	/*//报酬
 	@Column(name="ur_remuneration",length=50)
 	private double remuneration;
 	//投资金额
 	@Column(name="ur_invest_amount",length=50)
-	private double investAmount;
+	private double investAmount;*/
 	
-	
+	//版本
+	@Version
+	@Column(name="update_time",length=10,nullable=false)
+	private Date update_time;
 	
 	public int getUarState() {
 		return uarState;
@@ -79,21 +85,6 @@ public class UserAndRole {
 		this.waitCost = waitCost;
 	}
 
-	public double getRemuneration() {
-		return remuneration;
-	}
-
-	public void setRemuneration(double remuneration) {
-		this.remuneration = remuneration;
-	}
-
-	public double getInvestAmount() {
-		return investAmount;
-	}
-
-	public void setInvestAmount(double investAmount) {
-		this.investAmount = investAmount;
-	}
 
 	public double getCost() {
 		return cost;

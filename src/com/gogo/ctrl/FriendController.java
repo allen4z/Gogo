@@ -11,8 +11,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
+import com.gogo.annotation.GoJsonFilter;
 import com.gogo.domain.Place;
 import com.gogo.domain.User;
+import com.gogo.domain.filter.UserFilter;
 import com.gogo.helper.CommonConstant;
 import com.gogo.page.Page;
 import com.gogo.service.FriendService;
@@ -56,6 +58,7 @@ public class FriendController extends BaseController {
 	 */
 	@RequestMapping(value = "loadFriendByPlace")
 	@ResponseBody
+	@GoJsonFilter(mixin=UserFilter.class,target=User.class)
 	public Page<User> loadPersonByPlace(
 			HttpServletRequest request, 
 			@RequestParam(required=false) Place place,

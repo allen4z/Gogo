@@ -26,19 +26,23 @@ public class RoleHelper {
 	//成员
 	public static final String VISITOR_CODE= "05";
 	public static final String VISITOR_NAME= "VISITOR";
-	
+	//-----------------------------------------------------
 	//权限相关信息--使用二进制进行判断
 	//用户在当前活动没有权限
 	public static final int UAR_NONE_ACTIVITY=0;  //  000
 	//用户在当前活动为参与者权限
 	public static final int UAR_JOIN_ACTIVITY=1;  //  001
-	//用户在当前活动为观众权限
-	public static final int UAR_SINGUP_ACTIVITY=2; // 010
+	//用户在当前排队权限
+	public static final int UAR_QUEUE_ACTIVITY=2; // 010
 	//用户在当前活动为投资人权限
-	public static final int UAR_INVEST_ACTIVITY=4; // 100
+	//public static final int UAR_INVEST_ACTIVITY=4; // 100
+	
+	//--------------------------------------------------------------
+	public static final int JOIN_SUCCESS = 1; //加入成功状态
+	public static final int JOIN_QUEUE = 2; //加入排队状态
 	
 	//最大值
-	public static final int MAX_ACTITVITY=UAR_INVEST_ACTIVITY;
+	public static final int MAX_ACTITVITY=UAR_QUEUE_ACTIVITY;
 	
 	/**
 	 * 判断是否已经包含了此权限

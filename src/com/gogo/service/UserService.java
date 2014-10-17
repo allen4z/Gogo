@@ -95,8 +95,6 @@ public class UserService{
 			payInfo.append(" yuan for");
 			if(RoleHelper.judgeState(userAndRole.getUarState(), RoleHelper.UAR_JOIN_ACTIVITY)){
 				payInfo.append(" join ");
-			}else if(RoleHelper.judgeState(userAndRole.getUarState(), RoleHelper.UAR_SINGUP_ACTIVITY)){
-				payInfo.append(" signup ");
 			}
 			payInfo.append("activity -- "+act.getActName());
 		

@@ -131,7 +131,7 @@ public class Activity {
 	//-------------------JOIN INFO END------------------------
 	
 	//-------------------SINGUP INFO END------------------------
-	//是否需要观众
+	/*//是否需要观众
 	@Column(name="act_need_signup",length=1)
 	private boolean needSignup;
 	//观众最少
@@ -142,23 +142,18 @@ public class Activity {
 	private int maxSignUp;
 	//每名观众需要支付
 	@Column(name="act_signup_needpay",length=50)
-	private double signUpNeedPay;
+	private double signUpNeedPay;*/
 	//-------------------SINGUP INFO END------------------------
 	
 	//-------------------Undertake INFO------------------------
-	//是否需要承办方
+/*	//是否需要承办方
 	@Column(name="act_need_undertake",length=1)
 	private boolean needUndertake;
 	//活动承办方
 	@ManyToOne
 	@JoinColumn(name="uk_id")
-	private Undertake undertake;
+	private Undertake undertake;*/
 	//-------------------Undertake INFO END------------------------
-	
-	//是否需要投资人
-	@Column(name="act_need_invest",length=1)
-	private boolean needInvest;
-	
 
 	/**
 	 * 构造方法
@@ -172,22 +167,6 @@ public class Activity {
 
 	public void setMinJoin(int minJoin) {
 		this.minJoin = minJoin;
-	}
-
-	public int getMinSignUp() {
-		return minSignUp;
-	}
-
-	public void setMinSignUp(int minSignUp) {
-		this.minSignUp = minSignUp;
-	}
-
-	public boolean isNeedSignup() {
-		return needSignup;
-	}
-
-	public void setNeedSignup(boolean needSignup) {
-		this.needSignup = needSignup;
 	}
 
 	public String getImageUrl() {
@@ -206,23 +185,12 @@ public class Activity {
 	public void setJoinNeedPay(double joinNeedPay) {
 		this.joinNeedPay = joinNeedPay;
 	}
-	public double getSignUpNeedPay() {
-		return signUpNeedPay;
-	}
-	public void setSignUpNeedPay(double signUpNeedPay) {
-		this.signUpNeedPay = signUpNeedPay;
-	}
+
 	public int getMaxJoin() {
 		return maxJoin;
 	}
 	public void setMaxJoin(int maxJoin) {
 		this.maxJoin = maxJoin;
-	}
-	public int getMaxSignUp() {
-		return maxSignUp;
-	}
-	public void setMaxSignUp(int maxSignUp) {
-		this.maxSignUp = maxSignUp;
 	}
 
 	public boolean isNeedLoop() {
@@ -327,22 +295,6 @@ public class Activity {
 		this.roles = roles;
 	}
 
-	public boolean isNeedInvest() {
-		return needInvest;
-	}
-
-	public void setNeedInvest(boolean needInvest) {
-		this.needInvest = needInvest;
-	}
-
-	public boolean isNeedUndertake() {
-		return needUndertake;
-	}
-
-	public void setNeedUndertake(boolean needUndertake) {
-		this.needUndertake = needUndertake;
-	}
-
 	public boolean isNeedActor() {
 		return needActor;
 	}
@@ -375,14 +327,6 @@ public class Activity {
 
 	public void setHaveAmount(double haveAmount) {
 		this.haveAmount = haveAmount;
-	}
-
-	public Undertake getUndertake() {
-		return undertake;
-	}
-
-	public void setUndertake(Undertake undertake) {
-		this.undertake = undertake;
 	}
 	
 }
