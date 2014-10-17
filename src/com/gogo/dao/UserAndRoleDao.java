@@ -86,13 +86,22 @@ public class UserAndRoleDao extends BaseDao<UserAndRole> {
 	 * 根据活动ID和“角色用户状态”查询所有该状态用户角色关系
 	 * @param actId
 	 * @param uarState
+	 * @param maxResult 最大返回条数
 	 * @return
 	 */
-	public List<UserAndRole> loadUserAndRoleByActAndState(String actId,int uarState){
+	public List<UserAndRole> loadUserAndRoleByActAndState(String actId,int uarState,int...maxResult){
 		String hql = "select ur from UserAndRole ur join ur.role.belongAct a where a.actId=:actId and ur.uarState=:uarState ";
-		List<UserAndRole> uars = getSession().createQuery(hql)
+		
+		Query query = getSession().createQuery(hql);
+		
+		List<UserAndRole> uars =query
 		.setString("actId", actId).setInteger("uarState", uarState)
 		.list();
+		
+		if(maxResult!= null ){
+			query.setMaxResults(maxResult[0]);
+		}
+			
 		return uars;
 	}
 	

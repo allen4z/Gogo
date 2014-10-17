@@ -125,15 +125,21 @@ public class ActivityService {
 	 */
 	public synchronized void updateDropActivity4UARState(String actId,User user,int uarState){
 		Activity act = loadActbyActId(actId);
+		
 		UserAndRole uar = userAndRoleDao.loadUserAndRoleByUserAndAct(user.getUserId(), actId);
 		int curState = uar.getUarState();
+		
+		boolean isCancelQueue = false;
+		if(uarState == RoleHelper.UAR_JOIN_ACTIVITY && curState == RoleHelper.UAR_QUEUE_ACTIVITY){
+			isCancelQueue = true;
+		}
 		
 		if(!RoleHelper.judgeState(curState, uarState)){
 			throw new Business4JsonException("act_join_false","The activity don't need Participants");	
 		}
 		
 		double subCost = 0;
-		if(uarState == RoleHelper.UAR_JOIN_ACTIVITY){
+		if(uarState == RoleHelper.UAR_JOIN_ACTIVITY && !isCancelQueue){
 			if(act.getJoinNeedPay() != 0){
 				subCost += act.getJoinNeedPay();
 			}
@@ -146,22 +152,24 @@ public class ActivityService {
 		double curCost = uar.getWaitCost();
 		uar.setWaitCost(curCost - subCost); 
 		
-		//如果存在排队用户
-		List<UserAndRole> queueUars = userAndRoleDao.loadUserAndRoleByActAndState(actId, RoleHelper.UAR_QUEUE_ACTIVITY);
-		if(queueUars != null && queueUars.size()>0){
-			UserAndRole firstUar = queueUars.get(0);
-			int queueUar = firstUar.getUarState();
-			//去掉排队用户的排队状态
-			queueUar = RoleHelper.reduceState(queueUar, RoleHelper.UAR_QUEUE_ACTIVITY);
-			//增加排队用的传入状态
-			queueUar = RoleHelper.mergeState(queueUar, uarState);
-			firstUar.setUarState(queueUar);
-			//增加排队用的代付款
-			double firstWaitCost = firstUar.getWaitCost();
-			firstUar.setWaitCost(firstWaitCost+subCost);
+		
+		if(!isCancelQueue){
+			//如果存在排队用户
+			List<UserAndRole> queueUars = userAndRoleDao.loadUserAndRoleByActAndState(actId, RoleHelper.UAR_QUEUE_ACTIVITY,new int[]{1});
+			if(queueUars != null && queueUars.size()>0){
+				UserAndRole firstUar = queueUars.get(0);
+				int queueUar = firstUar.getUarState();
+				//去掉排队用户的排队状态
+				queueUar = RoleHelper.reduceState(queueUar, RoleHelper.UAR_QUEUE_ACTIVITY);
+				//增加排队用的传入状态
+				queueUar = RoleHelper.mergeState(queueUar, uarState);
+				firstUar.setUarState(queueUar);
+				//增加排队用的代付款
+				double firstWaitCost = firstUar.getWaitCost();
+				firstUar.setWaitCost(firstWaitCost+subCost);
+			}
 		}
 	}
-	
 	
 	/**
 	 *  更新用户关联关系的状态 
@@ -182,13 +190,14 @@ public class ActivityService {
 		//2.得到已经报名的人数
 		int hasUserCount = 0;
 		//3.得到当前用户与活动角色的关系
-		UserAndRole uar = null;
+		UserAndRole  uar = null;
 		for (UserAndRole userAndRole : uars) {
 			//当前用户的关联关系
 			if(userAndRole.getUser().getUserId().equals(user.getUserId())){
-				uar = userAndRoleDao.loadUserAndRoleByUserAndAct(user.getUserId(), actId);
+				uar = userAndRole;
+				//uar = userAndRoleDao.loadUserAndRoleByUserAndAct(user.getUserId(), actId);
 				//如果当前用户的权限包含了需要变更的权限，则为重复加入
-				if(RoleHelper.judgeState(uar.getUarState(), uarState)){
+				if(RoleHelper.judgeState(userAndRole.getUarState(), uarState)){
 					throw new Business4JsonException("act_you_joined_this_activity","you joined this activity!");
 				}
 			}
@@ -224,7 +233,6 @@ public class ActivityService {
 					payFlag = true;
 				}
 			}
-			
 		}
 		if(payFlag){
 			notifyPayProcess(user);
