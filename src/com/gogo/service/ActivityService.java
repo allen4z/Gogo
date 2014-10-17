@@ -129,17 +129,17 @@ public class ActivityService {
 		UserAndRole uar = userAndRoleDao.loadUserAndRoleByUserAndAct(user.getUserId(), actId);
 		int curState = uar.getUarState();
 		
-		boolean isCancelQueue = false;
-		if(uarState == RoleHelper.UAR_JOIN_ACTIVITY && curState == RoleHelper.UAR_QUEUE_ACTIVITY){
-			isCancelQueue = true;
-		}
+//		boolean isCancelQueue = false;
+//		if(uarState == RoleHelper.UAR_JOIN_ACTIVITY && curState == RoleHelper.UAR_QUEUE_ACTIVITY){
+//			isCancelQueue = true;
+//		}
 		
 		if(!RoleHelper.judgeState(curState, uarState)){
 			throw new Business4JsonException("act_join_false","The activity don't need Participants");	
 		}
 		
 		double subCost = 0;
-		if(uarState == RoleHelper.UAR_JOIN_ACTIVITY && !isCancelQueue){
+		if(uarState == RoleHelper.UAR_JOIN_ACTIVITY  ){//&&!isCancelQueue
 			if(act.getJoinNeedPay() != 0){
 				subCost += act.getJoinNeedPay();
 			}
@@ -153,7 +153,7 @@ public class ActivityService {
 		uar.setWaitCost(curCost - subCost); 
 		
 		
-		if(!isCancelQueue){
+		if(uarState == RoleHelper.UAR_JOIN_ACTIVITY){
 			//如果存在排队用户
 			List<UserAndRole> queueUars = userAndRoleDao.loadUserAndRoleByActAndState(actId, RoleHelper.UAR_QUEUE_ACTIVITY,new int[]{1});
 			if(queueUars != null && queueUars.size()>0){
@@ -329,6 +329,20 @@ public class ActivityService {
 	 */
 	public Page<User> loadSpecialUserFromAct(String actId, int currPage,int pageSize,int uarState) {
 		return PageUtil.getPage(userAndRoleDao.loadUserAndRoleByActCount(actId,uarState), 0, userAndRoleDao.loadActUserByAct(actId, currPage, pageSize,uarState), pageSize);
+	}
+
+	/**
+	 * 获得用户在当前活动的状态信息
+	 * @param userId
+	 * @param actId
+	 */
+	public int loadCurUserStateInAct(String userId, String actId) {
+		UserAndRole uar = userAndRoleDao.loadUserAndRoleByUserAndAct(userId, actId);	
+		if(uar != null){
+			return uar.getUarState();
+		}else{
+			return -1;
+		}
 	}
 
 }

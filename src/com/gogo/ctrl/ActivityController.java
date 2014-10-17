@@ -160,6 +160,21 @@ public class ActivityController extends BaseController {
 	}
 	
 	/**
+	 * 取消排队+
+	 * @param user
+	 * @param actId
+	 * @return
+	 */
+	@RequestMapping("cancelQueue/{actId}")
+	@ResponseBody
+	public boolean cancelQueueActivity(@ModelAttribute(CommonConstant.USER_CONTEXT) User user,@PathVariable String actId){
+		
+		actService.updateDropActivity4UARState(actId,user,RoleHelper.UAR_QUEUE_ACTIVITY);
+		
+		return true;
+	}
+	
+	/**
 	 * 根据ID删除活动
 	 * @param actId
 	 * @return
@@ -252,10 +267,19 @@ public class ActivityController extends BaseController {
 	 * @return
 	 * @throws Exception
 	 */
-	@RequestMapping("toShowActPage/{state}/{actId}")
-	public ModelAndView toShowActPage(@PathVariable String state,@PathVariable String actId) throws Exception{
+	@RequestMapping("toShowActPage/{actId}")
+	public ModelAndView toShowActPage(HttpServletRequest request,@PathVariable String actId) throws Exception{
 		ModelAndView mav = new ModelAndView();
-		mav.addObject("state", state);
+		
+		User user = getSessionUser(request.getSession());
+		
+		int uarState =-1;
+		
+		if(user != null){
+			uarState = actService.loadCurUserStateInAct(user.getUserId(),actId);
+		}
+		
+		mav.addObject("uarState", uarState);
 		mav.addObject("actId", actId);
 		mav.setViewName("act/showActPage");
 		return mav;

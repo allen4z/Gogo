@@ -1,3 +1,4 @@
+<%@page import="com.gogo.domain.helper.RoleHelper"%>
 <%@page import="com.gogo.domain.Role"%>
 <%@page import="com.gogo.domain.Activity"%>
 <%@ page language="java" import="java.util.*" pageEncoding="utf-8"%>
@@ -5,7 +6,7 @@
 <%
 	String actId = (String)request.getAttribute("actId");
 
-	String state = (String)request.getAttribute("state");
+	Integer uarState = (Integer)request.getAttribute("uarState");
 %>
 
 <html>
@@ -47,21 +48,32 @@ function templatefill(data){
 		<br/>
 
 		<%
-			if(state.equals("0")){
+			if(uarState == -1){
 		%>
-		
+		<a href="activity/visitor/{{actId}}">加入活动小组</a>
 		<%
-			}else if(state.equals("1")){
-				%><a href="activity/visitor/{{actId}}">加入活动小组</a><br/><%
-			}else if(state.equals("2")){
+			}else if(RoleHelper.judgeState(uarState, RoleHelper.UAR_JOIN_ACTIVITY) ){
+				
 				%>
-				  <a href="activity/join/{{actId}}">报名参加活动</a>&nbsp;&nbsp;<a href="activity/cancelJoin/{{actId}}">取消报名&nbsp;&nbsp;<a href="activity/showSpecialActUserPage/1/{{actId}}">查看参加用户</a>&nbsp;&nbsp;<a href="activity/showSpecialActUserPage/2/{{actId}}">查看排队用户</a><br/>
+				&nbsp;&nbsp;<a href="activity/cancelJoin/{{actId}}">取消报名</a>
+				&nbsp;&nbsp;<a href='activity/showSpecialActUserPage/<%=RoleHelper.UAR_JOIN_ACTIVITY%>/{{actId}}'>查看参加用户</a>
+				&nbsp;&nbsp;<a href="activity/showSpecialActUserPage/<%=RoleHelper.UAR_QUEUE_ACTIVITY%>/{{actId}}">查看排队用户</a>
+ 				<br/><a href="activity/showActAllUserPage/{{actId}}">查看活动小组所有用户</a><br/>
+				<%
+			}else if (RoleHelper.judgeState(uarState, RoleHelper.UAR_QUEUE_ACTIVITY)){
+				%>
+				&nbsp;&nbsp;<a href="activity/cancelQueue/{{actId}}">取消排队</a>
+				&nbsp;&nbsp;<a href='activity/showSpecialActUserPage/<%=RoleHelper.UAR_JOIN_ACTIVITY%>/{{actId}}'>查看参加用户</a>
+				&nbsp;&nbsp;<a href="activity/showSpecialActUserPage/<%=RoleHelper.UAR_QUEUE_ACTIVITY%>/{{actId}}">查看排队用户</a>
+ 				<br/><a href="activity/showActAllUserPage/{{actId}}">查看活动小组所有用户</a><br/>				
+				<%
+				
+			}else if(RoleHelper.judgeState(uarState, RoleHelper.UAR_NONE_ACTIVITY)){
+				%>
+				  <a href="activity/join/{{actId}}">报名参加活动</a><br/>
+ 				<br/><a href="activity/showActAllUserPage/{{actId}}">查看活动小组所有用户</a><br/>
 				<%
 			}
-		
-			%>
-			 <a href="activity/showActAllUserPage/{{actId}}">查看活动小组所有用户</a><br/>
-			<%
 		%>
 		</div>
 		

@@ -117,7 +117,7 @@
 			for(Activity act : list){
 		%>
 		<tr>
-			<td><a href="activity/toShowActPage/2/<%=act.getActId()%>"><%=act.getActName() %></a></td>
+			<td><a href="activity/toShowActPage/<%=act.getActId()%>"><%=act.getActName() %></a></td>
 			<td><%=act.getActContent() %></td>
 		</tr>
 		<%
@@ -143,7 +143,7 @@
 			for(Activity act : jlist){
 		%>
 		<tr>
-			<td><a href="activity/toShowActPage/2/<%=act.getActId()%>"><%=act.getActName() %></a></td>
+			<td><a href="activity/toShowActPage/<%=act.getActId()%>"><%=act.getActName() %></a></td>
 			<td><%=act.getActContent() %></td>
 		</tr>
 		<%

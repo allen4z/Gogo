@@ -40,7 +40,7 @@ public class CommonInterceptor extends HandlerInterceptorAdapter {
 			 PrintWriter out = response.getWriter();  
             StringBuilder builder = new StringBuilder();  
             builder.append("<script type=\"text/javascript\" charset=\"UTF-8\">");  
-            builder.append("alert(\"页面过期，请重新登录\");");  
+            builder.append("alert(\"还没有登录，请先登录\");");  
             builder.append("window.top.location.href=\"");  
             builder.append("http://127.0.0.1:8080/Gogo");  
             builder.append("/\";</script>");  
