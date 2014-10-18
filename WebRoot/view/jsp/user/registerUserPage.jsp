@@ -17,12 +17,12 @@
 		$("#registerBtn").click(function(){
 			var f_userName = $("#u_userName").val();
 			var f_password = $("#u_password").val();
-			var f_alisName = $("#u_alisName").val();
+			var f_aliasName = $("#u_aliasName").val();
 			var f_phone = $("#u_phone").val();
 			var f_email = $("#u_email").val();
 			var f_userhead = $("#u_userhead")[0].src;
 			
-			var params = {userName:f_userName,userPassword:f_password,alisName:f_alisName,phoneNum:f_phone,email:f_email,imageUrl:f_userhead};
+			var params = {userName:f_userName,userPassword:f_password,aliasName:f_aliasName,phoneNum:f_phone,email:f_email,imageUrl:f_userhead};
 			var actionInfo = 'user/doRegister';
 			var success = function(result) { 
 					if(result == true){
@@ -88,7 +88,7 @@
    
    	passwod:<input id="u_password" type="password"/><br/>
    	 
-   	alisname：<input id="u_alisName" type="text" /><br/>
+   	aliasname：<input id="u_aliasName" type="text" /><br/>
    	
    	phone：<input id="u_phone" type="text" /><br/>
    	

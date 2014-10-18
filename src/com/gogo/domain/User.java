@@ -46,11 +46,11 @@ public class User {
 	private String userPassword;
 	
 	//昵称
-	@NotNull(message="{user.alisname.not.empty}")
-	@Length(min=4,max=20,message="{user.alisname.length.error}")
-	@Pattern(regexp = "[A-Za-z0-9]*", message = "{user.alisname.regexp.error}") 
-	@Column(name="user_alis_name",length=20,nullable=false)
-	private String alisName;
+	@NotNull(message="{user.aliasname.not.empty}")
+	@Length(min=4,max=20,message="{user.aliasname.length.error}")
+	@Pattern(regexp = "[A-Za-z0-9]*", message = "{user.aliasname.regexp.error}") 
+	@Column(name="user_alias_name",length=20,nullable=false)
+	private String aliasName;
 	
 	//头像
 	@Column(name="user_image_url",length=100)
@@ -121,11 +121,12 @@ public class User {
 	public void setUserName(String userName) {
 		this.userName = userName;
 	}
-	public String getAlisName() {
-		return alisName;
+
+	public String getAliasName() {
+		return aliasName;
 	}
-	public void setAlisName(String alisName) {
-		this.alisName = alisName;
+	public void setAliasName(String aliasName) {
+		this.aliasName = aliasName;
 	}
 	public String getUserPassword() {
 		return userPassword;

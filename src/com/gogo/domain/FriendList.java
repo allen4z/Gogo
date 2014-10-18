@@ -42,11 +42,11 @@ public class FriendList {
 	private User friendUser;
 	
 	//好友昵称
-	@NotNull(message="friend.ailsname.null.error")
-	@Length(min=4,max=20,message="{friend.alisname.length.error}")
-	@Pattern(regexp = "[A-Za-z0-9]*", message = "{friend.alisname.regexp.error}") 
-	@Column(name="f_ailsname",length=20)
-	private String fAlisName;
+	@NotNull(message="friend.aliasname.null.error")
+	@Length(min=4,max=20,message="{friend.aliasname.length.error}")
+	@Pattern(regexp = "[A-Za-z0-9]*", message = "{friend.aliasname.regexp.error}") 
+	@Column(name="f_aliasname",length=20)
+	private String fAliasName;
 	
 	//是否通过认证
 	@Column(name="fg_passed",length=1)
@@ -57,12 +57,13 @@ public class FriendList {
 	@Column(name="update_time",length=10,nullable=false)
 	private Date update_time;
 
-	public String getfAlisName() {
-		return fAlisName;
+
+	public String getfAliasName() {
+		return fAliasName;
 	}
 
-	public void setfAlisName(String fAlisName) {
-		this.fAlisName = fAlisName;
+	public void setfAliasName(String fAliasName) {
+		this.fAliasName = fAliasName;
 	}
 
 	public String getId() {

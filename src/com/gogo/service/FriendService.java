@@ -61,7 +61,7 @@ public class FriendService{
 			fl = new FriendList();
 			fl.setBelongUser(belongUser);
 			fl.setFriendUser(friendUser);
-			fl.setfAlisName(friendUser.getAlisName());
+			fl.setfAliasName(friendUser.getAliasName());
 			fl.setPassed(false);
 		}else{
 			
@@ -94,7 +94,7 @@ public class FriendService{
 		FriendList fl = new FriendList();
 		fl.setBelongUser(belongUser);
 		fl.setFriendUser(friendUser);
-		fl.setfAlisName(friendUser.getAlisName());
+		fl.setfAliasName(friendUser.getAliasName());
 		fl.setPassed(true);
 		
 		friendListDao.save(fl);

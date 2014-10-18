@@ -55,7 +55,7 @@
 <%
 	if(requestFriend!= null && requestFriend.size()>0){
 		for(User rfInfo : requestFriend){
-			%><tr><td><%=rfInfo.getAlisName()
+			%><tr><td><%=rfInfo.getAliasName()
 			
 			%></td><%
 			
@@ -72,7 +72,7 @@
 <%
 	if(friends!= null && friends.size()>0){
 		for(User friend : friends){
-			%><tr><td><%=friend.getAlisName()
+			%><tr><td><%=friend.getAliasName()
 			
 			%></td><%
 			

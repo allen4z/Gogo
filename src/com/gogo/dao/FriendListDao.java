@@ -23,7 +23,7 @@ public class FriendListDao extends BaseDao<FriendList> {
 		
 		String hql = " select friendList.friendUser from FriendList friendList "
 				+ " where friendList.belongUser.userId=:userId and friendList.passed=:passed "
-				+ " order by friendList.friendUser.alisName ";
+				+ " order by friendList.friendUser.aliasName ";
 		
 		List firends = getSession().createQuery(hql)
 				.setString("userId", userId)
@@ -36,7 +36,7 @@ public class FriendListDao extends BaseDao<FriendList> {
 		
 		String hql = " select friendList.belongUser from FriendList friendList "
 				+ " where friendList.friendUser.userId=:userId and friendList.passed=:passed "
-				+ " order by friendList.belongUser.alisName  ";
+				+ " order by friendList.belongUser.aliasName  ";
 		
 		List firends = getSession().createQuery(hql)
 				.setString("userId", userId)

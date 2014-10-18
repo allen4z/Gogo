@@ -76,7 +76,7 @@ if(user!= null){
 <button id="doLogOut" name="doLogOut" >退出登录</button>
 
 &nbsp;
-<div id="backUserMain" style="float:right;display:inline;"> <img  height="44" width="44" src="<%=user.getImageUrl()%>"> <%=user.getAlisName()%>的主页 </div>
+<div id="backUserMain" style="float:right;display:inline;"> <img  height="44" width="44" src="<%=user.getImageUrl()%>"> <%=user.getAliasName()%>的主页 </div>
 
 <%
 }
