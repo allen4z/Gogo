@@ -50,7 +50,8 @@ function templatefill(data){
 		<%
 			if(uarState == -1){
 		%>
-		<a href="activity/visitor/{{actId}}">加入活动小组</a>
+		<a href="activity/visitor/{{actId}}">加入活动小组</a><br/>
+		<a href="activity/join/{{actId}}">报名参加活动</a>
 		<%
 			}else if(RoleHelper.judgeState(uarState, RoleHelper.UAR_JOIN_ACTIVITY) ){
 				

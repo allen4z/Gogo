@@ -71,7 +71,7 @@ public class ActivityService {
 	 * 
 	 * 使用了同步方法！！！！
 	 */
-	public synchronized void saveActivity4RoleState(String actId,User user,String roleCode){
+	public synchronized UserAndRole saveActivity4RoleState(String actId,User user,String roleCode){
 		
 		Activity act = loadActbyActId(actId);
 		Set<Role> roles= act.getRoles();
@@ -115,6 +115,7 @@ public class ActivityService {
 		
 		actDao.update(act);
 		userAndRoleDao.saveOrUpdate(uar);
+		return uar;
 	}
 	
 	/**
@@ -209,7 +210,8 @@ public class ActivityService {
 		
 		//如果用户没有关联人和该活动的角色，则提示用户先加入活动小组
 		if(uar == null){
-			throw new Business4JsonException("act_join_group_first","user not in current group,plase join first");
+			uar = saveActivity4RoleState(actId, user, RoleHelper.VISITOR_CODE);
+			//throw new Business4JsonException("act_join_group_first","user not in current group,plase join first");
 		}
 		
 		//4、分配权限，合并已有权限和变更权限 （例如：参加活动，观看活动，投资活动等不同权限时）

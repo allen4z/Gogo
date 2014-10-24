@@ -50,7 +50,7 @@ function templatefill(acts){
 		{{/if}}
 		<br/>
 		<br/>
-		<a href="activity/toShowActPage/{{act.actId}}">加入该活动组织</a>
+		<a href="activity/toShowActPage/{{act.actId}}">查看活动详情</a>
 		</div>
 {{/each}}
 </script>
