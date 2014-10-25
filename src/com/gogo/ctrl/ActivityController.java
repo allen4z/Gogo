@@ -83,12 +83,11 @@ public class ActivityController extends BaseController {
 	 */
 	private boolean checkActInfo(Activity act) throws Exception {
 		
-		if(act.isNeedActor()){
-			//最小参与人数大于最大参与人数
-			if(act.getMinJoin()>act.getMaxJoin()){
-				throw new Business4JsonException("act_savecheck_minjoin_morethen_maxjoin","min join people more then max join people!");
-			}
+		
+		if(act.getMinJoin()>act.getMaxJoin()){
+			throw new Business4JsonException("act_savecheck_minjoin_morethen_maxjoin","min join people more then max join people!");
 		}
+		
 		/*if(act.isNeedSignup()){
 			//最小观众大于最大观众
 			if(act.getMinSignUp()>act.getMaxSignUp()){

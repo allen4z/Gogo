@@ -67,11 +67,8 @@ public class ActivityService {
 	 * @param actId  活动ID
 	 * @param user  用户信息
 	 * @param RoleCode 角色编码
-	 * 
-	 * 
-	 * 使用了同步方法！！！！
 	 */
-	public synchronized UserAndRole saveActivity4RoleState(String actId,User user,String roleCode){
+	public UserAndRole saveActivity4RoleState(String actId,User user,String roleCode){
 		
 		Activity act = loadActbyActId(actId);
 		Set<Role> roles= act.getRoles();
@@ -182,7 +179,7 @@ public class ActivityService {
 		int result = RoleHelper.JOIN_SUCCESS;
 		Activity act = loadActbyActId(actId);
 		
-		if(uarState == RoleHelper.UAR_JOIN_ACTIVITY && !act.isNeedActor()){
+		if(uarState == RoleHelper.UAR_JOIN_ACTIVITY){
 			throw new Business4JsonException("act_join_false","The activity don't need Participants");	
 		}
 		
@@ -210,6 +207,7 @@ public class ActivityService {
 		
 		//如果用户没有关联人和该活动的角色，则提示用户先加入活动小组
 		if(uar == null){
+			//如果当前用户没有加入小组，则自动加入小组
 			uar = saveActivity4RoleState(actId, user, RoleHelper.VISITOR_CODE);
 			//throw new Business4JsonException("act_join_group_first","user not in current group,plase join first");
 		}

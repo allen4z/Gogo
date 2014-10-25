@@ -79,7 +79,7 @@ public class Activity {
 	@Column(name="act_state",length=1)
 	private int actState;
 	
-	//热点
+	//热度
 	@Column(name="act_hotpoint",length=10)
 	private int hotPoind;
 	
@@ -94,12 +94,7 @@ public class Activity {
 	@JoinColumn(name="place_id")
 	private Place place;
 	
-	//版本
-	@Version
-	@Column(name="update_time",length=10,nullable=false)
-	private Date update_time;
-	
-	//是否对外开放
+	//是否所有人可见
 	@Column(name="act_isopen",length=1)
 	private boolean needOpen;
 	
@@ -115,12 +110,15 @@ public class Activity {
 	@Column(name="act_have_amount",length=50)
 	private double haveAmount;
 	
+	//是否按报名人数
+	@Column(name="act_neesplit",length=1)
+	private boolean needSplit;
 	
-	//-------------------JOIN INFO ------------------------
-	//是否需要参与者
-	@Column(name="act_need_actor",length=1)
-	private boolean needActor;
+	//每名参与者需要支付
+	@Column(name="act_join_needpay",length=50)
+	private double joinNeedPay;
 	
+	//-------------------JOIN INFO -----------------------
 	//参与者最少
 	@Column(name="act_min_join",length=50)
 	private int minJoin;
@@ -129,36 +127,11 @@ public class Activity {
 	@Column(name="act_max_join",length=50)
 	private int maxJoin;
 	
-	//每名参与者需要支付
-	@Column(name="act_join_needpay",length=50)
-	private double joinNeedPay;
-	//-------------------JOIN INFO END------------------------
+	//版本
+	@Version
+	@Column(name="update_time",length=10,nullable=false)
+	private Date update_time;
 	
-	//-------------------SINGUP INFO END------------------------
-	/*//是否需要观众
-	@Column(name="act_need_signup",length=1)
-	private boolean needSignup;
-	//观众最少
-	@Column(name="act_min_signup",length=50)
-	private int minSignUp;
-	//观众最多
-	@Column(name="act_max_signup",length=50)
-	private int maxSignUp;
-	//每名观众需要支付
-	@Column(name="act_signup_needpay",length=50)
-	private double signUpNeedPay;*/
-	//-------------------SINGUP INFO END------------------------
-	
-	//-------------------Undertake INFO------------------------
-/*	//是否需要承办方
-	@Column(name="act_need_undertake",length=1)
-	private boolean needUndertake;
-	//活动承办方
-	@ManyToOne
-	@JoinColumn(name="uk_id")
-	private Undertake undertake;*/
-	//-------------------Undertake INFO END------------------------
-
 	/**
 	 * 构造方法
 	 */
@@ -299,14 +272,14 @@ public class Activity {
 		this.roles = roles;
 	}
 
-	public boolean isNeedActor() {
+	/*public boolean isNeedActor() {
 		return needActor;
 	}
 
 	public void setNeedActor(boolean needActor) {
 		this.needActor = needActor;
 	}
-
+*/
 
 
 	public boolean isNeedOpen() {
@@ -340,4 +313,14 @@ public class Activity {
 	public void setLabel(Set<Label> label) {
 		this.label = label;
 	}
+
+	public boolean isNeedSplit() {
+		return needSplit;
+	}
+
+	public void setNeedSplit(boolean needSplit) {
+		this.needSplit = needSplit;
+	}
+
+
 }
