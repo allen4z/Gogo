@@ -45,6 +45,10 @@ public class Activity {
 	@Column(name="act_contents",length=200)
 	private String actContent;
 	
+	
+	@OneToMany(mappedBy="act",cascade=CascadeType.ALL)
+	private Set<Label> label;
+	
 	//活动logo
 	@Column(name="act_image_url",length=100)
 	private String imageUrl;
@@ -328,5 +332,12 @@ public class Activity {
 	public void setHaveAmount(double haveAmount) {
 		this.haveAmount = haveAmount;
 	}
-	
+
+	public Set<Label> getLabel() {
+		return label;
+	}
+
+	public void setLabel(Set<Label> label) {
+		this.label = label;
+	}
 }
