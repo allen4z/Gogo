@@ -179,9 +179,6 @@ public class ActivityService {
 		int result = RoleHelper.JOIN_SUCCESS;
 		Activity act = loadActbyActId(actId);
 		
-		if(uarState == RoleHelper.UAR_JOIN_ACTIVITY){
-			throw new Business4JsonException("act_join_false","The activity don't need Participants");	
-		}
 		
 		//1、得到活动所有的角色用户关系
 		List<UserAndRole> uars = userAndRoleDao.loadUserAndRoleByAct(actId);

@@ -98,7 +98,7 @@
 最多参加人数：<input id="act_maxJoin" name="act_maxJoin" type="text"/>	<br/>
 
 活动所需总费用：<input id="act_needAmount" name="act_needAmount" type="text"/>	<br/>
-费用是否平摊：<input id="act_needSplit" name="act_needSplit" type="text"/>	<br/>
+费用是否平摊：<input id="act_needSplit" name="act_needSplit" type="checkbox"/>	<br/>
 每个参与者需要缴费：<input id="act_joinNeedPay" name="act_joinNeedPay" type="text"/>	-- 平摊费用此项隐藏，报名后自动计算<br/>
 
 是否为循环任务：<input id="act_isLoop" name="act_isLoop" type="checkbox"/><br/>
