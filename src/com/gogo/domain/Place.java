@@ -15,9 +15,6 @@ import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.GenericGenerator;
 
-import com.gogo.annotation.GoJsonFilter;
-import com.gogo.domain.filter.ActivityFilter;
-
 @Entity
 @Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
 @Table(name="t_place")
@@ -34,9 +31,6 @@ public class Place{
 	@Column(name="place_code",length=10)
 	private String placeCode;
 	
-	//地点名称（可能同意地点有多个名称）
-//	@OneToMany(mappedBy="placeNameId",cascade=CascadeType.ALL)
-//	private Set<PlaceName> placeNames;
 	
 	@Column(name="place_name",length=50)
 	private String placeName;
@@ -113,13 +107,6 @@ public class Place{
 		this.city = city;
 	}
 
-//	public Set<PlaceName> getPlaceNames() {
-//		return placeNames;
-//	}
-//
-//	public void setPlaceNames(Set<PlaceName> placeNames) {
-//		this.placeNames = placeNames;
-//	}
 
 	public Date getUpdateTime() {
 		return updateTime;
