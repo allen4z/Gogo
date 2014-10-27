@@ -45,10 +45,10 @@ public class Role {
 
 	//角色所在活动
 	@ManyToOne
-	@JoinColumn(name="belongact")
-	@OrderBy("actSignTime ASC")
+	@JoinColumn(name="belongGroup")
+//	@OrderBy("actSignTime ASC")
 	@Cascade(value=org.hibernate.annotations.CascadeType.SAVE_UPDATE)
-	private Activity belongAct;
+	private Group belongGroup;
 	
 	//角色所有人员
 	@OneToMany(mappedBy="role",cascade=CascadeType.ALL)
@@ -78,20 +78,20 @@ public class Role {
 		this.roleName = roleName;
 	}
 
-	public Activity getBelongAct() {
-		return belongAct;
-	}
-
-	public void setBelongAct(Activity belongAct) {
-		this.belongAct = belongAct;
-	}
-
 	public Set<UserAndRole> getBelongUser() {
 		return belongUser;
 	}
 
 	public void setBelongUser(Set<UserAndRole> belongUser) {
 		this.belongUser = belongUser;
+	}
+
+	public Group getBelongGroup() {
+		return belongGroup;
+	}
+
+	public void setBelongGroup(Group belongGroup) {
+		this.belongGroup = belongGroup;
 	}
 
 

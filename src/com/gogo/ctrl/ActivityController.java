@@ -28,6 +28,7 @@ import com.gogo.domain.Role;
 import com.gogo.domain.User;
 import com.gogo.domain.filter.ActivityFilter;
 import com.gogo.domain.filter.RoleFilter;
+import com.gogo.domain.helper.DomainStateHelper;
 import com.gogo.domain.helper.RoleHelper;
 import com.gogo.exception.Business4JsonException;
 import com.gogo.helper.CommonConstant;
@@ -119,7 +120,7 @@ public class ActivityController extends BaseController {
 	 * 加入活动小组
 	 * @param user
 	 * @return
-	 */
+	 *//*
 	@RequestMapping("visitor/{actId}")
 	@ResponseBody
 	public boolean visitorActivity(@ModelAttribute(CommonConstant.USER_CONTEXT) User user,@PathVariable String actId){
@@ -127,11 +128,11 @@ public class ActivityController extends BaseController {
 		return true;
 	}
 	
-	/**
+	*//**
 	 * 参与活动
 	 * @param user
 	 * @return
-	 */
+	 *//*
 	@RequestMapping("join/{actId}")
 	@ResponseBody
 	public boolean joinActivity(@ModelAttribute(CommonConstant.USER_CONTEXT) User user,@PathVariable String actId){
@@ -141,10 +142,26 @@ public class ActivityController extends BaseController {
 		}
 		
 		return true;
+	}*/
+	
+
+	/**
+	 * 参与活动  如果人满，则自动排队
+	 * @param user
+	 * @return
+	 */
+	@RequestMapping("join/{actId}")
+	@ResponseBody
+	public boolean joinActivity(@ModelAttribute(CommonConstant.USER_CONTEXT) User user,@PathVariable String actId){
+		int result = actService.saveUserJoinActivity(user,actId);
+		if(result ==  DomainStateHelper.USER_AND_ACT_QUEUE){
+			throw new Business4JsonException("act_join_full","Participate in the activity of the enrollment is full");
+		}
+		return true;
 	}
 	
 	/**
-	 * 取消报名
+	 * 取消排队或报名
 	 * @param user
 	 * @param actId
 	 * @return
@@ -152,26 +169,40 @@ public class ActivityController extends BaseController {
 	@RequestMapping("cancelJoin/{actId}")
 	@ResponseBody
 	public boolean cancelJoinActivity(@ModelAttribute(CommonConstant.USER_CONTEXT) User user,@PathVariable String actId){
-		
-		actService.updateDropActivity4UARState(actId,user,RoleHelper.UAR_JOIN_ACTIVITY);
-		
+		actService.updateUserJoinActivity(actId,user);
 		return true;
 	}
 	
+	
 	/**
-	 * 取消排队+
+	 * 取消报名
 	 * @param user
 	 * @param actId
 	 * @return
 	 */
-	@RequestMapping("cancelQueue/{actId}")
+	/*@RequestMapping("cancelJoin/{actId}")
+	@ResponseBody
+	public boolean cancelJoinActivity(@ModelAttribute(CommonConstant.USER_CONTEXT) User user,@PathVariable String actId){
+		
+		actService.updateDropActivity4UARState(actId,user,RoleHelper.UAR_JOIN_ACTIVITY);
+		
+		return true;
+	}*/
+	
+	/**
+	 * 取消排队
+	 * @param user
+	 * @param actId
+	 * @return
+	 */
+	/*@RequestMapping("cancelQueue/{actId}")
 	@ResponseBody
 	public boolean cancelQueueActivity(@ModelAttribute(CommonConstant.USER_CONTEXT) User user,@PathVariable String actId){
 		
 		actService.updateDropActivity4UARState(actId,user,RoleHelper.UAR_QUEUE_ACTIVITY);
 		
 		return true;
-	}
+	}*/
 	
 	/**
 	 * 根据ID删除活动

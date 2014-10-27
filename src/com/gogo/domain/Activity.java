@@ -52,6 +52,21 @@ public class Activity {
 	//活动logo
 	@Column(name="act_image_url",length=100)
 	private String imageUrl;
+
+	//活动创建人
+	@ManyToOne
+	@JoinColumn(name="act_own_user")
+	@OrderBy("userName ASC")
+	private User ownUser;
+	
+	
+	@OneToMany(mappedBy="act",cascade=CascadeType.ALL)
+	private Set<UserAndAct> joinUser;
+	
+	@ManyToOne
+	@JoinColumn(name="act_own_group")
+	@OrderBy("name ASC")
+	private Group group;
 	
 	//创建时间
 	@Column(name="act_create_time",length=10)
@@ -83,12 +98,6 @@ public class Activity {
 	@Column(name="act_hotpoint",length=10)
 	private int hotPoind;
 	
-	//活动创建人
-	@ManyToOne
-	@JoinColumn(name="act_own_user")
-	@OrderBy("userName ASC")
-	private User ownUser;
-	
 	//活动地点
 	@ManyToOne
 	@JoinColumn(name="place_id")
@@ -96,11 +105,7 @@ public class Activity {
 	
 	//是否所有人可见
 	@Column(name="act_isopen",length=1)
-	private boolean needOpen;
-	
-	//活动拥有角色  (管理员、成员)
-	@OneToMany(mappedBy="belongAct",cascade=CascadeType.ALL)
-	private Set<Role> roles;
+	private boolean needOpen;	
 	
 	//活总需金额
 	@Column(name="act_need_amount",length=50)
@@ -264,24 +269,6 @@ public class Activity {
 		this.update_time = update_time;
 	}
 
-	public Set<Role> getRoles() {
-		return roles;
-	}
-
-	public void setRoles(Set<Role> roles) {
-		this.roles = roles;
-	}
-
-	/*public boolean isNeedActor() {
-		return needActor;
-	}
-
-	public void setNeedActor(boolean needActor) {
-		this.needActor = needActor;
-	}
-*/
-
-
 	public boolean isNeedOpen() {
 		return needOpen;
 	}
@@ -322,5 +309,20 @@ public class Activity {
 		this.needSplit = needSplit;
 	}
 
+	public Group getGroup() {
+		return group;
+	}
+
+	public void setGroup(Group group) {
+		this.group = group;
+	}
+
+	public Set<UserAndAct> getJoinUser() {
+		return joinUser;
+	}
+
+	public void setJoinUser(Set<UserAndAct> joinUser) {
+		this.joinUser = joinUser;
+	}
 
 }

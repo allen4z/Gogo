@@ -59,17 +59,16 @@ public class ActivityDao extends BaseDao<Activity>{
 	
 	
 	public List<Activity> loadJoinActivitesByUser(String userId,int curPage,int pagesize) {
-		String hql = "select act from UserAndRole uar left join uar.role r  left join r.belongAct act where uar.user.userId='"+userId+"' "
-				+ " and r.roleCode!='"+ RoleHelper.MANAGER_CODE+"'";
+		String hql = "select act from UserAndAct uaa left join uaa.act act "
+				+ " where uaa.user.userId='"+userId+"' and uaa.uaaState in("+DomainStateHelper.USER_AND_ACT_JOIN+","+DomainStateHelper.USER_AND_ACT_QUEUE+") ";
 		List<Activity> list= findByPage(hql,curPage,pagesize);
 		
 		return list;
 	}
 	
 	public int loadJoinActivitesByUserCount(String userId){
-		String hql = "select count(act) from UserAndRole uar left join uar.role r  left join r.belongAct act "
-				+ " where uar.user.userId='"+userId+"' "
-				+ " and r.roleCode!='"+ RoleHelper.MANAGER_CODE+"'";
+		String hql = "select count(act) from UserAndAct uaa left join uaa.act act "
+				+ " where uaa.user.userId='"+userId+"' and uaa.uaaState in("+DomainStateHelper.USER_AND_ACT_JOIN+","+DomainStateHelper.USER_AND_ACT_QUEUE+") ";
 		return  this.<Number>getCount(hql, null).intValue();
 	}
 	

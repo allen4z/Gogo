@@ -9,11 +9,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.gogo.dao.ActivityDao;
+import com.gogo.dao.UserAndActDao;
 import com.gogo.dao.UserAndRoleDao;
 import com.gogo.dao.UserDao;
 import com.gogo.domain.Activity;
 import com.gogo.domain.Role;
 import com.gogo.domain.User;
+import com.gogo.domain.UserAndAct;
 import com.gogo.domain.UserAndRole;
 import com.gogo.domain.helper.DomainStateHelper;
 import com.gogo.domain.helper.RoleHelper;
@@ -32,6 +34,8 @@ public class UserService{
 	
 	@Autowired
 	private UserAndRoleDao userAndRoleDao;
+	@Autowired
+	private UserAndActDao userAndActDao;
 	
 	public void saveUser(User user){
 		user.setUserState(DomainStateHelper.USER_NORMAL_STATE);
@@ -80,25 +84,19 @@ public class UserService{
 		List<String> payInfos = new ArrayList<String>();
 		
 		//查询所有用户拥有角色信息
-		List<UserAndRole> uars = userAndRoleDao.loadUserAndRoleByUser(userId);
+		List<UserAndAct> uaas = userAndActDao.loadUserAndActByUser(userId);
 		
-		for (UserAndRole userAndRole : uars) {
-			if(userAndRole.getWaitCost() == 0){
+		for (UserAndAct uaa : uaas) {
+			if(uaa.getWaitCost() == 0){
 				continue;
 			}
-			Role role = userAndRole.getRole();
-			Activity act = role.getBelongAct();
-			
+			Activity act = uaa.getAct();
 			StringBuffer payInfo = new StringBuffer();
 			payInfo.append("you must pay ");
-			payInfo.append(userAndRole.getWaitCost());
+			payInfo.append(uaa.getWaitCost());
 			payInfo.append(" yuan for");
-			if(RoleHelper.judgeState(userAndRole.getUarState(), RoleHelper.UAR_JOIN_ACTIVITY)){
-				payInfo.append(" join ");
-			}
+			payInfo.append(" join ");
 			payInfo.append("activity -- "+act.getActName());
-		
-		
 			payInfos.add(payInfo.toString());
 		}
 		

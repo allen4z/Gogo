@@ -11,27 +11,25 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Version;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.GenericGenerator;
 
-/**
- * 角色和用户的关联关系
- * @author allen
- *
- */
+
 @Entity
 @Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
-@Table(name="t_user_role")
-public class UserAndRole {
+@Table(name="t_user_activity")
+public class UserAndAct {
+
 	
 	//主键
 	@Id
 	@GenericGenerator(name = "idGenerator", strategy = "uuid")
 	@GeneratedValue(generator = "idGenerator")
-	@Column(name="user_role_id",length=32)
-	private String userAndRoleId;
+	@Column(name="user_act_id",length=32)
+	private String userAndActId;
 	
 	//用户信息
 	@ManyToOne
@@ -39,36 +37,47 @@ public class UserAndRole {
 	@Cascade(value=org.hibernate.annotations.CascadeType.SAVE_UPDATE)
 	private User user;
 	
-	//角色信息
+	@JsonIgnore
+	//活动信息
 	@ManyToOne
-	@JoinColumn(name="role_id")
+	@JoinColumn(name="act_id")
 	@Cascade(value=org.hibernate.annotations.CascadeType.SAVE_UPDATE)
-	private Role role;
+	private Activity act;
 	
+	//待支付（票款）
+	@Column(name="ur_waitcost",length=50)
+	private double waitCost;
+
 	//用户在当前活动的状态 
-	@Column(name="ur_state",length=1)
-	private int uarState;
+	@Column(name="ua_state",length=1)
+	private int uaaState;
 	
-	//版本
 	@Version
 	@Column(name="update_time",length=10,nullable=false)
 	private Date update_time;
 	
-	public int getUarState() {
-		return uarState;
+	public Date getUpdate_time() {
+		return update_time;
 	}
 
-	public void setUarState(int uarState) {
-		this.uarState = uarState;
+	public void setUpdate_time(Date update_time) {
+		this.update_time = update_time;
 	}
 
-
-	public String getUserAndRoleId() {
-		return userAndRoleId;
+	public int getUaaState() {
+		return uaaState;
 	}
 
-	public void setUserAndRoleId(String userAndRoleId) {
-		this.userAndRoleId = userAndRoleId;
+	public void setUaaState(int uaaState) {
+		this.uaaState = uaaState;
+	}
+
+	public String getUserAndActId() {
+		return userAndActId;
+	}
+
+	public void setUserAndActId(String userAndActId) {
+		this.userAndActId = userAndActId;
 	}
 
 	public User getUser() {
@@ -79,12 +88,21 @@ public class UserAndRole {
 		this.user = user;
 	}
 
-	public Role getRole() {
-		return role;
+	public Activity getAct() {
+		return act;
 	}
 
-	public void setRole(Role role) {
-		this.role = role;
+	public void setAct(Activity act) {
+		this.act = act;
+	}
+	
+	public double getWaitCost() {
+		return waitCost;
 	}
 
+	public void setWaitCost(double waitCost) {
+		this.waitCost = waitCost;
+	}
+
+	
 }

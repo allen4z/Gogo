@@ -33,6 +33,13 @@ public class DomainStateHelper {
 	public static final boolean FIREND_PASSED=true;
 	//好友请求未通过
 	public static final boolean FIREND_UNPASSED=false;
+	
+	//加入
+	public static final int USER_AND_ACT_JOIN=0;
+	//排队
+	public static final int USER_AND_ACT_QUEUE=1;
+	//取消
+	public static final int USER_AND_ACT_CANCEL=2;
 
 	/**
 	 * 属性复制方法 -- 主要用于更新方法

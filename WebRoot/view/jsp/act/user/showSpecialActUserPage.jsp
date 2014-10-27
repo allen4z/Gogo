@@ -1,3 +1,4 @@
+<%@page import="com.gogo.domain.helper.DomainStateHelper"%>
 <%@page import="com.gogo.domain.helper.RoleHelper"%>
 <%@page import="com.gogo.page.Page"%>
 <%@page import="com.gogo.domain.Role"%>
@@ -19,9 +20,9 @@ Integer state = (Integer)request.getAttribute("state");
 <script type="text/javascript">
 function getActAllUser(pn,state){
 	var action;
-	if(state==<%=RoleHelper.UAR_JOIN_ACTIVITY%>){
+	if(state==<%=DomainStateHelper.USER_AND_ACT_JOIN%>){
 		action = 'activity/loadJoinUserFromAct/<%=actId%>?pn='+pn;
-	}else if(state==<%=RoleHelper.UAR_QUEUE_ACTIVITY%>){
+	}else if(state==<%=DomainStateHelper.USER_AND_ACT_QUEUE%>){
 		action = 'activity/loadQueueUserFromAct/<%=actId%>?pn='+pn;
 	}
 	

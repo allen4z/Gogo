@@ -1,9 +1,7 @@
 package com.gogo.service;
 
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.BeanUtils;
@@ -11,12 +9,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.gogo.dao.ActivityDao;
+import com.gogo.dao.UserAndActDao;
 import com.gogo.dao.UserAndRoleDao;
 import com.gogo.domain.Activity;
 import com.gogo.domain.City;
 import com.gogo.domain.Place;
-import com.gogo.domain.Role;
 import com.gogo.domain.User;
+import com.gogo.domain.UserAndAct;
 import com.gogo.domain.UserAndRole;
 import com.gogo.domain.helper.DomainStateHelper;
 import com.gogo.domain.helper.RoleHelper;
@@ -34,7 +33,7 @@ public class ActivityService {
 	@Autowired
 	private ActivityDao actDao;
 	@Autowired
-	private UserAndRoleDao userAndRoleDao;
+	private UserAndActDao userAndActDao;
 	
 	public Activity loadActbyActId(String actId){
 		return actDao.getActbyActId(actId);
@@ -44,31 +43,88 @@ public class ActivityService {
 		act.setActCreateTime(new Date());
 		act.setOwnUser(user);
 		act.setActState(DomainStateHelper.ACT_NEW);
-		
-		//设置为超级管理员
-		Role mrole = new Role();
-		mrole.setRoleCode(RoleHelper.MANAGER_CODE);
-		mrole.setRoleName(RoleHelper.getRoleInfo().get(RoleHelper.MANAGER_CODE));
-		mrole.setBelongAct(act);
-		
-		UserAndRole uar = new UserAndRole();
-		uar.setRole(mrole);
-		uar.setUser(user);
-		uar.setUarState(RoleHelper.UAR_NONE_ACTIVITY);
-		
-		userAndRoleDao.save(uar);
+		actDao.save(act);
 	}
 
 	
 	/**
-	 * 更新用户角色状态  ： 加入小组时 用户关联当前活动的游客角色
-	 *              参加活动时 用户关联当前活动的参与者角色
-	 *              
+	 * 用户参加活动             
 	 * @param actId  活动ID
 	 * @param user  用户信息
-	 * @param RoleCode 角色编码
 	 */
-	public UserAndRole saveActivity4RoleState(String actId,User user,String roleCode){
+	public synchronized int saveUserJoinActivity(User user, String actId) {
+		
+		int result = -1;
+		
+		List<UserAndAct> uaas  = userAndActDao.loadByAct(actId);
+		UserAndAct uaa =null;
+		
+		for (UserAndAct userAndAct : uaas) {
+			if(userAndAct.getUser().getUserId().equals(user.getUserId())){
+				if((userAndAct.getUaaState() == DomainStateHelper.USER_AND_ACT_JOIN||userAndAct.getUaaState() == DomainStateHelper.USER_AND_ACT_QUEUE)){
+					throw new Business4JsonException("you joined this activity!");
+				}else{
+					uaa = userAndAct;
+					break;
+				}
+			}
+		}
+		Activity act = actDao.loadActbyActId(actId);
+		
+		if(uaa == null){
+			uaa = new UserAndAct();
+			uaa.setUser(user);
+			uaa.setAct(act);
+		}
+		
+		//判断是否报名已满
+		int maxJoin = act.getMaxJoin();
+		int curJoint = uaas.size();
+		if(curJoint>=maxJoin){ //报名已满
+			uaa.setUaaState(DomainStateHelper.USER_AND_ACT_QUEUE);
+			result = DomainStateHelper.USER_AND_ACT_QUEUE;
+			
+		}else{
+			uaa.setUaaState(DomainStateHelper.USER_AND_ACT_JOIN);
+			result = DomainStateHelper.USER_AND_ACT_JOIN;
+			uaa.setWaitCost(act.getJoinNeedPay());
+		}
+		//保存报名信息
+		uaa.setUpdate_time(new Date());
+		userAndActDao.saveOrUpdate(uaa);
+		
+		return result;
+	}
+	
+	/**
+	 * 取消报名或排队
+	 * @param actId
+	 * @param user
+	 */
+	public synchronized void updateUserJoinActivity(String actId, User user) {
+		UserAndAct uaa = userAndActDao.loadByUserAndAct(user.getUserId(),actId);
+		if(uaa == null){
+			throw new Business4JsonException("您没有报名此活动");
+		}
+		
+		//如果用户是参加状态，则查询排队人员，更新为参加
+		if(uaa.getUaaState() == DomainStateHelper.USER_AND_ACT_JOIN){
+			//获得最近一条排队人员
+			List<UserAndAct> queueUsers = userAndActDao.loadByActAndState(actId,DomainStateHelper.USER_AND_ACT_QUEUE,new int[]{1});
+			if(queueUsers != null && queueUsers.size()>0){
+				UserAndAct queueUaa = queueUsers.get(0);
+				queueUaa.setUaaState(DomainStateHelper.USER_AND_ACT_JOIN);
+				queueUaa.setWaitCost(uaa.getAct().getJoinNeedPay());
+				userAndActDao.update(queueUaa);
+			}
+		}
+		uaa.setWaitCost(0);
+		uaa.setUaaState(DomainStateHelper.USER_AND_ACT_CANCEL);
+		userAndActDao.update(uaa);
+	}
+	
+	
+	/*public UserAndRole saveActivity4RoleState(String actId,User user,String roleCode){
 		
 		Activity act = loadActbyActId(actId);
 		Set<Role> roles= act.getRoles();
@@ -113,24 +169,20 @@ public class ActivityService {
 		actDao.update(act);
 		userAndRoleDao.saveOrUpdate(uar);
 		return uar;
-	}
+	}*/
 	
 	/**
 	 * TODO 取消排队情况
 	 * @param actId
 	 * @param user
 	 * @param uarState
-	 */
+	 *//*
 	public synchronized void updateDropActivity4UARState(String actId,User user,int uarState){
 		Activity act = loadActbyActId(actId);
 		
 		UserAndRole uar = userAndRoleDao.loadUserAndRoleByUserAndAct(user.getUserId(), actId);
 		int curState = uar.getUarState();
 		
-//		boolean isCancelQueue = false;
-//		if(uarState == RoleHelper.UAR_JOIN_ACTIVITY && curState == RoleHelper.UAR_QUEUE_ACTIVITY){
-//			isCancelQueue = true;
-//		}
 		
 		if(!RoleHelper.judgeState(curState, uarState)){
 			throw new Business4JsonException("act_join_false","The activity don't need Participants");	
@@ -167,7 +219,7 @@ public class ActivityService {
 				firstUar.setWaitCost(firstWaitCost+subCost);
 			}
 		}
-	}
+	}*/
 	
 	/**
 	 *  更新用户关联关系的状态 
@@ -175,7 +227,7 @@ public class ActivityService {
 	 * @param user
 	 * @param uarState
 	 */
-	public synchronized int updateAddActivity4UARState(String actId,User user,int uarState){
+/*	public synchronized int updateAddActivity4UARState(String actId,User user,int uarState){
 		int result = RoleHelper.JOIN_SUCCESS;
 		Activity act = loadActbyActId(actId);
 		
@@ -236,7 +288,7 @@ public class ActivityService {
 		}
 		userAndRoleDao.update(uar);
 		return result;
-	}
+	}*/
 	
 	
 	/**
@@ -314,7 +366,7 @@ public class ActivityService {
 	 * @return
 	 */
 	public Page<User> loadAllUserFromAct(String actId,int currPage,int pageSize) {
-		return PageUtil.getPage(userAndRoleDao.loadUserAndRoleByActCount(actId), 0, userAndRoleDao.loadActUserByAct(actId, currPage, pageSize), pageSize);
+		return PageUtil.getPage(userAndActDao.loadUserByActCount(actId), 0, userAndActDao.loadUserByAct(actId, currPage, pageSize), pageSize);
 	}
 	/**
 	 * 获得当前活动制定用户
@@ -325,7 +377,7 @@ public class ActivityService {
 	 * @return
 	 */
 	public Page<User> loadSpecialUserFromAct(String actId, int currPage,int pageSize,int uarState) {
-		return PageUtil.getPage(userAndRoleDao.loadUserAndRoleByActCount(actId,uarState), 0, userAndRoleDao.loadActUserByAct(actId, currPage, pageSize,uarState), pageSize);
+		return PageUtil.getPage(userAndActDao.loadUserByActCount(actId,uarState), 0, userAndActDao.loadUserByAct(actId, currPage, pageSize,uarState), pageSize);
 	}
 
 	/**
@@ -334,9 +386,9 @@ public class ActivityService {
 	 * @param actId
 	 */
 	public int loadCurUserStateInAct(String userId, String actId) {
-		UserAndRole uar = userAndRoleDao.loadUserAndRoleByUserAndAct(userId, actId);	
-		if(uar != null){
-			return uar.getUarState();
+		UserAndAct uaa = userAndActDao.loadByUserAndAct(userId, actId);	
+		if(uaa != null){
+			return uaa.getUaaState();
 		}else{
 			return -1;
 		}
