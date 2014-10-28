@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.gogo.dao.ActivityDao;
 import com.gogo.dao.UserAndActDao;
+import com.gogo.dao.UserDao;
 import com.gogo.domain.Activity;
 import com.gogo.domain.City;
 import com.gogo.domain.Place;
@@ -31,6 +32,8 @@ public class ActivityService {
 	private ActivityDao actDao;
 	@Autowired
 	private UserAndActDao userAndActDao;
+	@Autowired
+	private UserDao userDao;
 	
 	public Activity loadActbyActId(String actId){
 		return actDao.get(actId);
@@ -52,39 +55,33 @@ public class ActivityService {
 	public synchronized int saveUserJoinActivity(User user, String actId) {
 		
 		int result = -1;
+		String userId = user.getUserId();
+	
+		UserAndAct uaa = userAndActDao.loadByUserAndAct(userId, actId);
 		
-		List<UserAndAct> uaas  = userAndActDao.loadByAct(actId);
-		UserAndAct uaa =null;
-		
-		for (UserAndAct userAndAct : uaas) {
-			if(userAndAct.getUser().getUserId().equals(user.getUserId())){
-				if((userAndAct.getUaaState() == DomainStateHelper.USER_AND_ACT_JOIN||userAndAct.getUaaState() == DomainStateHelper.USER_AND_ACT_QUEUE)){
-					throw new Business4JsonException("you joined this activity!");
-				}else{
-					uaa = userAndAct;
-					break;
-				}
-			}
-		}
 		Activity act = actDao.load(actId);
-		
 		if(uaa == null){
 			uaa = new UserAndAct();
 			uaa.setUser(user);
 			uaa.setAct(act);
+		}else{
+			if((uaa.getUaaState() == DomainStateHelper.USER_AND_ACT_JOIN||uaa.getUaaState() == DomainStateHelper.USER_AND_ACT_QUEUE)){
+				throw new Business4JsonException("you joined this activity!");
+			}
 		}
 		
 		//判断是否报名已满
 		int maxJoin = act.getMaxJoin();
-		int curJoint = uaas.size();
+		int curJoint = act.getCutJoin();
 		if(curJoint>=maxJoin){ //报名已满
 			uaa.setUaaState(DomainStateHelper.USER_AND_ACT_QUEUE);
 			result = DomainStateHelper.USER_AND_ACT_QUEUE;
-			
 		}else{
 			uaa.setUaaState(DomainStateHelper.USER_AND_ACT_JOIN);
 			result = DomainStateHelper.USER_AND_ACT_JOIN;
 			uaa.setWaitCost(act.getJoinNeedPay());
+			
+			act.setCutJoin(act.getCutJoin()+1);
 		}
 		//保存报名信息
 		uaa.setUpdate_time(new Date());
@@ -117,6 +114,8 @@ public class ActivityService {
 		}
 		uaa.setWaitCost(0);
 		uaa.setUaaState(DomainStateHelper.USER_AND_ACT_CANCEL);
+		Activity act = uaa.getAct();
+		act.setCutJoin(act.getCutJoin()-1);
 		userAndActDao.update(uaa);
 	}
 	

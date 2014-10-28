@@ -147,7 +147,7 @@ public class ActivityController extends BaseController {
 	 * @param actId
 	 * @return
 	 */
-	@RequestMapping(value = "loadActByActId/{actId}",produces = "text/html;charset=UTF-8")
+	@RequestMapping(value = "loadActByActId/{actId}")
 	@ResponseBody
 	public Activity loadActByActId(@PathVariable String actId)throws Exception{
 		Activity act = actService.loadActbyActId(actId);

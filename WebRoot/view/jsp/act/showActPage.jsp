@@ -15,9 +15,8 @@
 
 function getAct(actId){
 	var action = 'activity/loadActByActId/'+actId;
-	var success = function(page){
-		var acts = page.items;
-		templatefill(acts);
+	var success = function(act){
+		templatefill(act);
 	};
 	var failed = function(XMLHttpRequest,textStatus, errorThrown){
          alert(XMLHttpRequest.responseText);

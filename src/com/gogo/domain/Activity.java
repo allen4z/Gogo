@@ -126,17 +126,14 @@ public class Activity {
 	//参与者最多
 	@Column(name="act_max_join",length=50)
 	private int maxJoin;
+	@Column(name="act_current_join",length=50)
+	private int cutJoin;
 	
 	//版本
 	@Version
 	@Column(name="update_time",length=10,nullable=false)
 	private Date update_time;
 	
-	/**
-	 * 构造方法
-	 */
-	public Activity(){
-	}
 	
 	public int getMinJoin() {
 		return minJoin;
@@ -311,5 +308,14 @@ public class Activity {
 	public void setJoinUser(Set<UserAndAct> joinUser) {
 		this.joinUser = joinUser;
 	}
+
+	public int getCutJoin() {
+		return cutJoin;
+	}
+
+	public void setCutJoin(int cutJoin) {
+		this.cutJoin = cutJoin;
+	}
+	
 
 }
