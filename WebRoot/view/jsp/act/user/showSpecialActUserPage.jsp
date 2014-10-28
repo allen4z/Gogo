@@ -1,7 +1,6 @@
 <%@page import="com.gogo.domain.helper.DomainStateHelper"%>
 <%@page import="com.gogo.domain.helper.RoleHelper"%>
 <%@page import="com.gogo.page.Page"%>
-<%@page import="com.gogo.domain.Role"%>
 <%@page import="com.gogo.domain.Activity"%>
 <%@ page language="java" import="java.util.*" pageEncoding="utf-8"%>
 <%@ taglib prefix="pagenav" uri="/view/tld/commons.tld"%>
@@ -47,9 +46,9 @@ function templatefill(users){
 </head>
 <body onload="getActAllUser(1,<%=state%>)">
 <%
-if(state == RoleHelper.UAR_JOIN_ACTIVITY){
+if(state == DomainStateHelper.USER_AND_ACT_JOIN){
 	%><h1>参与活动用户</h1><%
-}else if(state == RoleHelper.UAR_QUEUE_ACTIVITY){
+}else if(state == DomainStateHelper.USER_AND_ACT_QUEUE){
 	%><h1>活动排队用户</h1><%
 }
 %>

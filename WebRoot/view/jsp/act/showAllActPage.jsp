@@ -1,13 +1,10 @@
 <%@page import="com.gogo.page.Page"%>
-<%@page import="com.gogo.domain.Role"%>
 <%@page import="com.gogo.domain.Activity"%>
 <%@ page language="java" import="java.util.*" pageEncoding="utf-8"%>
 <%@ taglib prefix="pagenav" uri="/view/tld/commons.tld"%>
 <%@include file="../Head.jsp" %>
 
-<%-- <% 
-	Page<Activity> allAct =(Page)request.getAttribute("page");
- %> --%>
+
 <html>
 <head>
 <title>Gogo-Main</title>

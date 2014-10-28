@@ -1,7 +1,5 @@
 package com.gogo.domain.helper;
 
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * 角色权限
@@ -10,39 +8,30 @@ import java.util.Map;
  */
 public class RoleHelper {
 
-	//角色相关信息
+	/*//角色相关信息
+	//超级管理员
+	public static final String SMANAGER_CODE= "01";
+	public static final String SMANAGER_NAME= "SUPERMANGER";
 	//管理员
-	public static final String MANAGER_CODE= "01";
+	public static final String MANAGER_CODE= "02";
 	public static final String MANAGER_NAME= "MANGER";
-	//投资人
-	public static final String INVEST_CODE= "02";
-	public static final String INVEST_NAME= "INVESTOR";
-	//参与者
-	public static final String JOIN_CODE= "03";
-	public static final String JOIN_NAME= "JOIN";
-	//观众
-	public static final String SIGNUP_CODE= "04";
-	public static final String SIGNUP_NAME= "SIGNUP";
 	//成员
-	public static final String VISITOR_CODE= "05";
-	public static final String VISITOR_NAME= "VISITOR";
+	public static final String VISITOR_CODE= "03";
+	public static final String VISITOR_NAME= "VISITOR";*/
 	//-----------------------------------------------------
-	//权限相关信息--使用二进制进行判断
-	//用户在当前活动没有权限
-	public static final int UAR_NONE_ACTIVITY=0;  //  000
-	//用户在当前活动为参与者权限
-	public static final int UAR_JOIN_ACTIVITY=1;  //  001
-	//用户在当前排队权限
-	public static final int UAR_QUEUE_ACTIVITY=2; // 010
-	//用户在当前活动为投资人权限
-	//public static final int UAR_INVEST_ACTIVITY=4; // 100
+
+	//用户权限
+	//没有任何权限
+	public static final int ONE_AUTHORITY_NONE=0; //000
+	//发言权利
+	public static final int TOW_AUTHORITY_TEXT=1;  //  001
+	//邀请权利
+	public static final int THREE_AUTHORITY_INVITE=2;  //  010
+	//踢人权利
+	public static final int FOUR_AUTHORITY_EXPEL=4; //100
 	
 	//--------------------------------------------------------------
-	public static final int JOIN_SUCCESS = 1; //加入成功状态
-	public static final int JOIN_QUEUE = 2; //加入排队状态
 	
-	//最大值
-	public static final int MAX_ACTITVITY=UAR_QUEUE_ACTIVITY;
 	
 	/**
 	 * 判断是否已经包含了此权限
@@ -86,18 +75,19 @@ public class RoleHelper {
 		return (curState^changeState);
 	}
 	
-	public static Map<String,String> getRoleInfo(){
-		Map<String,String> map = new HashMap<String,String>();
-		
-		map.put(MANAGER_CODE, MANAGER_NAME);
-		map.put(INVEST_CODE, INVEST_NAME);
-		map.put(JOIN_CODE, JOIN_NAME);
-		map.put(SIGNUP_CODE, SIGNUP_NAME);
-		map.put(VISITOR_CODE, VISITOR_NAME);
-		return map;
+	
+	/**
+	 * 获得传入参数一下所有值的总和(传入权限一下的所有权限)
+	 * @param state
+	 * @return
+	 */
+	public static int mergeParamState(int state){
+		int result = 0;
+		 while(0 !=state){
+			 result = mergeState(result, state);
+			 state = state>>1;
+		}
+		return result;
 	}
 	
-	public static void main(String[] args) {
-		System.out.println(RoleHelper.judgeState(7, 2));
-	}
 }

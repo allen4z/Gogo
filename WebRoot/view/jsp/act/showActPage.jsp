@@ -1,5 +1,4 @@
 <%@page import="com.gogo.domain.helper.DomainStateHelper"%>
-<%@page import="com.gogo.domain.Role"%>
 <%@page import="com.gogo.domain.Activity"%>
 <%@ page language="java" import="java.util.*" pageEncoding="utf-8"%>
 <%@include file="../Head.jsp" %>
@@ -16,14 +15,17 @@
 
 function getAct(actId){
 	var action = 'activity/loadActByActId/'+actId;
-	var success = function(act){
-		templatefill(act);
+	var success = function(page){
+		var acts = page.items;
+		templatefill(acts);
 	};
 	var failed = function(XMLHttpRequest,textStatus, errorThrown){
          alert(XMLHttpRequest.responseText);
     };
 	send4Json(null,action,success,failed);
 }
+
+
 
 function templatefill(data){
 	var html = template('dataTemplate', data);	

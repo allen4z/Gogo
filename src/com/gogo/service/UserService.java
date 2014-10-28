@@ -10,15 +10,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.gogo.dao.ActivityDao;
 import com.gogo.dao.UserAndActDao;
-import com.gogo.dao.UserAndRoleDao;
+import com.gogo.dao.UserAndGroupDao;
 import com.gogo.dao.UserDao;
 import com.gogo.domain.Activity;
-import com.gogo.domain.Role;
 import com.gogo.domain.User;
 import com.gogo.domain.UserAndAct;
-import com.gogo.domain.UserAndRole;
 import com.gogo.domain.helper.DomainStateHelper;
-import com.gogo.domain.helper.RoleHelper;
 import com.gogo.exception.Business4JsonException;
 import com.gogo.helper.MD5Util;
 import com.gogo.page.Page;
@@ -33,7 +30,7 @@ public class UserService{
 	private ActivityDao actDao;
 	
 	@Autowired
-	private UserAndRoleDao userAndRoleDao;
+	private UserAndGroupDao userAndRoleDao;
 	@Autowired
 	private UserAndActDao userAndActDao;
 	

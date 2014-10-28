@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 
 import com.gogo.domain.User;
 import com.gogo.domain.UserAndAct;
-import com.gogo.domain.UserAndRole;
+import com.gogo.domain.UserAndGroup;
 
 @Repository
 public class UserAndActDao extends BaseDao<UserAndAct> {

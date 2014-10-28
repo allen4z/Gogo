@@ -36,16 +36,19 @@ public class Group {
 	@Length(min=4,max=20,message="{group.name.length.error}")
 	@Column(name="group_name",length=20,nullable=false)
 	private String name;
-	
-	@OneToMany(mappedBy="group",cascade=CascadeType.ALL)
-	private Set<Activity> acts;
+//	
+//	@OneToMany(mappedBy="group",cascade=CascadeType.ALL)
+//	private Set<Activity> acts;
 	
 	//活动拥有角色  (管理员、成员)
-	@OneToMany(mappedBy="belongGroup",cascade=CascadeType.ALL)
-	private Set<Role> roles;
+	@OneToMany(mappedBy="group",cascade=CascadeType.ALL)
+	private Set<UserAndGroup> joinUser;
 
 	@Column(name="group_max_user",length=20,nullable=false)
 	private int maxJoinUser;
+	
+	@Column(name="group_current_user",length=20,nullable=false)
+	private int curJoinUser;
 	
 	@ManyToOne
 	@JoinColumn(name="group_create_user")
@@ -54,6 +57,22 @@ public class Group {
 	
 	
 	
+	public Set<UserAndGroup> getJoinUser() {
+		return joinUser;
+	}
+
+	public void setJoinUser(Set<UserAndGroup> joinUser) {
+		this.joinUser = joinUser;
+	}
+
+	public int getCurJoinUser() {
+		return curJoinUser;
+	}
+
+	public void setCurJoinUser(int curJoinUser) {
+		this.curJoinUser = curJoinUser;
+	}
+
 	public int getMaxJoinUser() {
 		return maxJoinUser;
 	}
@@ -78,21 +97,6 @@ public class Group {
 		this.name = name;
 	}
 
-	public Set<Activity> getActs() {
-		return acts;
-	}
-
-	public void setActs(Set<Activity> acts) {
-		this.acts = acts;
-	}
-
-	public Set<Role> getRoles() {
-		return roles;
-	}
-
-	public void setRoles(Set<Role> roles) {
-		this.roles = roles;
-	}
 
 	public User getCreateUser() {
 		return createUser;

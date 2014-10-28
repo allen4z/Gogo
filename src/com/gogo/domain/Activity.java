@@ -63,11 +63,6 @@ public class Activity {
 	@OneToMany(mappedBy="act",cascade=CascadeType.ALL)
 	private Set<UserAndAct> joinUser;
 	
-	@ManyToOne
-	@JoinColumn(name="act_own_group")
-	@OrderBy("name ASC")
-	private Group group;
-	
 	//创建时间
 	@Column(name="act_create_time",length=10)
 	private Date actCreateTime;
@@ -307,14 +302,6 @@ public class Activity {
 
 	public void setNeedSplit(boolean needSplit) {
 		this.needSplit = needSplit;
-	}
-
-	public Group getGroup() {
-		return group;
-	}
-
-	public void setGroup(Group group) {
-		this.group = group;
 	}
 
 	public Set<UserAndAct> getJoinUser() {

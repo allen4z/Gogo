@@ -121,6 +121,17 @@ public class BaseDao<T> {
 			 }
 			 return queryObject.list();
 	    }
+	    
+	    public Object findUnique(String hql, Object... params) {
+	    	 Object[] values = params;
+		     Query queryObject = getSession().createQuery(hql);
+			 if (values != null) {
+			 	for (int i = 0; i < values.length; i++) {
+			 		queryObject.setParameter(i, values[i]);
+			 	}
+			 }
+			 return queryObject.uniqueResult();
+	    }
 
 
 	    

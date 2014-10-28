@@ -13,20 +13,33 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.SessionAttributes;
 
 import com.gogo.domain.Group;
 import com.gogo.domain.User;
-import com.gogo.domain.helper.RoleHelper;
 import com.gogo.exception.Business4JsonException;
 import com.gogo.helper.CommonConstant;
 import com.gogo.service.GroupService;
 
 @Controller
+@RequestMapping("/group")
+@SessionAttributes(CommonConstant.USER_CONTEXT)
 public class GroupController {
 
 	@Autowired
 	private GroupService groupService;
 	
+	
+	/**
+	 * 保存活动小组信息
+	 * @param user
+	 * @param group
+	 * @param result
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping("saveGroup")
+	@ResponseBody		
 	public boolean saveGroup(@ModelAttribute(CommonConstant.USER_CONTEXT) User user ,@Valid @RequestBody Group group,BindingResult result) throws Exception{
 		//验证用户信息
 		if(result.hasErrors()){
@@ -38,25 +51,40 @@ public class GroupController {
 			throw new Business4JsonException(errMsg.toString());
 		}
 				
-			if(checkGroupInfo(group)){
-				groupService.saveGroup(group,user);
-			}
-			return true;
+			
+		groupService.saveGroup(group,user);
+			
+		return true;
 	}
 	
-	@RequestMapping("join/{actId}")
+	/**
+	 * 用户加入活动小组
+	 * @param user
+	 * @param groupId
+	 * @return
+	 */
+	@RequestMapping("join/{groupId}")
 	@ResponseBody
-	public boolean joinActivity(@ModelAttribute(CommonConstant.USER_CONTEXT) User user,@PathVariable String groupId){
-		int result = groupService.updateAddGroup4UARState(groupId,user,RoleHelper.UAR_JOIN_ACTIVITY);
-		if(result ==  RoleHelper.JOIN_QUEUE){
-			throw new Business4JsonException("act_join_full","Participate in the activity of the enrollment is full");
-		}
-		
+	public boolean joinGroup(@ModelAttribute(CommonConstant.USER_CONTEXT) User user,@PathVariable String groupId){
+		groupService.saveUserJoinGroup(user,groupId);
 		return true;
 	}
 	
 	
-	private boolean checkGroupInfo(Group group){
+	/**
+	 * 更新用户权限
+	 * @param user
+	 * @param groupId
+	 * @param authority 
+	 * @return
+	 */
+	@RequestMapping("updateAuth/{authority}/{groupId}/{userId}")
+	@ResponseBody
+	public boolean updateUserAuthority(@ModelAttribute(CommonConstant.USER_CONTEXT) User user,
+			@PathVariable String groupId,
+			@PathVariable String userId,
+			@PathVariable int authority){
+		groupService.updateUserAuthority(user,groupId,userId,authority);
 		return true;
 	}
 }

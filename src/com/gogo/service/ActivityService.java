@@ -10,15 +10,12 @@ import org.springframework.stereotype.Service;
 
 import com.gogo.dao.ActivityDao;
 import com.gogo.dao.UserAndActDao;
-import com.gogo.dao.UserAndRoleDao;
 import com.gogo.domain.Activity;
 import com.gogo.domain.City;
 import com.gogo.domain.Place;
 import com.gogo.domain.User;
 import com.gogo.domain.UserAndAct;
-import com.gogo.domain.UserAndRole;
 import com.gogo.domain.helper.DomainStateHelper;
-import com.gogo.domain.helper.RoleHelper;
 import com.gogo.exception.Business4JsonException;
 import com.gogo.exception.BusinessException;
 import com.gogo.map.GoMapHelper;
@@ -36,7 +33,7 @@ public class ActivityService {
 	private UserAndActDao userAndActDao;
 	
 	public Activity loadActbyActId(String actId){
-		return actDao.getActbyActId(actId);
+		return actDao.get(actId);
 	}
 
 	public void saveActivity(Activity act,User user) {
@@ -69,7 +66,7 @@ public class ActivityService {
 				}
 			}
 		}
-		Activity act = actDao.loadActbyActId(actId);
+		Activity act = actDao.load(actId);
 		
 		if(uaa == null){
 			uaa = new UserAndAct();
@@ -123,189 +120,12 @@ public class ActivityService {
 		userAndActDao.update(uaa);
 	}
 	
-	
-	/*public UserAndRole saveActivity4RoleState(String actId,User user,String roleCode){
-		
-		Activity act = loadActbyActId(actId);
-		Set<Role> roles= act.getRoles();
-		Iterator<Role> it = roles.iterator();
-		
-		Role joinRole = null;
-		UserAndRole uar = null;
-		//1.用户第一次分配角色
-		uar = new UserAndRole();
-		uar.setUser(user);
-	
-		//2.查询当前活动是否已经有游客角色
-		while(it.hasNext()){
-			Role role = it.next();
-			if(role.getRoleCode().equals(roleCode)){
-				joinRole = role;
-				break;
-			}
-		}
-		
-		//3.如果没有则新建角色信息
-		if(joinRole == null){
-			joinRole = new Role();
-			joinRole.setRoleCode(roleCode);
-			joinRole.setRoleName(RoleHelper.getRoleInfo().get(roleCode));
-			joinRole.setBelongAct(act);
-		}else{
-			User haveUser = userAndRoleDao.loadActUserByRole(user.getUserId(), joinRole.getRoleId());
-			if(haveUser != null){
-				throw new Business4JsonException("act_you_have_registered","You have registered");
-			}
-		}
-		uar.setRole(joinRole);
-		
-		//5、判断是否重复加入
-		if(joinRole.getBelongUser() !=null){
-			if(joinRole.getBelongUser().contains(uar)){
-				throw new Business4JsonException("you joined this activity!");
-			}
-		}
-		
-		actDao.update(act);
-		userAndRoleDao.saveOrUpdate(uar);
-		return uar;
-	}*/
-	
-	/**
-	 * TODO 取消排队情况
-	 * @param actId
-	 * @param user
-	 * @param uarState
-	 *//*
-	public synchronized void updateDropActivity4UARState(String actId,User user,int uarState){
-		Activity act = loadActbyActId(actId);
-		
-		UserAndRole uar = userAndRoleDao.loadUserAndRoleByUserAndAct(user.getUserId(), actId);
-		int curState = uar.getUarState();
-		
-		
-		if(!RoleHelper.judgeState(curState, uarState)){
-			throw new Business4JsonException("act_join_false","The activity don't need Participants");	
-		}
-		
-		double subCost = 0;
-		if(uarState == RoleHelper.UAR_JOIN_ACTIVITY  ){//&&!isCancelQueue
-			if(act.getJoinNeedPay() != 0){
-				subCost += act.getJoinNeedPay();
-			}
-		}
-		
-		//去掉传入权限
-		int newState = RoleHelper.reduceState(curState, uarState);
-		uar.setUarState(newState);
-		//去掉代付款
-		double curCost = uar.getWaitCost();
-		uar.setWaitCost(curCost - subCost); 
-		
-		
-		if(uarState == RoleHelper.UAR_JOIN_ACTIVITY){
-			//如果存在排队用户
-			List<UserAndRole> queueUars = userAndRoleDao.loadUserAndRoleByActAndState(actId, RoleHelper.UAR_QUEUE_ACTIVITY,new int[]{1});
-			if(queueUars != null && queueUars.size()>0){
-				UserAndRole firstUar = queueUars.get(0);
-				int queueUar = firstUar.getUarState();
-				//去掉排队用户的排队状态
-				queueUar = RoleHelper.reduceState(queueUar, RoleHelper.UAR_QUEUE_ACTIVITY);
-				//增加排队用的传入状态
-				queueUar = RoleHelper.mergeState(queueUar, uarState);
-				firstUar.setUarState(queueUar);
-				//增加排队用的代付款
-				double firstWaitCost = firstUar.getWaitCost();
-				firstUar.setWaitCost(firstWaitCost+subCost);
-			}
-		}
-	}*/
-	
-	/**
-	 *  更新用户关联关系的状态 
-	 * @param actId
-	 * @param user
-	 * @param uarState
-	 */
-/*	public synchronized int updateAddActivity4UARState(String actId,User user,int uarState){
-		int result = RoleHelper.JOIN_SUCCESS;
-		Activity act = loadActbyActId(actId);
-		
-		
-		//1、得到活动所有的角色用户关系
-		List<UserAndRole> uars = userAndRoleDao.loadUserAndRoleByAct(actId);
-		//2.得到已经报名的人数
-		int hasUserCount = 0;
-		//3.得到当前用户与活动角色的关系
-		UserAndRole  uar = null;
-		for (UserAndRole userAndRole : uars) {
-			//当前用户的关联关系
-			if(userAndRole.getUser().getUserId().equals(user.getUserId())){
-				uar = userAndRole;
-				//uar = userAndRoleDao.loadUserAndRoleByUserAndAct(user.getUserId(), actId);
-				//如果当前用户的权限包含了需要变更的权限，则为重复加入
-				if(RoleHelper.judgeState(userAndRole.getUarState(), uarState)){
-					throw new Business4JsonException("act_you_joined_this_activity","you joined this activity!");
-				}
-			}
-			int curState = userAndRole.getUarState();
-			if(RoleHelper.judgeState(curState, uarState)){
-				hasUserCount += 1;
-			}
-		}	
-		
-		//如果用户没有关联人和该活动的角色，则提示用户先加入活动小组
-		if(uar == null){
-			//如果当前用户没有加入小组，则自动加入小组
-			uar = saveActivity4RoleState(actId, user, RoleHelper.VISITOR_CODE);
-			//throw new Business4JsonException("act_join_group_first","user not in current group,plase join first");
-		}
-		
-		//4、分配权限，合并已有权限和变更权限 （例如：参加活动，观看活动，投资活动等不同权限时）
-		int chagedState=RoleHelper.mergeState(uar.getUarState(), uarState);
-		uar.setUarState(chagedState);
-				
-		//是否需要付款通知
-		boolean payFlag = false;
-		
-		//5.判断报名人数 增加代付款金额
-		if(uarState == RoleHelper.UAR_JOIN_ACTIVITY){
-			if(hasUserCount>= act.getMaxJoin()){
-				//排队则只需要排队权限
-				uar.setUarState(RoleHelper.UAR_QUEUE_ACTIVITY);
-				result = RoleHelper.JOIN_QUEUE;
-				
-			}else{
-				//更新用户参加活动待支付金额
-				if(act.getJoinNeedPay() != 0){
-					uar.setWaitCost(act.getJoinNeedPay());
-					payFlag = true;
-				}
-			}
-		}
-		if(payFlag){
-			notifyPayProcess(user);
-		}
-		userAndRoleDao.update(uar);
-		return result;
-	}*/
-	
-	
-	/**
-	 * 通知用户支付
-	 * @param act
-	 */
-	private void notifyPayProcess(User user){
-		//通过消息队列通知用户进行支付
-		log.info("通知用户开始支付");
-	}
-	
 	/**
 	 * 删除模块，首先检查模块是否属于当前登录用户
 	 * 如不属于，则抛出异常
 	 */
 	public void deleteActivity(String actId,String userId) {
-		Activity act = actDao.loadActbyActId(actId);
+		Activity act = actDao.load(actId);
 		User user = act.getOwnUser();
 		if(user.getUserId().equals(userId)){
 			act.setActState(DomainStateHelper.ACT_DEL);
@@ -322,7 +142,7 @@ public class ActivityService {
 	public void updateActivity(Activity act, String userId) throws Exception {
 		String actId = act.getActId();
 		
-		Activity act4db = actDao.loadActbyActId(actId);
+		Activity act4db = actDao.load(actId);
 		User user = act4db.getOwnUser();
 		
 		if(user.getUserId().equals(userId)){

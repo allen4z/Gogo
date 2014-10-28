@@ -19,17 +19,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.gogo.annotation.GoJsonFilter;
-import com.gogo.annotation.GoJsonFilters;
-import com.gogo.dao.UserAndRoleDao;
+import com.gogo.dao.UserAndGroupDao;
 import com.gogo.domain.Activity;
 import com.gogo.domain.Place;
-import com.gogo.domain.Role;
 import com.gogo.domain.User;
-import com.gogo.domain.filter.ActivityFilter;
-import com.gogo.domain.filter.RoleFilter;
 import com.gogo.domain.helper.DomainStateHelper;
-import com.gogo.domain.helper.RoleHelper;
 import com.gogo.exception.Business4JsonException;
 import com.gogo.helper.CommonConstant;
 import com.gogo.page.Page;
@@ -49,7 +43,7 @@ public class ActivityController extends BaseController {
 	private ActivityService actService;
 	
 	@Autowired
-	private UserAndRoleDao uarDao;
+	private UserAndGroupDao uarDao;
 	/**
 	 * 创建活动
 	 * @param act
@@ -88,14 +82,6 @@ public class ActivityController extends BaseController {
 		if(act.getMinJoin()>act.getMaxJoin()){
 			throw new Business4JsonException("act_savecheck_minjoin_morethen_maxjoin","min join people more then max join people!");
 		}
-		
-		/*if(act.isNeedSignup()){
-			//最小观众大于最大观众
-			if(act.getMinSignUp()>act.getMaxSignUp()){
-				throw new Business4JsonException("act_savecheck_minsingup_morethen_maxsignup","min signup people more then max signup people!");
-			}
-		}
-		*/
 		Date signDate =act.getActSignTime();
 		Date startDate = act.getActStartTime();
 		Date endDate =act.getActEndTime();
@@ -116,33 +102,7 @@ public class ActivityController extends BaseController {
 	}
 
 
-	/**
-	 * 加入活动小组
-	 * @param user
-	 * @return
-	 *//*
-	@RequestMapping("visitor/{actId}")
-	@ResponseBody
-	public boolean visitorActivity(@ModelAttribute(CommonConstant.USER_CONTEXT) User user,@PathVariable String actId){
-		actService.saveActivity4RoleState(actId,user,RoleHelper.VISITOR_CODE);
-		return true;
-	}
 	
-	*//**
-	 * 参与活动
-	 * @param user
-	 * @return
-	 *//*
-	@RequestMapping("join/{actId}")
-	@ResponseBody
-	public boolean joinActivity(@ModelAttribute(CommonConstant.USER_CONTEXT) User user,@PathVariable String actId){
-		int result = actService.updateAddActivity4UARState(actId,user,RoleHelper.UAR_JOIN_ACTIVITY);
-		if(result ==  RoleHelper.JOIN_QUEUE){
-			throw new Business4JsonException("act_join_full","Participate in the activity of the enrollment is full");
-		}
-		
-		return true;
-	}*/
 	
 
 	/**
@@ -173,47 +133,6 @@ public class ActivityController extends BaseController {
 		return true;
 	}
 	
-	
-	/**
-	 * 取消报名
-	 * @param user
-	 * @param actId
-	 * @return
-	 */
-	/*@RequestMapping("cancelJoin/{actId}")
-	@ResponseBody
-	public boolean cancelJoinActivity(@ModelAttribute(CommonConstant.USER_CONTEXT) User user,@PathVariable String actId){
-		
-		actService.updateDropActivity4UARState(actId,user,RoleHelper.UAR_JOIN_ACTIVITY);
-		
-		return true;
-	}*/
-	
-	/**
-	 * 取消排队
-	 * @param user
-	 * @param actId
-	 * @return
-	 */
-	/*@RequestMapping("cancelQueue/{actId}")
-	@ResponseBody
-	public boolean cancelQueueActivity(@ModelAttribute(CommonConstant.USER_CONTEXT) User user,@PathVariable String actId){
-		
-		actService.updateDropActivity4UARState(actId,user,RoleHelper.UAR_QUEUE_ACTIVITY);
-		
-		return true;
-	}*/
-	
-	/**
-	 * 根据ID删除活动
-	 * @param actId
-	 * @return
-	 */
-	@RequestMapping("deleteAct/{actId}")
-	public void delActivity(@ModelAttribute(CommonConstant.USER_CONTEXT) User user , String actId) throws Exception{
-		actService.deleteActivity(actId,user.getUserId());
-	}
-	
 	/**
 	 * 根据ID跟新活动
 	 * @param actId
@@ -230,7 +149,6 @@ public class ActivityController extends BaseController {
 	 */
 	@RequestMapping(value = "loadActByActId/{actId}",produces = "text/html;charset=UTF-8")
 	@ResponseBody
-	@GoJsonFilters(values={@GoJsonFilter(mixin=RoleFilter.class,target=Role.class)})
 	public Activity loadActByActId(@PathVariable String actId)throws Exception{
 		Activity act = actService.loadActbyActId(actId);
 		return act;
@@ -245,7 +163,6 @@ public class ActivityController extends BaseController {
 	 */
 	@RequestMapping(value = "loadActByPlace")
 	@ResponseBody
-	@GoJsonFilters(values={@GoJsonFilter(mixin=ActivityFilter.class,target=Activity.class)})
 	public Page<Activity> loadActByPlace(
 			HttpServletRequest request, 
 			@RequestParam(required=false) Place place,
@@ -281,13 +198,13 @@ public class ActivityController extends BaseController {
 	@RequestMapping(value = "loadJoinUserFromAct/{actId}")
 	@ResponseBody
 	public Page<User> loadJoinUserFromAct(@PathVariable String actId,@RequestParam int pn){
-		return actService.loadSpecialUserFromAct(actId,pn,CommonConstant.PAGE_SIZE,RoleHelper.UAR_JOIN_ACTIVITY);
+		return actService.loadSpecialUserFromAct(actId,pn,CommonConstant.PAGE_SIZE,DomainStateHelper.USER_AND_ACT_JOIN);
 	}
 	
 	@RequestMapping(value = "loadQueueUserFromAct/{actId}")
 	@ResponseBody
 	public Page<User> loadQueueUserFromAct(@PathVariable String actId,@RequestParam int pn){
-		return actService.loadSpecialUserFromAct(actId,pn,CommonConstant.PAGE_SIZE,RoleHelper.UAR_QUEUE_ACTIVITY);
+		return actService.loadSpecialUserFromAct(actId,pn,CommonConstant.PAGE_SIZE,DomainStateHelper.USER_AND_ACT_QUEUE);
 	}
 	
 	/**

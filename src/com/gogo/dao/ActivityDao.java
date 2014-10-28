@@ -10,9 +10,7 @@ import com.gogo.domain.City;
 import com.gogo.domain.Place;
 import com.gogo.domain.User;
 import com.gogo.domain.helper.DomainStateHelper;
-import com.gogo.domain.helper.RoleHelper;
 import com.gogo.map.GoMapHelper;
-import com.gogo.page.Page;
 
 @Repository
 public class ActivityDao extends BaseDao<Activity>{
@@ -20,15 +18,6 @@ public class ActivityDao extends BaseDao<Activity>{
 	private static final String HQL_AILS=" activity";
 	
 	private static final String HQL_LIST="FROM Activity"; 
-	
-
-	public Activity loadActbyActId(String actId){
-		return load(actId);
-	}
-	
-	public Activity getActbyActId(String actId){
-		return get(actId);
-	}
 
 	public Serializable saveActivity(Activity act) {
 		return save(act);
@@ -124,11 +113,15 @@ public class ActivityDao extends BaseDao<Activity>{
 	 * @return
 	 */
 	public List<Activity> loadActbyAddr(User user,City city,int pn,int pageSize) {
-		return null;
+		String hql =getHql4City(user, false);
+		
+		List<Activity> actList =findByPage(hql, pn, pageSize, null);
+		return actList;
 	}
 	
 	public int loadActbyAddrCount(User user,City city) {
-		return 0;
+		String hql =getHql4City(user, true);
+		return  this.<Number>getCount(hql, null).intValue();
 	}
 	
 
