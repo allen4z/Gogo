@@ -51,6 +51,7 @@ public class DomainStateHelper {
 	 * @throws IllegalAccessException
 	 * @throws InvocationTargetException
 	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public static void copyPriperties(Object source, Object target)
 			throws SecurityException, NoSuchMethodException,
 			IllegalArgumentException, IllegalAccessException,
@@ -64,8 +65,8 @@ public class DomainStateHelper {
 		Class c1 = source.getClass();
 		Class c2 = target.getClass();
 
-		Field[] fs1 = c1.getDeclaredFields();
-		Field[] fs2 = c2.getDeclaredFields();
+		//Field[] fs1 = c1.getDeclaredFields();
+		//Field[] fs2 = c2.getDeclaredFields();
 		// 两个类属性比较剔除不相同的属性，只留下相同的属性
 		/*for (int i = 0; i < fs2.length; i++) {
 			for (int j = 0; j < fs1.length; j++) {

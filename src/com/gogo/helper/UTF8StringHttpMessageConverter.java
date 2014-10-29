@@ -40,6 +40,7 @@ public class UTF8StringHttpMessageConverter extends AbstractHttpMessageConverter
 		return String.class.equals(clazz);
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	protected String readInternal(Class clazz, HttpInputMessage inputMessage) throws IOException {
 		Charset charset = getContentTypeCharset(inputMessage.getHeaders().getContentType());

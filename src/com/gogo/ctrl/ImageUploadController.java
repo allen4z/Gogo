@@ -18,11 +18,9 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 import com.gogo.domain.ImageModel;
-import com.gogo.domain.User;
 import com.gogo.exception.Business4JsonException;
 import com.gogo.helper.CommonConstant;
 import com.gogo.helper.CompressPic;
-import com.gogo.helper.MD5Util;
 import com.gogo.helper.UUIDHelper;
 import com.gogo.service.ImageUploadService;
 
