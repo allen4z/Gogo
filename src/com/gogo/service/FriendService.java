@@ -36,7 +36,7 @@ public class FriendService{
 			if(city != null){
 				//queryList =PageUtil.getPage(friendGroupDao.loadActbyAddrCount(user,city), currPage, friendGroupDao.loadActbyAddr(user,city, currPage, pageSize), pageSize);	
 			}else{
-				queryList =PageUtil.getPage(friendListDao.loadPersonAllCount(user), currPage, friendListDao.loadPersonAll(user, currPage, pageSize), pageSize);	
+				queryList =PageUtil.getPage(userDao.loadPersonAllCount(user), currPage, userDao.loadPersonAll(user, currPage, pageSize), pageSize);	
 			}
 		}
 		return queryList;
@@ -101,12 +101,12 @@ public class FriendService{
 	}
 	
 	public List<User> loadFriends(String userId) throws Exception{
-		 List<User> friends = friendListDao.loadAllFriends(userId);
+		 List<User> friends = userDao.loadAllFriends(userId);
 		 return friends;
 	}
 	
 	public List<User> loadFriendRequestList(String userId) throws Exception{
-		 List<User> friends = friendListDao.loadFriendRequestList(userId);
+		 List<User> friends = userDao.loadFriendRequestList(userId);
 		 return friends;
 	}
 	

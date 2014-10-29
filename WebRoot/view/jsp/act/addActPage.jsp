@@ -59,9 +59,11 @@
 				needOpen:$("#act_isOpen").attr("checked"),
 				needAmount:$("#act_needAmount").val(),
 				needSplit:$("act_needSplit").attr("checked"),	
+				joinNeedPay:$("#act_joinNeedPay").val(),
 				minJoin : $("#act_minJoin").val(),
 				maxJoin : $("#act_maxJoin").val(),
 				needLoop:$("#act_isLoop").attr("checked")
+				
 			};
 			
 			var success = function(id){

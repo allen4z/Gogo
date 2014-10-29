@@ -131,7 +131,7 @@
 
 <table border="1">
 	<tr >
-		<td colspan="2" align="center">加入的活动小组活动</td>
+		<td colspan="2" align="center">参加或排队的活动</td>
 	</tr>
 	<tr>
 		<td>活动名称</td>

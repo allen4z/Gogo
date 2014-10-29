@@ -49,7 +49,8 @@ public class ActivityDao extends BaseDao<Activity>{
 	
 	public List<Activity> loadJoinActivitesByUser(String userId,int curPage,int pagesize) {
 		String hql = "select act from UserAndAct uaa left join uaa.act act "
-				+ " where uaa.user.userId='"+userId+"' and uaa.uaaState in("+DomainStateHelper.USER_AND_ACT_JOIN+","+DomainStateHelper.USER_AND_ACT_QUEUE+") ";
+				+ " where uaa.user.userId='"+userId+"'"
+						+ " and uaa.uaaState in("+DomainStateHelper.USER_AND_ACT_JOIN+","+DomainStateHelper.USER_AND_ACT_QUEUE+") ";
 		List<Activity> list= findByPage(hql,curPage,pagesize);
 		
 		return list;
@@ -57,11 +58,10 @@ public class ActivityDao extends BaseDao<Activity>{
 	
 	public int loadJoinActivitesByUserCount(String userId){
 		String hql = "select count(act) from UserAndAct uaa left join uaa.act act "
-				+ " where uaa.user.userId='"+userId+"' and uaa.uaaState in("+DomainStateHelper.USER_AND_ACT_JOIN+","+DomainStateHelper.USER_AND_ACT_QUEUE+") ";
+				+ " where uaa.user.userId='"+userId+"'"
+				+ " and uaa.uaaState in("+DomainStateHelper.USER_AND_ACT_JOIN+","+DomainStateHelper.USER_AND_ACT_QUEUE+") ";
 		return  this.<Number>getCount(hql, null).intValue();
 	}
-	
-	
 	
 	/**
 	 * 根据地区信息查询活动信息
@@ -125,6 +125,12 @@ public class ActivityDao extends BaseDao<Activity>{
 	}
 	
 
+	public List<Activity> loadJoinActivitesByUser(int userId) {
+		
+		String hql = "from Activity act left join act.joinUser ju left join ju.user u where u.userId='"+userId+"'";
+		List<Activity> actList = find(hql);
+		return actList;
+	}
 	/**
 	 * 根据活动热点情况，查询活动信息
 	 * @param ip

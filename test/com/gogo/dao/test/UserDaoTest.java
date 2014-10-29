@@ -38,11 +38,11 @@ public class UserDaoTest extends AbstractContextTests  {
 		User user = userDao.loadUserById(4);
 		user.setUserName("Allen4z");
 		user.setAliasName("Allen4z");
-		userDao.updateUser(user);
+		userDao.update(user);
 	}
 	@Test
 	public void delUserTest()  throws Exception {
 		User user = userDao.loadUserById(2);
-		userDao.deleteUser(user);
+		userDao.remove(user);
 	}
 }

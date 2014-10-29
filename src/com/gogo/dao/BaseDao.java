@@ -14,6 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.gogo.page.PageUtil;
 
+
+
 public class BaseDao<T> {
 	
 	@Autowired
@@ -21,7 +23,7 @@ public class BaseDao<T> {
 
 	private Class entityClass;
 	
-	 public BaseDao() {
+	public BaseDao() {
 	        Type genType = getClass().getGenericSuperclass();
 	        Type[] params = ((ParameterizedType) genType).getActualTypeArguments();
 	        entityClass = (Class) params[0];
@@ -99,7 +101,7 @@ public class BaseDao<T> {
 	     * @param sql
 	     * @return 查询结果
 	     */
-	    public List find(String hql) {
+	    public List<T> find(String hql) {
 	        Query queryObject = getSession().createQuery(hql);
 			return queryObject.list();
 	    }
@@ -111,7 +113,7 @@ public class BaseDao<T> {
 	     * @param params
 	     * @return 查询结果
 	     */
-	    public List find(String hql, Object... params) {
+	    public List<T> find(String hql, Object... params) {
 	    	 Object[] values = params;
 		     Query queryObject = getSession().createQuery(hql);
 			 if (values != null) {
@@ -122,7 +124,14 @@ public class BaseDao<T> {
 			 return queryObject.list();
 	    }
 	    
-	    public Object findUnique(String hql, Object... params) {
+	    
+	    /**
+	     * 查询第一个记录
+	     * @param hql
+	     * @param params
+	     * @return
+	     */
+	    public T findUnique(String hql, Object... params) {
 	    	 Object[] values = params;
 		     Query queryObject = getSession().createQuery(hql);
 			 if (values != null) {
@@ -130,7 +139,8 @@ public class BaseDao<T> {
 			 		queryObject.setParameter(i, values[i]);
 			 	}
 			 }
-			 return queryObject.uniqueResult();
+			
+			return (T)queryObject.uniqueResult();
 	    }
 
 
@@ -144,7 +154,7 @@ public class BaseDao<T> {
 	     * @param pagesize
 	     * @return
 	     */
-	    public List findByPage(String hql, int pn,int pageSize, Object... paramlist){
+	    public List<T> findByPage(String hql, int pn,int pageSize, Object... paramlist){
 	    	
 	    	  Query query = getSession().createQuery(hql);
 	          setParameters(query, paramlist);

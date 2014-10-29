@@ -65,63 +65,7 @@ public class UserAndActDao extends BaseDao<UserAndAct> {
 	}
 	
 	
-	private static final String HQL_AILS="uaa";
-	private static final String HQL_LIST="FROM UserAndAct"; 
 	
-	/**
-	 * 根据活动ID查询活动用户Sql  查询参与用户，观众用户...
-	 * @param isCount
-	 * @param paramlist 权限状态（最多传入一个值，为空则查询所有用户）
-	 * @return
-	 */
-	private String getActUserByActSql(boolean isCount,Object... paramlist){
-		StringBuffer sqlBuffer = new StringBuffer();
-		sqlBuffer.append(" select ");
-		if(isCount){
-			sqlBuffer.append(" count("+HQL_AILS+".user) ");
-		}else{
-			sqlBuffer.append(" "+HQL_AILS+".user ");
-		}
-		sqlBuffer.append(" "+HQL_LIST+" "+HQL_AILS+" join "+HQL_AILS+".act a where a.actId=? ");
-		
-		if(paramlist!=null && paramlist.length>0){
-			sqlBuffer.append(" and "+HQL_AILS+".uaaState in (");
-			for (int i = 0; i < paramlist.length; i++) {
-				if(i==0){
-					sqlBuffer.append(paramlist[i]);
-				}else{
-					sqlBuffer.append(","+paramlist[i]);
-				}
-			}
-			sqlBuffer.append(")");
-		}
-		return sqlBuffer.toString();
-	}
-	
-	/**
-	 * 根据活动ID查询跟该活动有关的所有用户
-	 * @param actId
-	 * @param currPage
-	 * @param pageSize
-	 * @param params
-	 * @return
-	 */
-	public List<User> loadUserByAct(String actId,int currPage,int pageSize,Object...params){
-		String hql = getActUserByActSql(false,params);
-		List<User> userList = findByPage(hql,currPage,pageSize,actId);
-		return userList;
-	}
-	
-	/**
-	 * 根据活动ID查询跟该活动有关的所有用户的数量
-	 * @param actId
-	 * @param params
-	 * @return
-	 */
-	public int loadUserByActCount (String actId,Object...params){
-		String hql = getActUserByActSql(true,params);
-		return  this.<Number>getCount(hql,actId).intValue();
-	}
 
 	/**
 	 * 根据用户ID查询所有该用户的用户角色关系

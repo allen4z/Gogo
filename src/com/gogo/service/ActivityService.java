@@ -52,11 +52,10 @@ public class ActivityService {
 	 * @param actId  活动ID
 	 * @param user  用户信息
 	 */
-	public synchronized int saveUserJoinActivity(User user, String actId) {
+	public synchronized int saveUserJoinActivity(String userId, String actId) {
 		
 		int result = -1;
-		String userId = user.getUserId();
-	
+		User user = userDao.get(userId);
 		UserAndAct uaa = userAndActDao.loadByUserAndAct(userId, actId);
 		
 		Activity act = actDao.load(actId);
@@ -85,7 +84,7 @@ public class ActivityService {
 		}
 		//保存报名信息
 		uaa.setUpdate_time(new Date());
-		userAndActDao.saveOrUpdate(uaa);
+		userAndActDao.save(uaa);
 		
 		return result;
 	}
@@ -185,7 +184,7 @@ public class ActivityService {
 	 * @return
 	 */
 	public Page<User> loadAllUserFromAct(String actId,int currPage,int pageSize) {
-		return PageUtil.getPage(userAndActDao.loadUserByActCount(actId), 0, userAndActDao.loadUserByAct(actId, currPage, pageSize), pageSize);
+		return PageUtil.getPage(userDao.loadUserByActCount(actId), 0, userDao.loadUserByAct(actId, currPage, pageSize), pageSize);
 	}
 	/**
 	 * 获得当前活动制定用户
@@ -196,7 +195,7 @@ public class ActivityService {
 	 * @return
 	 */
 	public Page<User> loadSpecialUserFromAct(String actId, int currPage,int pageSize,int uarState) {
-		return PageUtil.getPage(userAndActDao.loadUserByActCount(actId,uarState), 0, userAndActDao.loadUserByAct(actId, currPage, pageSize,uarState), pageSize);
+		return PageUtil.getPage(userDao.loadUserByActCount(actId,uarState), 0, userDao.loadUserByAct(actId, currPage, pageSize,uarState), pageSize);
 	}
 
 	/**

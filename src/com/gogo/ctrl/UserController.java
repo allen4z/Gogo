@@ -156,7 +156,6 @@ public class UserController extends BaseController{
 		Page<Activity> joinAct = userService.loadJoinActivitesByUser(userId,currPage,CommonConstant.PAGE_SIZE);
 		//查询需要支付信息
 		List<String> payInfo = userService.loadPayInfo(userId);	
-		
 		//查询请求列表
 		List<User> requestFriend = friendService.loadFriendRequestList(userId);
 		//查询好友列表

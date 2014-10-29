@@ -113,7 +113,7 @@ public class ActivityController extends BaseController {
 	@RequestMapping("join/{actId}")
 	@ResponseBody
 	public boolean joinActivity(@ModelAttribute(CommonConstant.USER_CONTEXT) User user,@PathVariable String actId){
-		int result = actService.saveUserJoinActivity(user,actId);
+		int result = actService.saveUserJoinActivity(user.getUserId(),actId);
 		if(result ==  DomainStateHelper.USER_AND_ACT_QUEUE){
 			throw new Business4JsonException("act_join_full","Participate in the activity of the enrollment is full");
 		}
