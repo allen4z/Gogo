@@ -1,3 +1,4 @@
+<%@page import="com.gogo.domain.Group"%>
 <%@page import="com.gogo.page.Page"%>
 <%@page import="com.gogo.ctrl.model.UserMainModel"%>
 <%@ page language="java" import="java.util.*" pageEncoding="utf-8"%>
@@ -15,6 +16,8 @@
 	List<User> friends = (List)request.getAttribute("friends");
 	
 	List<User> requestFriend = (List)request.getAttribute("requestFriend");
+	
+	Page<Group> myGroups = (Page)request.getAttribute("myGroup");
 	
 %>
 <html>
@@ -36,6 +39,10 @@
 <br/>
 <form action="activity/toAddActPage" method="post">
 <input id="addActBtn" name="addActBtn"  type="submit" value="新增活動"></input>
+</form>
+
+<form action="group/toAddGroupPage" method="post">
+<input id="addGroupBtn" name="addGroupBtn"  type="submit" value="新增小组"></input>
 </form>
 
 <br/>
@@ -131,7 +138,7 @@
 
 <table border="1">
 	<tr >
-		<td colspan="2" align="center">参加或排队的活动</td>
+		<td colspan="2" align="center">正在参加或排队的活动</td>
 	</tr>
 	<tr>
 		<td>活动名称</td>
@@ -145,6 +152,30 @@
 		<tr>
 			<td><a href="activity/toShowActPage/<%=act.getActId()%>"><%=act.getActName() %></a></td>
 			<td><%=act.getActContent() %></td>
+		</tr>
+		<%
+	}
+	
+	%>
+	
+</table>
+
+
+<table border="1">
+	<tr >
+		<td align="center">我的小组</td>
+	</tr>
+	<tr>
+		<td>小组名称</td>
+	</tr>
+	
+	<%
+			List<Group> glist = myGroups.getItems();
+			for(Group group : glist){
+		%>
+		<tr>
+			<td><a href="group/toShowGroupPage/<%=group.getId()%>"><%=group.getName() %></a></td>
+			
 		</tr>
 		<%
 	}

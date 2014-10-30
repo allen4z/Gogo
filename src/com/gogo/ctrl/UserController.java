@@ -19,11 +19,13 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.gogo.domain.Activity;
+import com.gogo.domain.Group;
 import com.gogo.domain.User;
 import com.gogo.exception.Business4JsonException;
 import com.gogo.helper.CommonConstant;
 import com.gogo.page.Page;
 import com.gogo.service.FriendService;
+import com.gogo.service.GroupService;
 import com.gogo.service.UserService;
 
 /**
@@ -42,6 +44,9 @@ public class UserController extends BaseController{
 	
 	@Autowired
 	private FriendService friendService;
+	
+	@Autowired
+	private GroupService groupService;
 	/**
 	 * 用户注册
 	 * @param user
@@ -161,12 +166,15 @@ public class UserController extends BaseController{
 		//查询好友列表
 		List<User> friends = friendService.loadFriends(userId);
 		
+		Page<Group> myGroup = groupService.loadGroup4User(user, currPage, CommonConstant.PAGE_SIZE);
+		
 		
 		mav.addObject("page",ownAct );
 		mav.addObject("joinpage",joinAct );
 		mav.addObject("payinfo",payInfo );
 		mav.addObject("friends", friends);
 		mav.addObject("requestFriend", requestFriend);
+		mav.addObject("myGroup", myGroup);
 		
 		mav.setViewName("main");
 		

@@ -11,6 +11,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Version;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Cascade;
@@ -39,6 +40,7 @@ public class UserAndGroup {
 	@Cascade(value=org.hibernate.annotations.CascadeType.SAVE_UPDATE)
 	private User user;
 	
+	@JsonIgnore
 	//小组信息
 	@ManyToOne
 	@JoinColumn(name="group_id")

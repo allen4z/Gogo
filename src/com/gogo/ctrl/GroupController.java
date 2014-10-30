@@ -12,13 +12,16 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.gogo.domain.Group;
 import com.gogo.domain.User;
 import com.gogo.exception.Business4JsonException;
 import com.gogo.helper.CommonConstant;
+import com.gogo.page.Page;
 import com.gogo.service.GroupService;
 
 @Controller
@@ -86,5 +89,44 @@ public class GroupController {
 			@PathVariable int authority){
 		groupService.updateUserAuthority(user,groupId,userId,authority);
 		return true;
+	}
+	/**
+	 * 获取附近所有活动小组
+	 * @param currPage
+	 * @return
+	 */
+	@RequestMapping("loadAllGroup")
+	@ResponseBody
+	public Page<Group> loadAllGroup(@RequestParam(value="pn",required=false) Integer pn){
+		return groupService.loadAllGroup(pn, CommonConstant.PAGE_SIZE);
+	}
+	
+	
+	
+	@RequestMapping("loadGroupById/{groupId}")
+	@ResponseBody
+	public Group loadGroupById(@PathVariable String groupId){
+		Group group = groupService.loadGroupById(groupId);
+		return group;
+	}
+	
+	/**
+	 * 进入新增小组页面
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping("toAddGroupPage")
+	public String toAddGroupPage() throws Exception{
+		return "group/addGroupPage";
+		
+	}
+	
+	@RequestMapping("toShowGroupPage/{groupId}")
+	public ModelAndView toAddActPage(@PathVariable String groupId) throws Exception{
+		ModelAndView mav = new ModelAndView();
+		mav.addObject("groupId", groupId);
+		mav.setViewName("group/showGroupPage");
+		return mav;
+		
 	}
 }

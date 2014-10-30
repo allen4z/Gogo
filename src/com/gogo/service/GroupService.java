@@ -11,6 +11,8 @@ import com.gogo.domain.User;
 import com.gogo.domain.UserAndGroup;
 import com.gogo.domain.helper.RoleHelper;
 import com.gogo.exception.Business4JsonException;
+import com.gogo.page.Page;
+import com.gogo.page.PageUtil;
 
 @Service
 public class GroupService {
@@ -81,5 +83,16 @@ public class GroupService {
 		
 	}
 
+	public Page<Group> loadAllGroup(int currPage,int pageSize){
+		return PageUtil.getPage(groupDao.loadAllGroupCount(), currPage, groupDao.loadAllGroup(currPage, pageSize), pageSize);
+	}
+	
+	public Page<Group> loadGroup4User(User user,int currPage,int pageSize) {
+		return PageUtil.getPage(groupDao.loadGroup4UserCount(user.getUserId()), 0, groupDao.loadGroup4User(user.getUserId(), currPage, pageSize), pageSize);
+	}
 
+	public Group loadGroupById(String groupId) {
+		return groupDao.get(groupId);
+	}
+	
 }

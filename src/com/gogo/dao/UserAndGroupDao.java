@@ -1,7 +1,10 @@
 package com.gogo.dao;
 
+import java.util.List;
+
 import org.springframework.stereotype.Repository;
 
+import com.gogo.domain.Group;
 import com.gogo.domain.UserAndGroup;
 
 
@@ -20,5 +23,5 @@ public class UserAndGroupDao extends BaseDao<UserAndGroup> {
 		return this.<Number>getCount(hql, groupId).intValue();
 		
 	}
-	
+
 }
