@@ -74,7 +74,7 @@
 
 <table border="1">
 <tr >
-		<td colspan="2" align="center">好友列表</td>
+		<td colspan="4" align="center">好友列表</td>
 	</tr>
 <%
 	if(friends!= null && friends.size()>0){
@@ -83,7 +83,41 @@
 			
 			%></td><%
 			
-			%><td><a href="#">发送消息</a></td></tr><%
+			%>
+			<td><a href="#">发送消息</a></td>
+			<td>邀请加入活动小组<br/>
+				<%
+			
+					List<Group> glist = myGroups.getItems();
+					for(Group group : glist){
+					%>
+						<a href="group/inviteJoinGroup/<%=friend.getId()%>/<%=group.getId()%>"><%=group.getName() %></a><br/>		
+						
+					<%
+					}
+				%>
+				
+			</td>
+			<td>邀请加入活动<br/>
+				<%
+				
+				List<Activity> list = ownAct.getItems();
+				for(Activity act : list){
+				%>
+					<a href="activity/inviteJoinAct/<%=friend.getId()%>/<%=act.getId()%>"><%=act.getName() %></a><br/>
+				<%
+				}
+				
+				List<Activity> jlist = joinAct.getItems();
+				for(Activity act : jlist){
+				%>
+					<a href="activity/inviteJoinAct/<%=friend.getId()%>/<%=act.getId()%>"><%=act.getName() %></a><br/>
+				<%
+				}
+				%>
+			</td>
+			</tr>
+			<%
 		}
 	}
 	%>

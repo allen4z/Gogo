@@ -41,8 +41,13 @@ public class DomainStateHelper {
 	//取消
 	public static final int USER_AND_ACT_CANCEL=2;
 	
-	
+	//活动小组默认人数
 	public static final int GROUP_DEFAULT_USER_SIZE=50;
+	
+	//小组通知
+	public static final int NOTIFY_TYPE_GROUP=0;
+	//用户通知
+	public static final int NOTIFY_TYPE_USER=1;
 
 	/**
 	 * 属性复制方法 -- 主要用于更新方法

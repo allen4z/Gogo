@@ -8,26 +8,15 @@ package com.gogo.domain.helper;
  */
 public class RoleHelper {
 
-	/*//角色相关信息
-	//超级管理员
-	public static final String SMANAGER_CODE= "01";
-	public static final String SMANAGER_NAME= "SUPERMANGER";
-	//管理员
-	public static final String MANAGER_CODE= "02";
-	public static final String MANAGER_NAME= "MANGER";
-	//成员
-	public static final String VISITOR_CODE= "03";
-	public static final String VISITOR_NAME= "VISITOR";*/
 	//-----------------------------------------------------
-
 	//用户权限
 	//没有任何权限
 	public static final int ONE_AUTHORITY_NONE=0; //000
-	//发言权利
+	//是否允许发言
 	public static final int TOW_AUTHORITY_TEXT=1;  //  001
-	//邀请权利
+	//是否允许邀请其他人
 	public static final int THREE_AUTHORITY_INVITE=2;  //  010
-	//踢人权利
+	//是否允许踢人
 	public static final int FOUR_AUTHORITY_EXPEL=4; //100
 	
 	//--------------------------------------------------------------
@@ -77,7 +66,7 @@ public class RoleHelper {
 	
 	
 	/**
-	 * 获得传入参数一下所有值的总和(传入权限一下的所有权限)
+	 * 获得传入参数以下所有值的总和(传入权限一下的所有权限)
 	 * @param state
 	 * @return
 	 */

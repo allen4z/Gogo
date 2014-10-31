@@ -2,5 +2,6 @@ eclipse.preferences.version=1
 encoding//WebRoot/index.jsp=UTF-8
 encoding//resources/exception.properties=UTF-8
 encoding//resources/messages.properties=UTF-8
+encoding//resources/notify.properties=UTF-8
 encoding//src/com/gogo/helper/KeySynchronizer.java=UTF-8
 encoding/<project>=UTF-8

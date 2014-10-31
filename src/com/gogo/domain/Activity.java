@@ -56,7 +56,7 @@ public class Activity {
 	//活动创建人
 	@ManyToOne
 	@JoinColumn(name="act_own_user")
-	@OrderBy("userName ASC")
+	@OrderBy("name ASC")
 	private User ownUser;
 	
 	

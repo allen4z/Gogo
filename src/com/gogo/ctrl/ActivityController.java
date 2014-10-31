@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.gogo.annotation.Token;
 import com.gogo.dao.UserAndGroupDao;
 import com.gogo.domain.Activity;
 import com.gogo.domain.Place;
@@ -28,6 +29,7 @@ import com.gogo.exception.Business4JsonException;
 import com.gogo.helper.CommonConstant;
 import com.gogo.page.Page;
 import com.gogo.service.ActivityService;
+import com.gogo.service.InviteService;
 
 /**
  * 活动控制类
@@ -41,15 +43,17 @@ public class ActivityController extends BaseController {
 
 	@Autowired
 	private ActivityService actService;
-	
 	@Autowired
 	private UserAndGroupDao uarDao;
+	@Autowired
+	private InviteService inviteService;
 	/**
 	 * 创建活动
 	 * @param act
 	 * @return
 	 * @throws Exception 
 	 */
+	@Token(remove=true)
 	@RequestMapping("saveAct")
 	@ResponseBody
 	public boolean saveActivity(@ModelAttribute(CommonConstant.USER_CONTEXT) User user ,@Valid @RequestBody Activity act,BindingResult result) throws Exception{
@@ -207,6 +211,18 @@ public class ActivityController extends BaseController {
 		return actService.loadSpecialUserFromAct(actId,pn,CommonConstant.PAGE_SIZE,DomainStateHelper.USER_AND_ACT_QUEUE);
 	}
 	
+	
+	
+	@RequestMapping(value = "inviteJoinAct/{friendId}/{actId}")
+	@ResponseBody
+	public boolean InviteJoinGroup(@ModelAttribute(CommonConstant.USER_CONTEXT)User user,
+			@PathVariable String friendId,
+			@PathVariable String actId){
+		inviteService.saveInviteJoinAct(user, friendId, actId);
+		return true;
+	}
+	
+	
 	/**
 	 * 进入活动信息页
 	 * @param user
@@ -237,6 +253,7 @@ public class ActivityController extends BaseController {
 	 * @return
 	 * @throws Exception
 	 */
+	@Token(save=true)
 	@RequestMapping("toAddActPage")
 	public String toAddActPage() throws Exception{
 		return "act/addActPage";

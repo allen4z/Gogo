@@ -48,8 +48,9 @@
 
 	$(document).ready(function(){
 		$("#addActBtn").click(function(){
-			//alert($("#act_isLoop").attr("checked"));
-			var actionInfo = 'activity/saveAct';	
+			
+			var token =$("#token").val();
+			var actionInfo = 'activity/saveAct?token='+token;	
 			var params = {
 				name : $("#act_name").val(),
 				content : $("#act_content").val(),
@@ -90,6 +91,7 @@
 <br/>
 <br/>
 <form>
+<input type="hidden" id="token" name="token" value="${token} "/>
 活动名称：<input id="act_name" name="act_name" type="text"/>	<br/>
 活动内容：<textarea id="act_content" name ="act_content" rows="10" cols="50"></textarea> <br/>
 所在地：<br/>

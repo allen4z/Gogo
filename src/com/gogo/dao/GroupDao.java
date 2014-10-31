@@ -60,5 +60,12 @@ public class GroupDao extends BaseDao<Group> {
 		List<Group> groupPage = findByPage(hql, pn, pageSize, userId);
 		return groupPage;
 	}
+	
+	
+	public List<Group> loadGroup4User(String userId){
+		String hql = "select uag.group from UserAndGroup uag left join uag.user user where user.id=?";
+		List<Group> groups = find(hql,userId);
+		return groups;
+	}
 
 }

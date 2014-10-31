@@ -49,25 +49,34 @@
 	<mvc:resources mapping="/view/js/**" location="/view/js/" cache-period="31536000"/>
 
 	<mvc:interceptors>
-		<bean class="com.gogo.interceptor.CommonInterceptor">
-			<property name="exceptFilter">
-				<list>
-					<value>doLogin</value>
-					<value>doRegister</value>
-					<value>doLogin4json</value>
-					<value>toShowAllPage</value>
-					<value>toShowActPage</value>
-					<value>loadActByPlace</value>
-					<value>loadActByActId</value>
-					<value>uploadUserHead</value>
-				</list>
-			</property>
-			<property name="needSuffix">
-				<list>
-					<value>*.jsp</value>
-				</list>
-			</property>
-		</bean>
+		<mvc:interceptor>
+			<mvc:mapping path="/**"/>
+			<bean class="com.gogo.interceptor.CommonInterceptor">
+				<property name="exceptFilter">
+					<list>
+						<value>doLogin</value>
+						<value>doRegister</value>
+						<value>doLogin4json</value>
+						<value>toShowAllPage</value>
+						<value>toShowActPage</value>
+						<value>loadActByPlace</value>
+						<value>loadActByActId</value>
+						<value>uploadUserHead</value>
+					</list>
+				</property>
+				<property name="needSuffix">
+					<list>
+						<value>*.jsp</value>
+					</list>
+				</property>
+			</bean>
+		</mvc:interceptor>
+		
+		<mvc:interceptor>
+			<mvc:mapping path="/**"/>
+			<bean class="com.gogo.interceptor.TokenInterceptor"/>
+		</mvc:interceptor>
+		
 	</mvc:interceptors> 
 		
 	<aop:aspectj-autoproxy proxy-target-class="true"/>

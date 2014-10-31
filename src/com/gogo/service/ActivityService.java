@@ -1,7 +1,9 @@
 package com.gogo.service;
 
+import java.io.UnsupportedEncodingException;
 import java.util.Date;
 import java.util.List;
+import java.util.ResourceBundle;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.BeanUtils;
@@ -9,10 +11,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.gogo.dao.ActivityDao;
+import com.gogo.dao.GroupDao;
+import com.gogo.dao.NotifyAndGroupDao;
+import com.gogo.dao.NotifyDao;
 import com.gogo.dao.UserAndActDao;
 import com.gogo.dao.UserDao;
 import com.gogo.domain.Activity;
 import com.gogo.domain.City;
+import com.gogo.domain.Group;
+import com.gogo.domain.Notify;
+import com.gogo.domain.NotifyAndGroup;
 import com.gogo.domain.Place;
 import com.gogo.domain.User;
 import com.gogo.domain.UserAndAct;
@@ -34,19 +42,61 @@ public class ActivityService {
 	private UserAndActDao userAndActDao;
 	@Autowired
 	private UserDao userDao;
+	@Autowired
+	private GroupDao  groupDao;
+	@Autowired
+	private NotifyDao notifyDao;
+	@Autowired
+	private NotifyAndGroupDao notifyAndGroupDao;
 	
 	public Activity loadActbyActId(String actId){
 		return actDao.get(actId);
 	}
 
-	public void saveActivity(Activity act,User user) {
+	public void saveActivity(Activity act,User user) throws UnsupportedEncodingException {
 		act.setActCreateTime(new Date());
 		act.setOwnUser(user);
-		act.setState(DomainStateHelper.ACT_NEW);
+		//TODO 保存默认为发布状态
+		//act.setState(DomainStateHelper.ACT_NEW);
+		act.setState(DomainStateHelper.ACT_RELEASE);
 		actDao.save(act);
+		//建立消息信息
+		createActNotify(user,act);
+	}
+	
+	/**
+	 * 新建活动定义消息
+	 * @param user
+	 * @param act
+	 * @throws UnsupportedEncodingException
+	 */
+	private void createActNotify(User user,Activity act) throws UnsupportedEncodingException {
+		//新建消息
+		Notify notify = new Notify();
+		notify.setCreateUser(user);
+		notify.setType(DomainStateHelper.NOTIFY_TYPE_GROUP);
+		
+		ResourceBundle bundle = ResourceBundle.getBundle("notify");
+		String title = new String(bundle.getString("newacttitle").getBytes("ISO-8859-1"), "UTF-8");
+		notify.setTitle(title);
+
+		String content = new String(bundle.getString("newactcontent").getBytes("ISO-8859-1"), "UTF-8");
+		content = content.replace("{user}", user.getAliasName());
+		content = content.replace("{act}", act.getName());
+		notify.setContent(content);
+		notifyDao.save(notify);
+		//查看用户所在小组
+		List<Group> groups= groupDao.loadGroup4User(user.getId());
+		
+		for (Group group : groups) {
+			NotifyAndGroup nag = new NotifyAndGroup();
+			nag.setNotify(notify);
+			nag.setGroup(group);
+			notifyAndGroupDao.save(nag);
+		}
+		//TODO ****推送消息  
 	}
 
-	
 	/**
 	 * 用户参加活动             
 	 * @param actId  活动ID
@@ -59,6 +109,8 @@ public class ActivityService {
 		UserAndAct uaa = userAndActDao.loadByUserAndAct(userId, actId);
 		
 		Activity act = actDao.load(actId);
+		
+		//判断用户是否已参加此活动
 		if(uaa == null){
 			uaa = new UserAndAct();
 			uaa.setUser(user);

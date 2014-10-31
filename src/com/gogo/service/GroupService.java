@@ -40,7 +40,7 @@ public class GroupService {
 		UserAndGroup uag =new UserAndGroup();
 		uag.setGroup(group);
 		uag.setUser(user);
-		uag.setAuthorityState(maxAuthority);
+		uag.setAuthorityState(RoleHelper.mergeParamState(maxAuthority));
 		userAndGroupDao.save(uag);
 		groupDao.save(group);
 	}
@@ -65,7 +65,7 @@ public class GroupService {
 		uag = new UserAndGroup();
 		uag.setGroup(group);
 		uag.setUser(user);
-		uag.setAuthorityState(RoleHelper.TOW_AUTHORITY_TEXT);
+		uag.setAuthorityState(RoleHelper.mergeParamState(RoleHelper.TOW_AUTHORITY_TEXT));
 		userAndGroupDao.saveOrUpdate(uag);
 		groupDao.update(group);
 	}

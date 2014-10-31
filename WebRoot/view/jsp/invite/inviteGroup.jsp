@@ -52,6 +52,7 @@ function templatefill(data){
 			if(uarState == -1){
 				
 		%>
+		<a href="activity/visitor/{{id}}">加入活动小组</a><br/>
 		<a href="activity/join/{{id}}">报名参加活动</a>
 		<%
 			}else if(uarState != DomainStateHelper.USER_AND_ACT_CANCEL ){

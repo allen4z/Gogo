@@ -25,6 +25,7 @@ import com.gogo.exception.Business4JsonException;
 import com.gogo.helper.CommonConstant;
 import com.gogo.page.Page;
 import com.gogo.service.GroupService;
+import com.gogo.service.InviteService;
 
 @Controller
 @RequestMapping("/group")
@@ -33,6 +34,8 @@ public class GroupController extends BaseController {
 
 	@Autowired
 	private GroupService groupService;
+	@Autowired
+	private InviteService inviteService;
 	
 	
 	/**
@@ -92,6 +95,17 @@ public class GroupController extends BaseController {
 		groupService.updateUserAuthority(user,groupId,userId,authority);
 		return true;
 	}
+	
+	
+	@RequestMapping(value = "inviteJoinGroup/{friendId}/{groupId}")
+	@ResponseBody
+	public boolean InviteJoinGroup(@ModelAttribute(CommonConstant.USER_CONTEXT)User user,
+			@PathVariable String friendId,
+			@PathVariable String groupId){
+		inviteService.saveInviteJoinGroup(user, friendId, groupId);
+		return true;
+	}
+	
 	/**
 	 * 获取附近所有活动小组
 	 * @param currPage

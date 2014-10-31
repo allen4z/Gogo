@@ -74,7 +74,6 @@ public class FriendController extends BaseController {
 		
 	}
 	
-	
 	@RequestMapping("toFriendPage")
 	public String toFriendPage() throws Exception{
 		return "friend/showAllPersonPage";

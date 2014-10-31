@@ -1,10 +1,7 @@
 package com.gogo.dao;
 
-import java.util.List;
-
 import org.springframework.stereotype.Repository;
 
-import com.gogo.domain.Group;
 import com.gogo.domain.UserAndGroup;
 
 

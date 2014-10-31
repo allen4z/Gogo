@@ -28,7 +28,7 @@ public class Group {
 	@Id
 	@GenericGenerator(name = "idGenerator", strategy = "uuid")
 	@GeneratedValue(generator = "idGenerator")
-	@Column(name="goup_id",length=32,nullable=false)
+	@Column(name="group_id",length=32,nullable=false)
 	private String id;
 	
 	//活动名称
