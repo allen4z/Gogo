@@ -25,15 +25,15 @@ public class Place{
 	@GenericGenerator(name = "idGenerator", strategy = "uuid")
 	@GeneratedValue(generator = "idGenerator")
 	@Column(name="place_id",length=32)
-	private String placeId;
+	private String id;
 	
 	//地点编码
 	@Column(name="place_code",length=10)
-	private String placeCode;
+	private String code;
 	
 	
 	@Column(name="place_name",length=50)
-	private String placeName;
+	private String name;
 	
 	//经度
 	@Column(name="place_longitude",length=20)
@@ -52,28 +52,33 @@ public class Place{
 	@JoinColumn(name="city_id")
 	private City city;
 	
-
-	
 	@Version
 	@Column(name="update_time",length=10,nullable=false)
 	private Date updateTime;
 
-	public String getPlaceId() {
-		return placeId;
+	public String getId() {
+		return id;
 	}
 
-	public void setPlaceId(String placeId) {
-		this.placeId = placeId;
+	public void setId(String id) {
+		this.id = id;
 	}
 
-	public String getPlaceCode() {
-		return placeCode;
+	public String getCode() {
+		return code;
 	}
 
-	public void setPlaceCode(String placeCode) {
-		this.placeCode = placeCode;
+	public void setCode(String code) {
+		this.code = code;
 	}
 
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
 
 	public float getLongitude() {
 		return longitude;
@@ -107,7 +112,6 @@ public class Place{
 		this.city = city;
 	}
 
-
 	public Date getUpdateTime() {
 		return updateTime;
 	}
@@ -116,15 +120,4 @@ public class Place{
 		this.updateTime = updateTime;
 	}
 
-	public String getPlaceName() {
-		return placeName;
-	}
-
-	public void setPlaceName(String placeName) {
-		this.placeName = placeName;
-	}
-	
-	
-	
-	
 }

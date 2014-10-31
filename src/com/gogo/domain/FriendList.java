@@ -27,7 +27,7 @@ public class FriendList {
 	@Id
 	@GenericGenerator(name = "idGenerator", strategy = "uuid")
 	@GeneratedValue(generator = "idGenerator")
-	@Column(name="fg_id",length=32,nullable=false)
+	@Column(name="fl_id",length=32,nullable=false)
 	private String id;
 	
 	//所属用户

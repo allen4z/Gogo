@@ -18,7 +18,7 @@ public class GroupDao extends BaseDao<Group> {
 		StringBuffer hql = new StringBuffer();
 		
 		if(isCount){
-			hql.append("select count("+HQL_AILS+") ");
+			hql.append("select count(*) ");
 		}else{
 			hql.append("select "+HQL_AILS+" ");
 		}
@@ -45,7 +45,7 @@ public class GroupDao extends BaseDao<Group> {
 		}else{
 			hql+= " uag.group";
 		}
-		hql +=" from UserAndGroup uag left join uag.user user where user.userId=?";
+		hql +=" from UserAndGroup uag left join uag.user user where user.id=?";
 		
 		return hql;
 	}

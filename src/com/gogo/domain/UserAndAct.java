@@ -29,7 +29,7 @@ public class UserAndAct {
 	@GenericGenerator(name = "idGenerator", strategy = "uuid")
 	@GeneratedValue(generator = "idGenerator")
 	@Column(name="user_act_id",length=32)
-	private String userAndActId;
+	private String id;
 	
 	//用户信息
 	@ManyToOne
@@ -72,12 +72,12 @@ public class UserAndAct {
 		this.uaaState = uaaState;
 	}
 
-	public String getUserAndActId() {
-		return userAndActId;
+	public String getId() {
+		return id;
 	}
 
-	public void setUserAndActId(String userAndActId) {
-		this.userAndActId = userAndActId;
+	public void setId(String id) {
+		this.id = id;
 	}
 
 	public User getUser() {

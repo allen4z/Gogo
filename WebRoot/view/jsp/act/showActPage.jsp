@@ -44,29 +44,29 @@ function templatefill(data){
 <script id="dataTemplate" type="text/html">
 
 		<div  id="contentDiv" style="width:800px;height:300px;border:1px solid red;text-align:center;padding-top:20px;">
-		<h3>{{actName}}<h3>
-		<a>{{actContent}}</a>
+		<h3>{{name}}<h3>
+		<a>{{content}}</a>
 		<br/>
 
 		<%
 			if(uarState == -1){
 				
 		%>
-		<a href="activity/visitor/{{actId}}">加入活动小组</a><br/>
-		<a href="activity/join/{{actId}}">报名参加活动</a>
+		<a href="activity/visitor/{{id}}">加入活动小组</a><br/>
+		<a href="activity/join/{{id}}">报名参加活动</a>
 		<%
 			}else if(uarState != DomainStateHelper.USER_AND_ACT_CANCEL ){
 				
 				%>
-				&nbsp;&nbsp;<a href="activity/cancelJoin/{{actId}}">取消报名</a>
-				&nbsp;&nbsp;<a href='activity/showSpecialActUserPage/<%=DomainStateHelper.USER_AND_ACT_JOIN%>/{{actId}}'>查看参加用户</a>
-				&nbsp;&nbsp;<a href="activity/showSpecialActUserPage/<%=DomainStateHelper.USER_AND_ACT_QUEUE%>/{{actId}}">查看排队用户</a>
- 				<br/><a href="activity/showActAllUserPage/{{actId}}">查看活动小组所有用户</a><br/>
+				&nbsp;&nbsp;<a href="activity/cancelJoin/{{id}}">取消报名</a>
+				&nbsp;&nbsp;<a href='activity/showSpecialActUserPage/<%=DomainStateHelper.USER_AND_ACT_JOIN%>/{{id}}'>查看参加用户</a>
+				&nbsp;&nbsp;<a href="activity/showSpecialActUserPage/<%=DomainStateHelper.USER_AND_ACT_QUEUE%>/{{id}}">查看排队用户</a>
+ 				<br/><a href="activity/showActAllUserPage/{{id}}">查看活动小组所有用户</a><br/>
 				<%
 			}else{
 				%>
-				  <a href="activity/join/{{actId}}">报名参加活动</a><br/>
- 				<br/><a href="activity/showActAllUserPage/{{actId}}">查看活动小组所有用户</a><br/>
+				  <a href="activity/join/{{id}}">报名参加活动</a><br/>
+ 				<br/><a href="activity/showActAllUserPage/{{id}}">查看活动小组所有用户</a><br/>
 				<%
 			}
 		%>

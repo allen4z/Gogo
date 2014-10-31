@@ -36,11 +36,11 @@ function templatefill(users){
 <script id="users" type="text/html">
 {{each users as user index}}
 		<div  id="contentDiv" style="width:400px;height:300px;border:1px solid red;text-align:center;padding-top:20px;">
-		<h3><a href="friend/toShowFriendPage/1/{{user.userId}}">{{user.aliasName}}</a><h3>
+		<h3><a href="friend/toShowFriendPage/1/{{user.id}}">{{user.aliasName}}</a><h3>
 		<a>{{user.aliasName}}</a>
 		<br/>
 		<br/>
-		<a href="friend/friendRequest/{{user.userId}}">添加</a>
+		<a href="friend/friendRequest/{{user.id}}">添加</a>
 		</div>
 {{/each}}
 </script>

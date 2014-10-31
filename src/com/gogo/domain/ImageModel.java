@@ -20,7 +20,7 @@ public class ImageModel {
 	@GenericGenerator(name = "idGenerator", strategy = "uuid")
 	@GeneratedValue(generator = "idGenerator")
 	@Column(name="im_id",length=32,nullable=false)
-	private String imageModelID;
+	private String id;
 	
 	//指纹信息
 	@Column(name="im_md5",length=32,nullable=false)
@@ -30,12 +30,12 @@ public class ImageModel {
 	@Column(name="im_url",length=200,nullable=false)
 	private String url;
 
-	public String getImageModelID() {
-		return imageModelID;
+	public String getId() {
+		return id;
 	}
 
-	public void setImageModelID(String imageModelID) {
-		this.imageModelID = imageModelID;
+	public void setId(String id) {
+		this.id = id;
 	}
 
 	public String getMd5() {

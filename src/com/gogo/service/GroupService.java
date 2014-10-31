@@ -7,8 +7,10 @@ import com.gogo.dao.GroupDao;
 import com.gogo.dao.UserAndGroupDao;
 import com.gogo.dao.UserDao;
 import com.gogo.domain.Group;
+import com.gogo.domain.Place;
 import com.gogo.domain.User;
 import com.gogo.domain.UserAndGroup;
+import com.gogo.domain.helper.DomainStateHelper;
 import com.gogo.domain.helper.RoleHelper;
 import com.gogo.exception.Business4JsonException;
 import com.gogo.page.Page;
@@ -31,6 +33,8 @@ public class GroupService {
 	 */
 	public void saveGroup(Group group, User user) {
 		group.setCreateUser(user);
+		group.setMaxJoinUser(DomainStateHelper.GROUP_DEFAULT_USER_SIZE);
+		group.setCurJoinUser(1);
 		
 		int maxAuthority  = RoleHelper.FOUR_AUTHORITY_EXPEL;
 		UserAndGroup uag =new UserAndGroup();
@@ -53,7 +57,12 @@ public class GroupService {
 		if(group.getCurJoinUser()>=group.getMaxJoinUser()){
 			throw new Business4JsonException("小组人数已满");
 		}
-		UserAndGroup uag = new UserAndGroup();
+		
+		UserAndGroup uag = userAndGroupDao.loadUAG4UserAndGroup(user.getId(), groupId);
+		if(uag != null){
+			throw new Business4JsonException("您已经加入了小组");
+		}
+		uag = new UserAndGroup();
 		uag.setGroup(group);
 		uag.setUser(user);
 		uag.setAuthorityState(RoleHelper.TOW_AUTHORITY_TEXT);
@@ -71,7 +80,7 @@ public class GroupService {
 	 */
 	public synchronized void updateUserAuthority(User user, String groupId, String userId,int authority) {
 		//判断是否允许修改
-		UserAndGroup  uag = userAndGroupDao.loadUAG4UserAndGroup(user.getUserId(), groupId);
+		UserAndGroup  uag = userAndGroupDao.loadUAG4UserAndGroup(user.getId(), groupId);
 		
 		int curAuth = uag.getAuthorityState();
 		
@@ -83,12 +92,14 @@ public class GroupService {
 		
 	}
 
-	public Page<Group> loadAllGroup(int currPage,int pageSize){
-		return PageUtil.getPage(groupDao.loadAllGroupCount(), currPage, groupDao.loadAllGroup(currPage, pageSize), pageSize);
+	//@TODO 按地区未实现
+	public Page<Group> loadAllGroup(User user, Place place, String remoteAddr,
+			Integer pn, int pageSize){
+		return PageUtil.getPage(groupDao.loadAllGroupCount(), pn, groupDao.loadAllGroup(pn, pageSize), pageSize);
 	}
 	
 	public Page<Group> loadGroup4User(User user,int currPage,int pageSize) {
-		return PageUtil.getPage(groupDao.loadGroup4UserCount(user.getUserId()), 0, groupDao.loadGroup4User(user.getUserId(), currPage, pageSize), pageSize);
+		return PageUtil.getPage(groupDao.loadGroup4UserCount(user.getId()), 0, groupDao.loadGroup4User(user.getId(), currPage, pageSize), pageSize);
 	}
 
 	public Group loadGroupById(String groupId) {

@@ -2,6 +2,7 @@ package com.gogo.ctrl;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.gogo.domain.Group;
+import com.gogo.domain.Place;
 import com.gogo.domain.User;
 import com.gogo.exception.Business4JsonException;
 import com.gogo.helper.CommonConstant;
@@ -27,7 +29,7 @@ import com.gogo.service.GroupService;
 @Controller
 @RequestMapping("/group")
 @SessionAttributes(CommonConstant.USER_CONTEXT)
-public class GroupController {
+public class GroupController extends BaseController {
 
 	@Autowired
 	private GroupService groupService;
@@ -97,8 +99,15 @@ public class GroupController {
 	 */
 	@RequestMapping("loadAllGroup")
 	@ResponseBody
-	public Page<Group> loadAllGroup(@RequestParam(value="pn",required=false) Integer pn){
-		return groupService.loadAllGroup(pn, CommonConstant.PAGE_SIZE);
+	public Page<Group> loadAllGroup(HttpServletRequest request, 
+			@RequestParam(required=false) Place place,
+			@RequestParam(value="pn",required=false) Integer pn){
+		
+		String remoteAddr =request.getRemoteAddr();
+		
+		User user = getSessionUser(request.getSession());
+		
+		return groupService.loadAllGroup(user,place,remoteAddr,pn, CommonConstant.PAGE_SIZE);
 	}
 	
 	
@@ -118,6 +127,12 @@ public class GroupController {
 	@RequestMapping("toAddGroupPage")
 	public String toAddGroupPage() throws Exception{
 		return "group/addGroupPage";
+		
+	}
+	
+	@RequestMapping("toShowAllPage")
+	public String toShowAllPage() throws Exception{
+		return "group/showAllGroupPage";
 		
 	}
 	

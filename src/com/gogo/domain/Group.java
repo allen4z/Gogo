@@ -80,7 +80,7 @@ public class Group {
 	public void setMaxJoinUser(int maxJoinUser) {
 		this.maxJoinUser = maxJoinUser;
 	}
-
+	
 	public String getId() {
 		return id;
 	}
@@ -96,7 +96,6 @@ public class Group {
 	public void setName(String name) {
 		this.name = name;
 	}
-
 
 	public User getCreateUser() {
 		return createUser;

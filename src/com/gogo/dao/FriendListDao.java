@@ -10,8 +10,8 @@ public class FriendListDao extends BaseDao<FriendList> {
 
 	public FriendList loadFriendListByUserId(String requestUserId, String agreeUserId) {
 		String hql = "select friendList from FriendList friendList "
-				+ " where friendList.belongUser.userId=:requestUserId "
-				+ " and friendList.friendUser.userId=:agreeUserId ";
+				+ " where friendList.belongUser.id=:requestUserId "
+				+ " and friendList.friendUser.id=:agreeUserId ";
 	
 		FriendList fl = (FriendList) getSession()
 				.createQuery(hql)

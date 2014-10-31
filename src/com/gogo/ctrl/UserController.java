@@ -154,7 +154,7 @@ public class UserController extends BaseController{
 			@ModelAttribute(CommonConstant.USER_CONTEXT) User user,
 			@RequestParam(value="pn",defaultValue="0",required=false) int currPage) throws Exception{
 		ModelAndView mav = new ModelAndView();
-		String userId = user.getUserId();
+		String userId = user.getId();
 		//查询拥有活动
 		Page<Activity> ownAct = userService.loadOwnActivitesByUser(userId,currPage,CommonConstant.PAGE_SIZE);
 		//查询相关活动

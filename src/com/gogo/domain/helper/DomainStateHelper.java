@@ -40,6 +40,9 @@ public class DomainStateHelper {
 	public static final int USER_AND_ACT_QUEUE=1;
 	//取消
 	public static final int USER_AND_ACT_CANCEL=2;
+	
+	
+	public static final int GROUP_DEFAULT_USER_SIZE=50;
 
 	/**
 	 * 属性复制方法 -- 主要用于更新方法

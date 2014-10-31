@@ -12,8 +12,8 @@
 			var f_userName = $("#u_userName").val();
 			var f_password = $("#u_password").val();
 			var params = {
-				userName : f_userName,
-				userPassword : f_password
+				name : f_userName,
+				password : f_password
 			};
 			var actionInfo = 'login/doLogin4json';
 			var success = function(result) {

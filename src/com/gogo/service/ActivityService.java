@@ -42,7 +42,7 @@ public class ActivityService {
 	public void saveActivity(Activity act,User user) {
 		act.setActCreateTime(new Date());
 		act.setOwnUser(user);
-		act.setActState(DomainStateHelper.ACT_NEW);
+		act.setState(DomainStateHelper.ACT_NEW);
 		actDao.save(act);
 	}
 
@@ -95,7 +95,7 @@ public class ActivityService {
 	 * @param user
 	 */
 	public synchronized void updateUserJoinActivity(String actId, User user) {
-		UserAndAct uaa = userAndActDao.loadByUserAndAct(user.getUserId(),actId);
+		UserAndAct uaa = userAndActDao.loadByUserAndAct(user.getId(),actId);
 		if(uaa == null){
 			throw new Business4JsonException("您没有报名此活动");
 		}
@@ -125,8 +125,8 @@ public class ActivityService {
 	public void deleteActivity(String actId,String userId) {
 		Activity act = actDao.load(actId);
 		User user = act.getOwnUser();
-		if(user.getUserId().equals(userId)){
-			act.setActState(DomainStateHelper.ACT_DEL);
+		if(user.getId().equals(userId)){
+			act.setState(DomainStateHelper.ACT_DEL);
 //			act.setUpdate_time(new Date());
 			actDao.updateActivity(act);
 		}else{
@@ -138,12 +138,12 @@ public class ActivityService {
 	 * 更新活动信息，将前台传入的数据赋值到查询出的活动 并更新
 	 */
 	public void updateActivity(Activity act, String userId) throws Exception {
-		String actId = act.getActId();
+		String actId = act.getId();
 		
 		Activity act4db = actDao.load(actId);
 		User user = act4db.getOwnUser();
 		
-		if(user.getUserId().equals(userId)){
+		if(user.getId().equals(userId)){
 			BeanUtils.copyProperties(act, act4db);
 			DomainStateHelper.copyPriperties(act, act4db);
 //			act4db.setUpdate_time(new Date());

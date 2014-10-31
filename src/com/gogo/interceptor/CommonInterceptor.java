@@ -50,7 +50,7 @@ public class CommonInterceptor extends HandlerInterceptorAdapter {
 		}else{
 			//记录日志
 			User user = (User) obj;
-			log.debug(user.getUserId()+" : "+ uri);
+			log.debug(user.getId()+" : "+ uri);
 		}
 		return super.preHandle(request, response, handler);
 	}

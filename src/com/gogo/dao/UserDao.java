@@ -24,7 +24,7 @@ public class UserDao extends BaseDao<User>{
 	}
 	
 	public List<User> loadUserByName(String userName){
-		String hql = "from User where userName='"+userName+"'";
+		String hql = "from User where name='"+userName+"'";
 		List<User> userList  = find(hql);
 		return userList;
 	}
@@ -32,8 +32,8 @@ public class UserDao extends BaseDao<User>{
 	public User loadUserByNameAndPassword(String userName,String password){
 		
 		User user = (User) getSession().createCriteria(User.class)
-				.add(Restrictions.eq("userName",userName))
-				.add(Restrictions.eq("userPassword",password))
+				.add(Restrictions.eq("name",userName))
+				.add(Restrictions.eq("password",password))
 				.setMaxResults(1)
 				.uniqueResult();
 		
@@ -41,7 +41,7 @@ public class UserDao extends BaseDao<User>{
 	}
 	
 	public List<User> loadUserByName(String userName,int curPage,int pagesize){
-		String hql = "from User where userName='"+userName+"'";		
+		String hql = "from User where name='"+userName+"'";		
 		List<User> userList  = findByPage(hql,curPage,pagesize);
 		return userList;
 	}
@@ -60,7 +60,7 @@ public class UserDao extends BaseDao<User>{
 		}else{
 			sqlBuffer.append(" uaa.user ");
 		}
-		sqlBuffer.append(" FROM UserAndAct uaa join uaa.act a where a.actId=? ");
+		sqlBuffer.append(" FROM UserAndAct uaa join uaa.act a where a.id=? ");
 		
 		if(paramlist!=null && paramlist.length>0){
 			sqlBuffer.append(" and uaa.uaaState in (");
@@ -110,7 +110,7 @@ public class UserDao extends BaseDao<User>{
 	public List<User> loadAllFriends(String userId){
 		
 		String hql = " select friendList.friendUser from FriendList friendList "
-				+ " where friendList.belongUser.userId=:userId and friendList.passed=:passed "
+				+ " where friendList.belongUser.id=:userId and friendList.passed=:passed "
 				+ " order by friendList.friendUser.aliasName ";
 		
 		List firends = getSession().createQuery(hql)
@@ -123,7 +123,7 @@ public class UserDao extends BaseDao<User>{
 	public List<User> loadFriendRequestList(String userId){
 		
 		String hql = " select friendList.belongUser from FriendList friendList "
-				+ " where friendList.friendUser.userId=:userId and friendList.passed=:passed "
+				+ " where friendList.friendUser.id=:userId and friendList.passed=:passed "
 				+ " order by friendList.belongUser.aliasName  ";
 		
 		List firends = getSession().createQuery(hql)
@@ -156,7 +156,7 @@ public class UserDao extends BaseDao<User>{
 		}
 		hql.append(" "+HQL_LIST+" "+HQL_AILS+" ");
 	
-		hql.append(" where "+HQL_AILS+".userId !='"+user.getUserId()+"' ");
+		hql.append(" where "+HQL_AILS+".id !='"+user.getId()+"' ");
 		
 		return hql.toString();
 	}

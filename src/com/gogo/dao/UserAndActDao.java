@@ -19,7 +19,7 @@ public class UserAndActDao extends BaseDao<UserAndAct> {
 	 * @return
 	 */
 	public List<UserAndAct> loadByAct(String actId){
-		String hql = "select ua from UserAndAct ua join ua.act a  where a.actId=:actId";
+		String hql = "select ua from UserAndAct ua join ua.act a  where a.id=:actId";
 		List<UserAndAct> uaas = getSession().createQuery(hql)
 		.setString("actId", actId)
 		.list();
@@ -33,7 +33,7 @@ public class UserAndActDao extends BaseDao<UserAndAct> {
 	 * @return
 	 */
 	public UserAndAct loadByUserAndAct(String userID,String actID){
-		String hql = "select ua from UserAndAct ua join ua.act a where ua.user.userId = :userId and a.actId=:actId";
+		String hql = "select ua from UserAndAct ua join ua.act a where ua.user.id = :userId and a.id=:actId";
 		UserAndAct uaa = (UserAndAct) getSession().createQuery(hql)
 		.setString("userId", userID)
 		.setString("actId", actID)
@@ -49,7 +49,7 @@ public class UserAndActDao extends BaseDao<UserAndAct> {
 	 * @return
 	 */
 	public List<UserAndAct> loadByActAndState(String actId,int uaaState,int...maxResult){
-		String hql = "select ua from UserAndAct ua join ua.act a where a.actId=:actId and ua.uaaState=:uaaState ";
+		String hql = "select ua from UserAndAct ua join ua.act a where a.id=:actId and ua.uaaState=:uaaState ";
 		
 		Query query = getSession().createQuery(hql);
 		
@@ -73,7 +73,7 @@ public class UserAndActDao extends BaseDao<UserAndAct> {
 	 * @return
 	 */
 	public List<UserAndAct> loadUserAndActByUser(String userId){
-		String hql = "select ua from UserAndAct ua where ua.user.userId = :userId";
+		String hql = "select ua from UserAndAct ua where ua.user.id = :userId";
 		List<UserAndAct> uaas = getSession().createQuery(hql)
 		.setString("userId", userId)
 		.list();

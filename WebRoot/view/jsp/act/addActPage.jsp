@@ -51,18 +51,18 @@
 			//alert($("#act_isLoop").attr("checked"));
 			var actionInfo = 'activity/saveAct';	
 			var params = {
-				actName : $("#act_name").val(),
-				actContent : $("#act_content").val(),
-				actStartTime : $("#act_starttime").val(),
-				actEndTime : $("#act_endtime").val(),
-				actSignTime : $("#act_signtime").val(),
-				needOpen:$("#act_isOpen").attr("checked"),
-				needAmount:$("#act_needAmount").val(),
-				needSplit:$("act_needSplit").attr("checked"),	
+				name : $("#act_name").val(),
+				content : $("#act_content").val(),
+				startTime : $("#act_starttime").val(),
+				endTime : $("#act_endtime").val(),
+				signTime : $("#act_signtime").val(),
+				open:$("#act_isOpen").attr("checked"),
+				amount:$("#act_needAmount").val(),
+				split:$("act_needSplit").attr("checked"),	
 				joinNeedPay:$("#act_joinNeedPay").val(),
 				minJoin : $("#act_minJoin").val(),
 				maxJoin : $("#act_maxJoin").val(),
-				needLoop:$("#act_isLoop").attr("checked")
+				loop:$("#act_isLoop").attr("checked")
 				
 			};
 			

@@ -49,13 +49,13 @@ public class FriendService{
 	 */
 	public void saveFriendRequest(User belongUser,String friendUserId){
 		
-		if(belongUser.getUserId().equals(friendUserId)){
+		if(belongUser.getId().equals(friendUserId)){
 			throw new Business4JsonException("friend_request_yourself","don't request yourself!");
 		}
 		
 		User friendUser = userDao.load(friendUserId);
 	
-		FriendList fl = friendListDao.loadFriendListByUserId(belongUser.getUserId(), friendUserId);
+		FriendList fl = friendListDao.loadFriendListByUserId(belongUser.getId(), friendUserId);
 		
 		if(fl== null){
 			fl = new FriendList();
@@ -83,11 +83,11 @@ public class FriendService{
 	 */
 	public void saveAgreeApply(User belongUser,String friendUserId){
 		
-		if(belongUser.getUserId().equals(friendUserId)){
+		if(belongUser.getId().equals(friendUserId)){
 			throw new Business4JsonException("friend_request_yourself","don't request yourself!");
 		}
 		
-		FriendList applyList = friendListDao.loadFriendListByUserId(friendUserId,belongUser.getUserId());
+		FriendList applyList = friendListDao.loadFriendListByUserId(friendUserId,belongUser.getId());
 		applyList.setPassed(true);
 		
 		User friendUser = userDao.load(friendUserId);

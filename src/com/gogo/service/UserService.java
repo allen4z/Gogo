@@ -35,12 +35,12 @@ public class UserService{
 	private UserAndActDao userAndActDao;
 	
 	public void saveUser(User user){
-		user.setUserState(DomainStateHelper.USER_NORMAL_STATE);
-		user.setUserRegisterTime(new Date());
+		user.setState(DomainStateHelper.USER_NORMAL_STATE);
+		user.setRegisterTime(new Date());
 		user.setUpdate_time(new Date());
 		//使用MD5加密用户密码
-		String password = user.getUserPassword();
-		user.setUserPassword(MD5Util.MD5(password));
+		String password = user.getPassword();
+		user.setPassword(MD5Util.MD5(password));
 		
 		/*FriendList fg = new FriendList();
 		fg.setBelongUser(user);*/
@@ -93,7 +93,7 @@ public class UserService{
 			payInfo.append(uaa.getWaitCost());
 			payInfo.append(" yuan for");
 			payInfo.append(" join ");
-			payInfo.append("activity -- "+act.getActName());
+			payInfo.append("activity -- "+act.getName());
 			payInfos.add(payInfo.toString());
 		}
 		
@@ -109,8 +109,8 @@ public class UserService{
 	 */
 	public User UserInfoCheck(User loginUser)  throws Exception{
 		
-		String dbPassword = MD5Util.MD5(loginUser.getUserPassword());
-		User user =  userDao.loadUserByNameAndPassword(loginUser.getUserName(),dbPassword);
+		String dbPassword = MD5Util.MD5(loginUser.getPassword());
+		User user =  userDao.loadUserByNameAndPassword(loginUser.getName(),dbPassword);
 		
 		if(user == null ){
 			throw new Business4JsonException("user_username_or_password_error","username or password error");

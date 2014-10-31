@@ -22,7 +22,7 @@
 			var f_email = $("#u_email").val();
 			var f_userhead = $("#u_userhead")[0].src;
 			
-			var params = {userName:f_userName,userPassword:f_password,aliasName:f_aliasName,phoneNum:f_phone,email:f_email,imageUrl:f_userhead};
+			var params = {name:f_userName,password:f_password,aliasName:f_aliasName,phoneNum:f_phone,email:f_email,imageUrl:f_userhead};
 			var actionInfo = 'user/doRegister';
 			var success = function(result) { 
 					if(result == true){

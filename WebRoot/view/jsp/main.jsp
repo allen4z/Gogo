@@ -66,7 +66,7 @@
 			
 			%></td><%
 			
-			%><td><a href="friend/agreeApply/<%=rfInfo.getUserId() %>">同意请求</a></td></tr><%
+			%><td><a href="friend/agreeApply/<%=rfInfo.getId() %>">同意请求</a></td></tr><%
 		}
 	}
 	%>
@@ -124,8 +124,8 @@
 			for(Activity act : list){
 		%>
 		<tr>
-			<td><a href="activity/toShowActPage/<%=act.getActId()%>"><%=act.getActName() %></a></td>
-			<td><%=act.getActContent() %></td>
+			<td><a href="activity/toShowActPage/<%=act.getId()%>"><%=act.getName() %></a></td>
+			<td><%=act.getContent() %></td>
 		</tr>
 		<%
 	}
@@ -150,8 +150,8 @@
 			for(Activity act : jlist){
 		%>
 		<tr>
-			<td><a href="activity/toShowActPage/<%=act.getActId()%>"><%=act.getActName() %></a></td>
-			<td><%=act.getActContent() %></td>
+			<td><a href="activity/toShowActPage/<%=act.getId()%>"><%=act.getName() %></a></td>
+			<td><%=act.getContent() %></td>
 		</tr>
 		<%
 	}

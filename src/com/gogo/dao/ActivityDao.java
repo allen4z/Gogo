@@ -35,21 +35,21 @@ public class ActivityDao extends BaseDao<Activity>{
 	
 
 	public List<Activity> loadOwnActivitesByUser(String userId,int curPage,int pagesize) {
-		String hql = "select act from Activity act left join act.ownUser ou where ou.userId='"+userId+"'";
+		String hql = "select act from Activity act left join act.ownUser ou where ou.id='"+userId+"'";
 		List<Activity> list= findByPage(hql,curPage,pagesize);
 		
 		return list;
 	}
 	
 	public int loadOwnActivitesByUserCount(String userId){
-		String hql = "select count(act) from Activity act left join act.ownUser ou where ou.userId='"+userId+"'";
+		String hql = "select count(act) from Activity act left join act.ownUser ou where ou.id='"+userId+"'";
 		return  this.<Number>getCount(hql, null).intValue();
 	}
 	
 	
 	public List<Activity> loadJoinActivitesByUser(String userId,int curPage,int pagesize) {
 		String hql = "select act from UserAndAct uaa left join uaa.act act "
-				+ " where uaa.user.userId='"+userId+"'"
+				+ " where uaa.user.id='"+userId+"'"
 						+ " and uaa.uaaState in("+DomainStateHelper.USER_AND_ACT_JOIN+","+DomainStateHelper.USER_AND_ACT_QUEUE+") ";
 		List<Activity> list= findByPage(hql,curPage,pagesize);
 		
@@ -58,7 +58,7 @@ public class ActivityDao extends BaseDao<Activity>{
 	
 	public int loadJoinActivitesByUserCount(String userId){
 		String hql = "select count(act) from UserAndAct uaa left join uaa.act act "
-				+ " where uaa.user.userId='"+userId+"'"
+				+ " where uaa.user.id='"+userId+"'"
 				+ " and uaa.uaaState in("+DomainStateHelper.USER_AND_ACT_JOIN+","+DomainStateHelper.USER_AND_ACT_QUEUE+") ";
 		return  this.<Number>getCount(hql, null).intValue();
 	}
@@ -100,7 +100,7 @@ public class ActivityDao extends BaseDao<Activity>{
 				+ " And p.latitude="+ (latitude-GoMapHelper.COORD_RANGE));
 		
 		if(user != null){
-			hql.append("AND "+HQL_AILS+".ownUser.userId !='"+user.getUserId()+"'");
+			hql.append("AND "+HQL_AILS+".ownUser.id !='"+user.getId()+"'");
 		}
 		
 		hql.append(" order by p.hotPoint");
@@ -113,8 +113,7 @@ public class ActivityDao extends BaseDao<Activity>{
 	 * @return
 	 */
 	public List<Activity> loadActbyAddr(User user,City city,int pn,int pageSize) {
-		String hql =getHql4City(user, false);
-		
+		String hql =getHql4City(user, false);		
 		List<Activity> actList =findByPage(hql, pn, pageSize, null);
 		return actList;
 	}
@@ -127,7 +126,7 @@ public class ActivityDao extends BaseDao<Activity>{
 
 	public List<Activity> loadJoinActivitesByUser(int userId) {
 		
-		String hql = "from Activity act left join act.joinUser ju left join ju.user u where u.userId='"+userId+"'";
+		String hql = "from Activity act left join act.joinUser ju left join ju.user u where u.id='"+userId+"'";
 		List<Activity> actList = find(hql);
 		return actList;
 	}
@@ -159,12 +158,12 @@ public class ActivityDao extends BaseDao<Activity>{
 		hql.append(" "+HQL_LIST+" "+HQL_AILS+" ");
 		
 		//非公开项目不能被查询到
-		hql.append(" where "+HQL_AILS+".needOpen=true ");
+		hql.append(" where "+HQL_AILS+".open=true ");
 		//活动状态为发布则可以被查询
-		hql.append(" and "+HQL_AILS+".actState="+DomainStateHelper.ACT_RELEASE);
+		hql.append(" and "+HQL_AILS+".state="+DomainStateHelper.ACT_RELEASE);
 		
 		if(user != null){
-			hql.append("  and "+HQL_AILS+".ownUser.userId !='"+user.getUserId()+"'");
+			hql.append("  and "+HQL_AILS+".ownUser.id !='"+user.getId()+"'");
 		}
 		
 		

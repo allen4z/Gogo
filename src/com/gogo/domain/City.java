@@ -21,39 +21,37 @@ public class City {
 	@GenericGenerator(name = "idGenerator", strategy = "uuid")
 	@GeneratedValue(generator = "idGenerator")
 	@Column(name="city_id",length=32)
-	private String cityId;
+	private String id;
 	
 	//城市编码
 	@Column(name="city_code",length=10)
-	private String cityCode;
+	private String code;
 	
 	//城市名称
 	@Column(name="city_name",length=20)
-	private String cityName;
+	private String name;
 
-	public String getCityId() {
-		return cityId;
+	public String getId() {
+		return id;
 	}
 
-	public void setCityId(String cityId) {
-		this.cityId = cityId;
+	public void setId(String id) {
+		this.id = id;
 	}
 
-	public String getCityCode() {
-		return cityCode;
+	public String getCode() {
+		return code;
 	}
 
-	public void setCityCode(String cityCode) {
-		this.cityCode = cityCode;
+	public void setCode(String code) {
+		this.code = code;
 	}
 
-	public String getCityName() {
-		return cityName;
+	public String getName() {
+		return name;
 	}
 
-	public void setCityName(String cityName) {
-		this.cityName = cityName;
+	public void setName(String name) {
+		this.name = name;
 	}
-	
-	
 }

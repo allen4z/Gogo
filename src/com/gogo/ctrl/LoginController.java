@@ -44,8 +44,8 @@ public class LoginController extends BaseController{
 		
 		ModelAndView mav = new ModelAndView();
 		User loginUser = new User();
-		loginUser.setUserName(userName);
-		loginUser.setUserPassword(password);
+		loginUser.setName(userName);
+		loginUser.setPassword(password);
 		
 		String toUrl;
 		User dbUser = userService.UserInfoCheck(loginUser);
@@ -111,8 +111,8 @@ public class LoginController extends BaseController{
 		log.debug("userName:"+userName +"start login");
 		
 		User usr = new User();
-		usr.setUserName(userName);
-		usr.setUserPassword(password);
+		usr.setName(userName);
+		usr.setPassword(password);
 		return usr;
 		
 	}

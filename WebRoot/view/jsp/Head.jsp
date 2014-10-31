@@ -31,6 +31,10 @@
 			location.href = '<%=basePath %>activity/toShowAllPage'; 
 		});
 		
+		$("#searchGroupBtn").click(function(){
+			location.href = '<%=basePath %>group/toShowAllPage'; 
+		});
+		
 		$("#searchUserBtn").click(function(){
 			location.href = '<%=basePath %>friend/toFriendPage'; 
 		});
@@ -56,6 +60,8 @@ if(user!= null){
 %>
 
 <button id="searchUserBtn" >附近的人</button>
+
+<button id="searchGroupBtn" >附近的小组</button>
 
 <%
 }

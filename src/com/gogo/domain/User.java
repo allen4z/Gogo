@@ -26,7 +26,7 @@ public class User {
 	@GenericGenerator(name = "idGenerator", strategy = "uuid")
 	@GeneratedValue(generator = "idGenerator")
 	@Column(name="user_id",length=32)
-	private String userId;
+	private String id;
 
 	//用户名称
 	
@@ -34,13 +34,13 @@ public class User {
 	@NotNull(message="{user.username.not.empty}")
 	@Pattern(regexp = "[A-Za-z0-9]*", message = "{user.username.regexp.error}")
 	@Column(name="user_name",length=20,nullable=false)
-	private String userName;
+	private String name;
 	
 	//用户密码
 	@Length(min=6,max=32,message="{user.password,length.error}")
 	@NotNull(message="{user.password.not,empty}")
 	@Column(name="user_password",length=32,nullable=false)
-	private String userPassword;
+	private String password;
 	
 	//昵称
 	@NotNull(message="{user.aliasname.not.empty}")
@@ -69,11 +69,11 @@ public class User {
 	
 	//注册时间
 	@Column(name="user_register_time",length=10,nullable=false)
-	private Date userRegisterTime;
+	private Date registerTime;
 	
 	//用户状态：删除、正常
 	@Column(name="user_state",length=1,nullable=false)
-	private int userState;	
+	private int state;	
 	
 	//版本信息
 	@Version
@@ -104,44 +104,41 @@ public class User {
 	public void setEmail(String email) {
 		this.email = email;
 	}
-
-	public String getUserId() {
-		return userId;
+	public String getId() {
+		return id;
 	}
-	public void setUserId(String userId) {
-		this.userId = userId;
+	public void setId(String id) {
+		this.id = id;
 	}
-	
-	public String getUserName() {
-		return userName;
+	public String getName() {
+		return name;
 	}
-	public void setUserName(String userName) {
-		this.userName = userName;
+	public void setName(String name) {
+		this.name = name;
 	}
-
+	public String getPassword() {
+		return password;
+	}
+	public void setPassword(String password) {
+		this.password = password;
+	}
 	public String getAliasName() {
 		return aliasName;
 	}
 	public void setAliasName(String aliasName) {
 		this.aliasName = aliasName;
 	}
-	public String getUserPassword() {
-		return userPassword;
+	public Date getRegisterTime() {
+		return registerTime;
 	}
-	public void setUserPassword(String userPassword) {
-		this.userPassword = userPassword;
+	public void setRegisterTime(Date registerTime) {
+		this.registerTime = registerTime;
 	}
-	public Date getUserRegisterTime() {
-		return userRegisterTime;
+	public int getState() {
+		return state;
 	}
-	public void setUserRegisterTime(Date userRegisterTime) {
-		this.userRegisterTime = userRegisterTime;
-	}
-	public int getUserState() {
-		return userState;
-	}
-	public void setUserState(int userState) {
-		this.userState = userState;
+	public void setState(int state) {
+		this.state = state;
 	}
 	public Date getUpdate_time() {
 		return update_time;
@@ -149,5 +146,5 @@ public class User {
 	public void setUpdate_time(Date update_time) {
 		this.update_time = update_time;
 	}
-	
+
 }

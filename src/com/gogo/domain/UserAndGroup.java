@@ -32,7 +32,7 @@ public class UserAndGroup {
 	@GenericGenerator(name = "idGenerator", strategy = "uuid")
 	@GeneratedValue(generator = "idGenerator")
 	@Column(name="user_group_id",length=32)
-	private String userAndGroupId;
+	private String id;
 	
 	//用户信息
 	@ManyToOne
@@ -55,13 +55,13 @@ public class UserAndGroup {
 	@Version
 	@Column(name="update_time",length=10,nullable=false)
 	private Date update_time;
-	
-	public String getUserAndGroupId() {
-		return userAndGroupId;
+
+	public String getId() {
+		return id;
 	}
 
-	public void setUserAndGroupId(String userAndGroupId) {
-		this.userAndGroupId = userAndGroupId;
+	public void setId(String id) {
+		this.id = id;
 	}
 
 	public int getAuthorityState() {

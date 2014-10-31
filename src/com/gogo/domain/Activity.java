@@ -31,19 +31,19 @@ public class Activity {
 	@GenericGenerator(name = "idGenerator", strategy = "uuid")
 	@GeneratedValue(generator = "idGenerator")
 	@Column(name="act_id",length=32,nullable=false)
-	private String actId;
+	private String id;
 	
 	//活动名称
 	@NotNull(message="{act.actname.not.empty}")
 	@Length(min=4,max=20,message="{act.actname.length.error}")
 	@Column(name="act_name",length=20,nullable=false)
-	private String actName;
+	private String name;
 	
 	//活动内容
 	@NotNull(message="{act.actcount.not.empty}")
 	@Length(min=0,max=200,message="{act.actcount.length.error}")
 	@Column(name="act_contents",length=200)
-	private String actContent;
+	private String content;
 	
 	
 	@OneToMany(mappedBy="act",cascade=CascadeType.ALL)
@@ -69,25 +69,25 @@ public class Activity {
 	
 	//是否循环任务
 	@Column(name="act_isloop",length=1)
-	private boolean needLoop;
+	private boolean loop;
 	
 	//开始时间
 	@NotNull(message="{act.actstarttime.not.empty}")
 	@Column(name="act_start_time",length=10)
-	private Date actStartTime;
+	private Date startTime;
 	
 	//结束时间
 	@NotNull(message="{act.actendtime.not.empty}")
 	@Column(name="act_end_time",length=10)
-	private Date actEndTime;
+	private Date endTime;
 	
 	//报名时间
 	@Column(name="act_sign_time",length=10)
-	private Date actSignTime;
+	private Date signTime;
 	
 	//活动状态 ：未发布、未发布
 	@Column(name="act_state",length=1)
-	private int actState;
+	private int state;
 	
 	//热度
 	@Column(name="act_hotpoint",length=10)
@@ -100,19 +100,19 @@ public class Activity {
 	
 	//是否所有人可见
 	@Column(name="act_isopen",length=1)
-	private boolean needOpen;	
+	private boolean open;	
 	
 	//活总需金额
 	@Column(name="act_need_amount",length=50)
-	private double needAmount;
+	private double amount;
 	
 	//已拥有资金
-	@Column(name="act_have_amount",length=50)
-	private double haveAmount;
+	@Column(name="act_has_amount",length=50)
+	private double hasAmount;
 	
 	//是否按报名人数
-	@Column(name="act_neesplit",length=1)
-	private boolean needSplit;
+	@Column(name="act_split",length=1)
+	private boolean split;
 	
 	//每名参与者需要支付
 	@Column(name="act_join_needpay",length=50)
@@ -167,122 +167,28 @@ public class Activity {
 		this.maxJoin = maxJoin;
 	}
 
-	public boolean isNeedLoop() {
-		return needLoop;
+	public String getId() {
+		return id;
 	}
 
-	public void setNeedLoop(boolean needLoop) {
-		this.needLoop = needLoop;
+	public void setId(String id) {
+		this.id = id;
 	}
 
-	public String getActId() {
-		return actId;
+	public String getName() {
+		return name;
 	}
 
-	public void setActId(String actId) {
-		this.actId = actId;
+	public void setName(String name) {
+		this.name = name;
 	}
 
-	public String getActName() {
-		return actName;
-	}
-	public void setActName(String actName) {
-		this.actName = actName;
-	}
-	public String getActContent() {
-		return actContent;
-	}
-	public void setActContent(String actContent) {
-		this.actContent = actContent;
-	}
-	public Date getActCreateTime() {
-		return actCreateTime;
-	}
-	public void setActCreateTime(Date actCreateTime) {
-		this.actCreateTime = actCreateTime;
-	}
-	public Date getActStartTime() {
-		return actStartTime;
-	}
-	public void setActStartTime(Date actStartTime) {
-		this.actStartTime = actStartTime;
-	}
-	public Date getActEndTime() {
-		return actEndTime;
-	}
-	public void setActEndTime(Date actEndTime) {
-		this.actEndTime = actEndTime;
-	}
-	public Date getActSignTime() {
-		return actSignTime;
-	}
-	public void setActSignTime(Date actSignTime) {
-		this.actSignTime = actSignTime;
-	}
-	public int getActState() {
-		return actState;
-	}
-	public void setActState(int actState) {
-		this.actState = actState;
-	}
-	
-	public int getHotPoind() {
-		return hotPoind;
+	public String getContent() {
+		return content;
 	}
 
-
-	public void setHotPoind(int hotPoind) {
-		this.hotPoind = hotPoind;
-	}
-
-
-	public Place getPlace() {
-		return place;
-	}
-
-
-	public void setPlace(Place place) {
-		this.place = place;
-	}
-
-
-	public User getOwnUser() {
-		return ownUser;
-	}
-	public void setOwnUser(User ownUser) {
-		this.ownUser = ownUser;
-	}
-
-	public Date getUpdate_time() {
-		return update_time;
-	}
-
-	public void setUpdate_time(Date update_time) {
-		this.update_time = update_time;
-	}
-
-	public boolean isNeedOpen() {
-		return needOpen;
-	}
-
-	public void setNeedOpen(boolean needOpen) {
-		this.needOpen = needOpen;
-	}
-
-	public double getNeedAmount() {
-		return needAmount;
-	}
-
-	public void setNeedAmount(double needAmount) {
-		this.needAmount = needAmount;
-	}
-
-	public double getHaveAmount() {
-		return haveAmount;
-	}
-
-	public void setHaveAmount(double haveAmount) {
-		this.haveAmount = haveAmount;
+	public void setContent(String content) {
+		this.content = content;
 	}
 
 	public Set<Label> getLabel() {
@@ -293,12 +199,12 @@ public class Activity {
 		this.label = label;
 	}
 
-	public boolean isNeedSplit() {
-		return needSplit;
+	public User getOwnUser() {
+		return ownUser;
 	}
 
-	public void setNeedSplit(boolean needSplit) {
-		this.needSplit = needSplit;
+	public void setOwnUser(User ownUser) {
+		this.ownUser = ownUser;
 	}
 
 	public Set<UserAndAct> getJoinUser() {
@@ -309,6 +215,102 @@ public class Activity {
 		this.joinUser = joinUser;
 	}
 
+	public Date getActCreateTime() {
+		return actCreateTime;
+	}
+
+	public void setActCreateTime(Date actCreateTime) {
+		this.actCreateTime = actCreateTime;
+	}
+
+	public boolean isLoop() {
+		return loop;
+	}
+
+	public void setLoop(boolean loop) {
+		this.loop = loop;
+	}
+
+	public Date getStartTime() {
+		return startTime;
+	}
+
+	public void setStartTime(Date startTime) {
+		this.startTime = startTime;
+	}
+
+	public Date getEndTime() {
+		return endTime;
+	}
+
+	public void setEndTime(Date endTime) {
+		this.endTime = endTime;
+	}
+
+	public Date getSignTime() {
+		return signTime;
+	}
+
+	public void setSignTime(Date signTime) {
+		this.signTime = signTime;
+	}
+
+	public int getState() {
+		return state;
+	}
+
+	public void setState(int state) {
+		this.state = state;
+	}
+
+	public int getHotPoind() {
+		return hotPoind;
+	}
+
+	public void setHotPoind(int hotPoind) {
+		this.hotPoind = hotPoind;
+	}
+
+	public Place getPlace() {
+		return place;
+	}
+
+	public void setPlace(Place place) {
+		this.place = place;
+	}
+
+	public boolean isOpen() {
+		return open;
+	}
+
+	public void setOpen(boolean open) {
+		this.open = open;
+	}
+
+	public double getAmount() {
+		return amount;
+	}
+
+	public void setAmount(double amount) {
+		this.amount = amount;
+	}
+
+	public double getHasAmount() {
+		return hasAmount;
+	}
+
+	public void setHasAmount(double hasAmount) {
+		this.hasAmount = hasAmount;
+	}
+
+	public boolean isSplit() {
+		return split;
+	}
+
+	public void setSplit(boolean split) {
+		this.split = split;
+	}
+
 	public int getCutJoin() {
 		return cutJoin;
 	}
@@ -316,6 +318,12 @@ public class Activity {
 	public void setCutJoin(int cutJoin) {
 		this.cutJoin = cutJoin;
 	}
-	
 
+	public Date getUpdate_time() {
+		return update_time;
+	}
+
+	public void setUpdate_time(Date update_time) {
+		this.update_time = update_time;
+	}
 }

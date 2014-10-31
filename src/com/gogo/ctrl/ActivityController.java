@@ -82,9 +82,9 @@ public class ActivityController extends BaseController {
 		if(act.getMinJoin()>act.getMaxJoin()){
 			throw new Business4JsonException("act_savecheck_minjoin_morethen_maxjoin","min join people more then max join people!");
 		}
-		Date signDate =act.getActSignTime();
-		Date startDate = act.getActStartTime();
-		Date endDate =act.getActEndTime();
+		Date signDate =act.getSignTime();
+		Date startDate = act.getStartTime();
+		Date endDate =act.getEndTime();
 		
 		if(startDate.compareTo(signDate)<=0){
 			throw new Business4JsonException("act_savecheck_startdate_earlythen_signupDate","start date early then signup date");
@@ -113,7 +113,7 @@ public class ActivityController extends BaseController {
 	@RequestMapping("join/{actId}")
 	@ResponseBody
 	public boolean joinActivity(@ModelAttribute(CommonConstant.USER_CONTEXT) User user,@PathVariable String actId){
-		int result = actService.saveUserJoinActivity(user.getUserId(),actId);
+		int result = actService.saveUserJoinActivity(user.getId(),actId);
 		if(result ==  DomainStateHelper.USER_AND_ACT_QUEUE){
 			throw new Business4JsonException("act_join_full","Participate in the activity of the enrollment is full");
 		}
@@ -139,7 +139,7 @@ public class ActivityController extends BaseController {
 	 * @return
 	 */
 	public void updateActivity(@ModelAttribute(CommonConstant.USER_CONTEXT) User user,@RequestBody Activity act)throws Exception{
-		actService.updateActivity(act, user.getUserId());
+		actService.updateActivity(act, user.getId());
 	}
 	
 	/**
@@ -223,7 +223,7 @@ public class ActivityController extends BaseController {
 		int uarState =-1;
 		
 		if(user != null){
-			uarState = actService.loadCurUserStateInAct(user.getUserId(),actId);
+			uarState = actService.loadCurUserStateInAct(user.getId(),actId);
 		}
 		
 		mav.addObject("uarState", uarState);

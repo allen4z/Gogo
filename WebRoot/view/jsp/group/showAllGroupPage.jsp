@@ -10,10 +10,10 @@
 <title>Gogo-Main</title>
 <script type="text/javascript">
 function getNearAct(pn){
-	var action = 'activity/loadActByPlace?pn='+pn;
+	var action = 'group/loadAllGroup?pn='+pn;
 	var success = function(page){
-		var acts = page.items;
-		templatefill(acts);
+		var groups = page.items;
+		templatefill(groups);
 	};
 	var failed = function(XMLHttpRequest,textStatus, errorThrown){
          alert(XMLHttpRequest.responseText);
@@ -21,9 +21,9 @@ function getNearAct(pn){
 	send4Json(null,action,success,failed);
 }
 
-function templatefill(acts){
-	var data = {acts:acts};
-	var html = template('acts', data);	
+function templatefill(groups){
+	var data = {groups:groups};
+	var html = template('groups', data);	
 	document.getElementById('content').innerHTML = html;
 	
 }
@@ -34,20 +34,14 @@ function templatefill(acts){
 
 <div id="content" style="float:lift;"></div>
 
-<script id="acts" type="text/html">
-{{each acts as act index}}
+<script id="groups" type="text/html">
+{{each groups as group index}}
 		<div  id="contentDiv" style="width:400px;height:300px;border:1px solid red;text-align:center;padding-top:20px;">
-		<h3><a href="activity/toShowActPage/{{act.actId}}">{{act.actName}}</a><h3>
-		<a>{{act.actContent}}</a>
-		
-		<br/>
-
-		{{if act.needActor}}
-			该项目需要招募参与者
-		{{/if}}
+		<h3>{{group.name}}<h3>
 		<br/>
 		<br/>
-		<a href="activity/toShowActPage/{{act.actId}}">查看活动详情</a>
+		<a href="group/join/{{group.id}}">加入小组</a>
+		<a href="group/toShowGroupPage/{{group.id}}">查看小组人员</a>
 		</div>
 {{/each}}
 </script>
