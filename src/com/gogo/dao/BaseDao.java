@@ -176,7 +176,9 @@ public class BaseDao<T> {
 	    public int getCount(String hql,Object...paramlist){
 	    	  Query query = getSession().createQuery(hql);
 	          setParameters(query, paramlist);
-	          return (Integer) query.uniqueResult();
+	          
+	          Long count = (Long)query.uniqueResult();
+	          return count.intValue();
 	    }
 	    
 	    protected void setParameters(Query query, Object[] paramlist) {

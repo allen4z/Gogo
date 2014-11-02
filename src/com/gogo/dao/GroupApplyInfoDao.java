@@ -2,9 +2,12 @@ package com.gogo.dao;
 
 import java.util.List;
 
+import org.springframework.stereotype.Repository;
+
 import com.gogo.domain.GroupApplyInfo;
 import com.gogo.domain.helper.DomainStateHelper;
 
+@Repository
 public class GroupApplyInfoDao extends BaseDao<GroupApplyInfo> {
 
 	public List<GroupApplyInfo> loadAllApplyInfo(String groupId) {
