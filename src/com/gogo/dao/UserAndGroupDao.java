@@ -20,7 +20,7 @@ public class UserAndGroupDao extends BaseDao<UserAndGroup> {
 	
 	public int loadCount(String groupId) {
 		String hql = "select count(uag) from  UserAndGroup uag where uag.group.id=?";
-		return this.<Number>getCount(hql, groupId).intValue();
+		return getCount(hql, groupId);
 		
 	}
 

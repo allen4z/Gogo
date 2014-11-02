@@ -41,8 +41,21 @@ public class DomainStateHelper {
 	//取消
 	public static final int USER_AND_ACT_CANCEL=2;
 	
+	
+	
 	//活动小组默认人数
 	public static final int GROUP_DEFAULT_USER_SIZE=50;
+	//申请加入小组 开始申请
+	public static final int GROUP_APPLY_STATE_APPLY=0;
+	//申请加入小组 已经通过
+	public static final int GROUP_APPLY_STATE_PASSED=1;
+	
+	//邀请类型 ： 活动
+	public static final int INVITE_TYPE_ACT=0;
+	//邀请类型：小组
+	public static final int INVITE_TYPE_GROUP=0;
+	
+	
 	
 	//小组通知
 	public static final int NOTIFY_TYPE_GROUP=0;

@@ -43,7 +43,7 @@ public class ActivityDao extends BaseDao<Activity>{
 	
 	public int loadOwnActivitesByUserCount(String userId){
 		String hql = "select count(act) from Activity act left join act.ownUser ou where ou.id='"+userId+"'";
-		return  this.<Number>getCount(hql, null).intValue();
+		return  getCount(hql, null);
 	}
 	
 	
@@ -60,7 +60,7 @@ public class ActivityDao extends BaseDao<Activity>{
 		String hql = "select count(act) from UserAndAct uaa left join uaa.act act "
 				+ " where uaa.user.id='"+userId+"'"
 				+ " and uaa.uaaState in("+DomainStateHelper.USER_AND_ACT_JOIN+","+DomainStateHelper.USER_AND_ACT_QUEUE+") ";
-		return  this.<Number>getCount(hql, null).intValue();
+		return   getCount(hql, null);
 	}
 	
 	/**
@@ -78,7 +78,7 @@ public class ActivityDao extends BaseDao<Activity>{
 	
 	public int lodActByPlaceCount(User user,Place place){
 		String hql = getHql4Place(user,place, true);
-		return  this.<Number>getCount(hql, null).intValue();
+		return  getCount(hql, null);
 	}
 	
 	
@@ -120,7 +120,7 @@ public class ActivityDao extends BaseDao<Activity>{
 	
 	public int loadActbyAddrCount(User user,City city) {
 		String hql =getHql4City(user, true);
-		return  this.<Number>getCount(hql, null).intValue();
+		return  getCount(hql, null);
 	}
 	
 
@@ -144,7 +144,7 @@ public class ActivityDao extends BaseDao<Activity>{
 	
 	public int loadActByHotPointCount(User user){
 		String hql=getHql4City(user, true);
-		return  this.<Number>getCount(hql, null).intValue();
+		return  getCount(hql, null);
 	}
 	
 	private String getHql4City(User user,boolean isCount){

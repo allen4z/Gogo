@@ -9,11 +9,28 @@ import com.gogo.domain.Invite;
 @Repository
 public class InviteDao extends BaseDao<Invite>{
 
-	
-	public List<Invite> loadAllInvite(String beInvitedId){
-		String hql = "from Invite invite left join invite.beInvited beInvitedId "
-				+ " where beInvitedId.id=?";
+	private String getAllInviteHql(boolean isCount){
+		String hql = "";
+		if(isCount){
+			hql +="select count(invite) ";
+		}else{
+			hql +="select invite ";
+		}
 		
-		return find(hql, beInvitedId);
+		hql +=  "from Invite invite left join invite.beInvited beInvitedId "
+				+ " where beInvitedId.id=? and invite.type=?";
+		return hql;
 	}
+	
+	public int loadAllInviteCount(String beInvitedId,int type){
+		String hql = getAllInviteHql(true);
+		return getCount(hql, beInvitedId,type);
+	}
+	
+	public List<Invite> loadAllInvite(String beInvitedId,int type){
+		String hql = getAllInviteHql(false);
+		return find(hql, beInvitedId,type);
+	}
+	
+	
 }

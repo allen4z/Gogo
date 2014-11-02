@@ -47,6 +47,18 @@ public class Invite {
 	private Activity activity;
 	
 	
+	@Column(name="invite_type",length=1)
+	private int type;
+
+
+
+	public int getType() {
+		return type;
+	}
+
+	public void setType(int type) {
+		this.type = type;
+	}
 
 	public Group getGroup() {
 		return group;

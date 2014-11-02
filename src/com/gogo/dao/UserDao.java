@@ -84,7 +84,7 @@ public class UserDao extends BaseDao<User>{
 	 */
 	public int loadUserByActCount (String actId,Object...params){
 		String hql = getActUserByActSql(true,params);
-		return  this.<Number>getCount(hql,actId).intValue();
+		return  getCount(hql, actId);
 	}
 
 	/**
@@ -143,7 +143,7 @@ public class UserDao extends BaseDao<User>{
 	
 	public int loadPersonAllCount(User user){
 		String hql=getHql4City(user, true);
-		return  this.<Number>getCount(hql, null).intValue();
+		return getCount(hql, null);
 	}
 	
 	private String getHql4City(User user,boolean isCount){

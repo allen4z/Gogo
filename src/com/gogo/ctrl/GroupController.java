@@ -19,8 +19,11 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.gogo.domain.Group;
+import com.gogo.domain.GroupApplyInfo;
+import com.gogo.domain.Invite;
 import com.gogo.domain.Place;
 import com.gogo.domain.User;
+import com.gogo.domain.helper.DomainStateHelper;
 import com.gogo.exception.Business4JsonException;
 import com.gogo.helper.CommonConstant;
 import com.gogo.page.Page;
@@ -66,15 +69,37 @@ public class GroupController extends BaseController {
 	}
 	
 	/**
-	 * 用户加入活动小组
+	 * 用户申请加入活动小组
 	 * @param user
 	 * @param groupId
 	 * @return
 	 */
-	@RequestMapping("join/{groupId}")
+	@RequestMapping("applyJoin/{groupId}")
 	@ResponseBody
-	public boolean joinGroup(@ModelAttribute(CommonConstant.USER_CONTEXT) User user,@PathVariable String groupId){
-		groupService.saveUserJoinGroup(user,groupId);
+	public boolean applyJoinGroup(@ModelAttribute(CommonConstant.USER_CONTEXT) User user,@PathVariable String groupId){
+		groupService.saveApplyJoinGroup(user,groupId);
+		return true;
+	}
+	
+	/**
+	 * 查看所有申请信息
+	 * @param user
+	 * @return
+	 */
+	public List<GroupApplyInfo> loadAllApplyInfo(@ModelAttribute(CommonConstant.USER_CONTEXT) User user,String groupId){
+		return groupService.loadAllApplyInfo(user,groupId);
+	}
+	
+	/**
+	 * 通过用户加入活动小组
+	 * @param user
+	 * @param groupId
+	 * @return
+	 */
+	@RequestMapping("passApply/{groupId}/{userId}")
+	@ResponseBody
+	public boolean passApply(@ModelAttribute(CommonConstant.USER_CONTEXT) User user,@PathVariable String groupId,@PathVariable String userId){
+		groupService.savePassApply(user,groupId,userId);
 		return true;
 	}
 	
@@ -103,6 +128,22 @@ public class GroupController extends BaseController {
 			@PathVariable String friendId,
 			@PathVariable String groupId){
 		inviteService.saveInviteJoinGroup(user, friendId, groupId);
+		return true;
+	}
+	
+	/**
+	 * 获得所有的小组邀请信息
+	 * @param user
+	 * @param pn
+	 * @return
+	 */
+	public Page<Invite> loadAllGroupInvite(@ModelAttribute(CommonConstant.USER_CONTEXT)User user,int pn){
+		return inviteService.loadAllInvite(user,pn,DomainStateHelper.INVITE_TYPE_GROUP,CommonConstant.PAGE_SIZE);
+	}
+	
+	public boolean passInviteGroup(@ModelAttribute(CommonConstant.USER_CONTEXT)User user,
+			@PathVariable String inviteId){
+		groupService.savePassInviteGroup(user,inviteId);
 		return true;
 	}
 	

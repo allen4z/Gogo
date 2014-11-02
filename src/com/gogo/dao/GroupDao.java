@@ -29,7 +29,7 @@ public class GroupDao extends BaseDao<Group> {
 	
 	public int loadAllGroupCount(){
 		String hql=getAllGroupHql(true);
-		return  this.<Number>getCount(hql, null).intValue();
+		return getCount(hql, null);
 	}
 	
 	public List<Group> loadAllGroup(int pn,int pageSize) {
@@ -52,7 +52,7 @@ public class GroupDao extends BaseDao<Group> {
 	
 	public int loadGroup4UserCount(String userId) {
 		String hql = getGroup4UserHql(true);
-		return  this.<Number>getCount(hql, userId).intValue();
+		return getCount(hql, userId);
 	}
 
 	public List<Group> loadGroup4User(String userId, int pn, int pageSize) {

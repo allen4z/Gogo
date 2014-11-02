@@ -1,12 +1,18 @@
 package com.gogo.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.gogo.dao.GroupApplyInfoDao;
 import com.gogo.dao.GroupDao;
+import com.gogo.dao.InviteDao;
 import com.gogo.dao.UserAndGroupDao;
 import com.gogo.dao.UserDao;
 import com.gogo.domain.Group;
+import com.gogo.domain.GroupApplyInfo;
+import com.gogo.domain.Invite;
 import com.gogo.domain.Place;
 import com.gogo.domain.User;
 import com.gogo.domain.UserAndGroup;
@@ -25,6 +31,10 @@ public class GroupService {
 	private UserAndGroupDao userAndGroupDao;
 	@Autowired
 	private UserDao userDao;
+	@Autowired
+	private GroupApplyInfoDao groupApplyInfoDao;
+	@Autowired
+	private InviteDao inviteDao;
 	
 	/**
 	 * 保存Group信息
@@ -46,12 +56,11 @@ public class GroupService {
 	}
 	
 	/**
-	 * 用户加入活动小组
+	 * 保存申请信息
 	 * @param user
 	 * @param groupId
 	 */
-	public synchronized void saveUserJoinGroup(User user, String groupId) {
-
+	public void saveApplyJoinGroup(User user, String groupId) {
 		Group group = groupDao.load(groupId);
 		//0.判断是否超过人员上线
 		if(group.getCurJoinUser()>=group.getMaxJoinUser()){
@@ -62,12 +71,49 @@ public class GroupService {
 		if(uag != null){
 			throw new Business4JsonException("您已经加入了小组");
 		}
-		uag = new UserAndGroup();
-		uag.setGroup(group);
-		uag.setUser(user);
-		uag.setAuthorityState(RoleHelper.mergeParamState(RoleHelper.TOW_AUTHORITY_TEXT));
-		userAndGroupDao.saveOrUpdate(uag);
-		groupDao.update(group);
+		
+		GroupApplyInfo gai = new GroupApplyInfo();
+		gai.setUser(user);
+		gai.setGroup(group);
+		gai.setState(DomainStateHelper.GROUP_APPLY_STATE_APPLY);
+		
+		groupApplyInfoDao.save(gai);
+	}
+	
+	/**
+	 * 管理员通过用户申请
+	 * @param user
+	 * @param groupId
+	 */
+	public synchronized void savePassApply(User user,String groupId,String userId) {
+		checkAuth(user, groupId);
+		User applyUser = userDao.load(userId);
+		Group group = groupDao.load(groupId);
+		
+		//0.判断是否超过人员上线
+		userAndGroupHandler(applyUser, group);
+	}
+
+	/**
+	 * 用户通过邀请加入小组
+	 * @param user
+	 * @param inviteId
+	 */
+	public void savePassInviteGroup(User user, String inviteId) {
+		Invite invite= inviteDao.load(inviteId);
+		Group group = invite.getGroup();
+		
+		userAndGroupHandler(user, group);
+		
+	}
+	
+	/**
+	 * 查询改小组所有的申请信息
+	 * @author allen
+	 */
+	public List<GroupApplyInfo> loadAllApplyInfo(User user,String groupId) {
+		checkAuth(user, groupId);
+		return groupApplyInfoDao.loadAllApplyInfo(groupId);
 	}
 	
 	
@@ -106,4 +152,31 @@ public class GroupService {
 		return groupDao.get(groupId);
 	}
 	
+	private void userAndGroupHandler(User applyUser, Group group) {
+		if(group.getCurJoinUser()>=group.getMaxJoinUser()){
+			throw new Business4JsonException("小组人数已满");
+		}
+		
+		UserAndGroup checkUag = userAndGroupDao.loadUAG4UserAndGroup(applyUser.getId(), group.getId());
+		if(checkUag != null){
+			throw new Business4JsonException("您已经加入了小组");
+		}
+		UserAndGroup applyUag = new UserAndGroup();
+		applyUag.setGroup(group);
+		applyUag.setUser(applyUser);
+		applyUag.setAuthorityState(RoleHelper.mergeParamState(RoleHelper.TOW_AUTHORITY_TEXT));
+		userAndGroupDao.saveOrUpdate(applyUag);
+		
+		group.setCurJoinUser(group.getCurJoinUser()+1);
+		groupDao.update(group);
+	}
+
+	private void checkAuth(User user, String groupId) {
+		UserAndGroup uag = userAndGroupDao.loadUAG4UserAndGroup(user.getId(), groupId);
+		int authstate = uag.getAuthorityState();
+		//如果用户不包含第三级别的权限，则无权查看申请列表
+		if(!RoleHelper.judgeState(authstate, RoleHelper.THREE_AUTHORITY_INVITE)){
+			throw new Business4JsonException("您无权查看改小组的申请列表！");
+		}
+	}
 }
