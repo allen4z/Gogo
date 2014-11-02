@@ -7,7 +7,6 @@ import com.gogo.dao.ActivityDao;
 import com.gogo.dao.GroupDao;
 import com.gogo.dao.InviteDao;
 import com.gogo.dao.UserDao;
-import com.gogo.domain.Group;
 import com.gogo.domain.Invite;
 import com.gogo.domain.User;
 import com.gogo.page.Page;
