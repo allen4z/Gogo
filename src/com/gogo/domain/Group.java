@@ -1,5 +1,6 @@
 package com.gogo.domain;
 
+import java.util.Date;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -12,6 +13,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
 import javax.persistence.Table;
+import javax.persistence.Version;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.Cache;
@@ -55,8 +57,19 @@ public class Group {
 	@OrderBy("userName ASC")
 	private User createUser;
 	
+	//版本
+	@Version
+	@Column(name="update_time",length=10,nullable=false)
+	private Date update_time;
 	
-	
+	public Date getUpdate_time() {
+		return update_time;
+	}
+
+	public void setUpdate_time(Date update_time) {
+		this.update_time = update_time;
+	}
+
 	public Set<UserAndGroup> getJoinUser() {
 		return joinUser;
 	}

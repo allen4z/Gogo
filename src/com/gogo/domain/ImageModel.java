@@ -1,10 +1,13 @@
 package com.gogo.domain;
 
+import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Version;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
@@ -29,6 +32,19 @@ public class ImageModel {
 	//路径信息
 	@Column(name="im_url",length=200,nullable=false)
 	private String url;
+
+	//版本
+	@Version
+	@Column(name="update_time",length=10,nullable=false)
+	private Date update_time;
+	
+	public Date getUpdate_time() {
+		return update_time;
+	}
+
+	public void setUpdate_time(Date update_time) {
+		this.update_time = update_time;
+	}
 
 	public String getId() {
 		return id;

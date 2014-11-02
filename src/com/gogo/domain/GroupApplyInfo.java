@@ -2,18 +2,51 @@ package com.gogo.domain;
 
 import java.util.Date;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OrderBy;
+import javax.persistence.Table;
+import javax.persistence.Version;
+
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.GenericGenerator;
+
+@Entity
+@Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
+@Table(name="t_groupapply")
 public class GroupApplyInfo {
 	
+	//主键
+	@Id
+	@GenericGenerator(name = "idGenerator", strategy = "uuid")
+	@GeneratedValue(generator = "idGenerator")
+	@Column(name="groupapply_id",length=32,nullable=false)
 	private String id;
 	
+	@ManyToOne
+	@JoinColumn(name="groupapply_group")
+	@OrderBy("name ASC")
 	private Group group;
 	
+	@ManyToOne
+	@JoinColumn(name="groupapply_user")
+	@OrderBy("name ASC")
 	private User user;
 	
+	@Column(name="groupapply_state",length=1)
 	private int state;
 	
+	//版本
+	@Version
+	@Column(name="update_time",length=10,nullable=false)
 	private Date update_time;
 
+	
 	public String getId() {
 		return id;
 	}
