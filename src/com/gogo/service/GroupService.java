@@ -16,6 +16,8 @@ import com.gogo.domain.Invite;
 import com.gogo.domain.Place;
 import com.gogo.domain.User;
 import com.gogo.domain.UserAndGroup;
+import com.gogo.domain.enums.GroupApplyState;
+import com.gogo.domain.enums.UserAndGroupState;
 import com.gogo.domain.helper.DomainStateHelper;
 import com.gogo.domain.helper.RoleHelper;
 import com.gogo.exception.Business4JsonException;
@@ -48,6 +50,7 @@ public class GroupService {
 		
 		int maxAuthority  = RoleHelper.FOUR_AUTHORITY_EXPEL;
 		UserAndGroup uag =new UserAndGroup();
+		uag.setState(UserAndGroupState.FORMAL);
 		uag.setGroup(group);
 		uag.setUser(user);
 		uag.setAuthorityState(RoleHelper.mergeParamState(maxAuthority));
@@ -75,7 +78,7 @@ public class GroupService {
 		GroupApplyInfo gai = new GroupApplyInfo();
 		gai.setUser(user);
 		gai.setGroup(group);
-		gai.setState(DomainStateHelper.GROUP_APPLY_STATE_APPLY);
+		gai.setState(GroupApplyState.APPLY);
 		
 		groupApplyInfoDao.save(gai);
 	}
@@ -162,6 +165,7 @@ public class GroupService {
 			throw new Business4JsonException("您已经加入了小组");
 		}
 		UserAndGroup applyUag = new UserAndGroup();
+		applyUag.setState(UserAndGroupState.FORMAL);
 		applyUag.setGroup(group);
 		applyUag.setUser(applyUser);
 		applyUag.setAuthorityState(RoleHelper.mergeParamState(RoleHelper.TOW_AUTHORITY_TEXT));
@@ -178,5 +182,16 @@ public class GroupService {
 		if(!RoleHelper.judgeState(authstate, RoleHelper.THREE_AUTHORITY_INVITE)){
 			throw new Business4JsonException("您无权查看改小组的申请列表！");
 		}
+	}
+
+	public void quitGroup(User user, String groupId) {
+		UserAndGroup uag = userAndGroupDao.loadUAG4UserAndGroup(user.getId(), groupId);
+		if(uag == null){
+			throw new Business4JsonException("您不在此小组");
+		}
+		uag.setAuthorityState(RoleHelper.ONE_AUTHORITY_NONE);
+		
+		uag.setState(UserAndGroupState.QUIT);
+		userAndGroupDao.update(uag);
 	}
 }

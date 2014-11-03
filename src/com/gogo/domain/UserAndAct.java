@@ -17,6 +17,8 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.GenericGenerator;
 
+import com.gogo.domain.enums.UserAndActState;
+
 
 @Entity
 @Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
@@ -50,7 +52,7 @@ public class UserAndAct {
 
 	//用户在当前活动的状态 
 	@Column(name="ua_state",length=1)
-	private int uaaState;
+	private UserAndActState uaaState;
 	
 	@Version
 	@Column(name="update_time",length=10,nullable=false)
@@ -64,11 +66,11 @@ public class UserAndAct {
 		this.update_time = update_time;
 	}
 
-	public int getUaaState() {
+	public UserAndActState getUaaState() {
 		return uaaState;
 	}
 
-	public void setUaaState(int uaaState) {
+	public void setUaaState(UserAndActState uaaState) {
 		this.uaaState = uaaState;
 	}
 

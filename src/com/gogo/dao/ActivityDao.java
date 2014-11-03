@@ -9,7 +9,8 @@ import com.gogo.domain.Activity;
 import com.gogo.domain.City;
 import com.gogo.domain.Place;
 import com.gogo.domain.User;
-import com.gogo.domain.helper.DomainStateHelper;
+import com.gogo.domain.enums.ACTState;
+import com.gogo.domain.enums.UserAndActState;
 import com.gogo.map.GoMapHelper;
 
 @Repository
@@ -50,7 +51,7 @@ public class ActivityDao extends BaseDao<Activity>{
 	public List<Activity> loadJoinActivitesByUser(String userId,int curPage,int pagesize) {
 		String hql = "select act from UserAndAct uaa left join uaa.act act "
 				+ " where uaa.user.id='"+userId+"'"
-						+ " and uaa.uaaState in("+DomainStateHelper.USER_AND_ACT_JOIN+","+DomainStateHelper.USER_AND_ACT_QUEUE+") ";
+						+ " and uaa.uaaState in("+UserAndActState.JOIN.ordinal()+","+UserAndActState.QUEUE.ordinal()+") ";
 		List<Activity> list= findByPage(hql,curPage,pagesize);
 		
 		return list;
@@ -59,7 +60,7 @@ public class ActivityDao extends BaseDao<Activity>{
 	public int loadJoinActivitesByUserCount(String userId){
 		String hql = "select count(act) from UserAndAct uaa left join uaa.act act "
 				+ " where uaa.user.id='"+userId+"'"
-				+ " and uaa.uaaState in("+DomainStateHelper.USER_AND_ACT_JOIN+","+DomainStateHelper.USER_AND_ACT_QUEUE+") ";
+				+ " and uaa.uaaState in("+UserAndActState.JOIN.ordinal()+","+UserAndActState.QUEUE.ordinal()+") ";
 		return   getCount(hql, null);
 	}
 	
@@ -160,7 +161,7 @@ public class ActivityDao extends BaseDao<Activity>{
 		//非公开项目不能被查询到
 		hql.append(" where "+HQL_AILS+".open=true ");
 		//活动状态为发布则可以被查询
-		hql.append(" and "+HQL_AILS+".state="+DomainStateHelper.ACT_RELEASE);
+		hql.append(" and "+HQL_AILS+".state="+ACTState.RELEASE.ordinal());
 		
 		if(user != null){
 			hql.append("  and "+HQL_AILS+".ownUser.id !='"+user.getId()+"'");

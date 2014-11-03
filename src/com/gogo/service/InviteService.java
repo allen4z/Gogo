@@ -9,6 +9,7 @@ import com.gogo.dao.InviteDao;
 import com.gogo.dao.UserDao;
 import com.gogo.domain.Invite;
 import com.gogo.domain.User;
+import com.gogo.domain.enums.InviteType;
 import com.gogo.page.Page;
 import com.gogo.page.PageUtil;
 
@@ -41,7 +42,7 @@ public class InviteService {
 		//TODO 推送邀请信息
 	}
 
-	public Page<Invite> loadAllInvite(User user,int type,int pn,int ps) {
+	public Page<Invite> loadAllInvite(User user,InviteType type,int pn,int ps) {
 		return PageUtil.getPage(inviteDao.loadAllInviteCount(user.getId(),type), pn, inviteDao.loadAllInvite(user.getId(),type),ps);
 	}
 

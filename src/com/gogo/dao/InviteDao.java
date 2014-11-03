@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Repository;
 
 import com.gogo.domain.Invite;
+import com.gogo.domain.enums.InviteType;
 
 @Repository
 public class InviteDao extends BaseDao<Invite>{
@@ -22,14 +23,14 @@ public class InviteDao extends BaseDao<Invite>{
 		return hql;
 	}
 	
-	public int loadAllInviteCount(String beInvitedId,int type){
+	public int loadAllInviteCount(String beInvitedId,InviteType type){
 		String hql = getAllInviteHql(true);
-		return getCount(hql, beInvitedId,type);
+		return getCount(hql, beInvitedId,type.ordinal());
 	}
 	
-	public List<Invite> loadAllInvite(String beInvitedId,int type){
+	public List<Invite> loadAllInvite(String beInvitedId,InviteType type){
 		String hql = getAllInviteHql(false);
-		return find(hql, beInvitedId,type);
+		return find(hql, beInvitedId,type.ordinal());
 	}
 	
 	

@@ -21,6 +21,8 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.validator.constraints.Length;
 
+import com.gogo.domain.enums.ACTState;
+
 @Entity
 @Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
 @Table(name="t_act")
@@ -87,7 +89,7 @@ public class Activity {
 	
 	//活动状态 ：未发布、未发布
 	@Column(name="act_state",length=1)
-	private int state;
+	private ACTState state;
 	
 	//热度
 	@Column(name="act_hotpoint",length=10)
@@ -254,12 +256,11 @@ public class Activity {
 	public void setSignTime(Date signTime) {
 		this.signTime = signTime;
 	}
-
-	public int getState() {
+	public ACTState getState() {
 		return state;
 	}
 
-	public void setState(int state) {
+	public void setState(ACTState state) {
 		this.state = state;
 	}
 

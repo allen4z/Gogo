@@ -16,6 +16,8 @@ import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.GenericGenerator;
 
+import com.gogo.domain.enums.NotifyType;
+
 /**
  * 通知实体类
  * @author Allen
@@ -40,7 +42,7 @@ public class Notify {
 	private String content;
 	
 	@Column(name="notify_type",length=10)
-	private int type;
+	private NotifyType type;
 	
 	@ManyToOne
 	@JoinColumn(name="notify_own_user")
@@ -75,11 +77,11 @@ public class Notify {
 		this.content = content;
 	}
 
-	public int getType() {
+	public NotifyType getType() {
 		return type;
 	}
 
-	public void setType(int type) {
+	public void setType(NotifyType type) {
 		this.type = type;
 	}
 

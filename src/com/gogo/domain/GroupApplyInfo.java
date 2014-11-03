@@ -16,6 +16,8 @@ import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.GenericGenerator;
 
+import com.gogo.domain.enums.GroupApplyState;
+
 @Entity
 @Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
 @Table(name="t_groupapply")
@@ -39,7 +41,7 @@ public class GroupApplyInfo {
 	private User user;
 	
 	@Column(name="groupapply_state",length=1)
-	private int state;
+	private GroupApplyState state;
 	
 	//版本
 	@Version
@@ -71,11 +73,11 @@ public class GroupApplyInfo {
 		this.user = user;
 	}
 
-	public int getState() {
+	public GroupApplyState getState() {
 		return state;
 	}
 
-	public void setState(int state) {
+	public void setState(GroupApplyState state) {
 		this.state = state;
 	}
 

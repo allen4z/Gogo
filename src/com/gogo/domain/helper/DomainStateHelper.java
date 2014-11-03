@@ -8,60 +8,16 @@ import java.util.List;
 
 public class DomainStateHelper {
 
-	// 用户状态信息：
-	// 用户正常状态
-	public static final int USER_NORMAL_STATE = 0;
-	// 用户删除状态
-	public static final int USER_DEL_STATE = 1;
-
-	// 活动状态信息：
-	// 活动删除
-	public static final int ACT_DEL = -1;
-	// 活动新增状态
-	public static final int ACT_NEW = 0;
-	// 活动发布状态
-	public static final int ACT_RELEASE = 1;
-	// 活动暂停状态
-	public static final int ACT_SUSPEND = 2;
-	// 活动停止状态
-	public static final int ACT_STOP = 3;
-	// 活动停止结束
-	public static final int ACT_FINASH = 4;
-	
-	//好友请求
+	//好友请求 ???
 	//好友请求通过
 	public static final boolean FIREND_PASSED=true;
 	//好友请求未通过
 	public static final boolean FIREND_UNPASSED=false;
-	
-	//加入
-	public static final int USER_AND_ACT_JOIN=0;
-	//排队
-	public static final int USER_AND_ACT_QUEUE=1;
-	//取消
-	public static final int USER_AND_ACT_CANCEL=2;
-	
-	
-	
+		
 	//活动小组默认人数
 	public static final int GROUP_DEFAULT_USER_SIZE=50;
-	//申请加入小组 开始申请
-	public static final int GROUP_APPLY_STATE_APPLY=0;
-	//申请加入小组 已经通过
-	public static final int GROUP_APPLY_STATE_PASSED=1;
-	
-	//邀请类型 ： 活动
-	public static final int INVITE_TYPE_ACT=0;
-	//邀请类型：小组
-	public static final int INVITE_TYPE_GROUP=0;
 	
 	
-	
-	//小组通知
-	public static final int NOTIFY_TYPE_GROUP=0;
-	//用户通知
-	public static final int NOTIFY_TYPE_USER=1;
-
 	/**
 	 * 属性复制方法 -- 主要用于更新方法
 	 * @param source

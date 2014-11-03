@@ -24,6 +24,9 @@ import com.gogo.domain.NotifyAndGroup;
 import com.gogo.domain.Place;
 import com.gogo.domain.User;
 import com.gogo.domain.UserAndAct;
+import com.gogo.domain.enums.ACTState;
+import com.gogo.domain.enums.NotifyType;
+import com.gogo.domain.enums.UserAndActState;
 import com.gogo.domain.helper.DomainStateHelper;
 import com.gogo.exception.Business4JsonException;
 import com.gogo.exception.BusinessException;
@@ -57,8 +60,7 @@ public class ActivityService {
 		act.setActCreateTime(new Date());
 		act.setOwnUser(user);
 		//TODO 保存默认为发布状态
-		//act.setState(DomainStateHelper.ACT_NEW);
-		act.setState(DomainStateHelper.ACT_RELEASE);
+		act.setState(ACTState.RELEASE);
 		actDao.save(act);
 		//建立消息信息
 		createActNotify(user,act);
@@ -74,7 +76,7 @@ public class ActivityService {
 		//新建消息
 		Notify notify = new Notify();
 		notify.setCreateUser(user);
-		notify.setType(DomainStateHelper.NOTIFY_TYPE_GROUP);
+		notify.setType(NotifyType.GROUP);
 		
 		ResourceBundle bundle = ResourceBundle.getBundle("notify");
 		String title = new String(bundle.getString("newacttitle").getBytes("ISO-8859-1"), "UTF-8");
@@ -102,9 +104,9 @@ public class ActivityService {
 	 * @param actId  活动ID
 	 * @param user  用户信息
 	 */
-	public synchronized int saveUserJoinActivity(String userId, String actId) {
+	public synchronized UserAndActState saveUserJoinActivity(String userId, String actId) {
 		
-		int result = -1;
+		UserAndActState result = UserAndActState.CANCEL;
 		User user = userDao.get(userId);
 		UserAndAct uaa = userAndActDao.loadByUserAndAct(userId, actId);
 		
@@ -116,7 +118,7 @@ public class ActivityService {
 			uaa.setUser(user);
 			uaa.setAct(act);
 		}else{
-			if((uaa.getUaaState() == DomainStateHelper.USER_AND_ACT_JOIN||uaa.getUaaState() == DomainStateHelper.USER_AND_ACT_QUEUE)){
+			if((uaa.getUaaState() == UserAndActState.JOIN||uaa.getUaaState() ==UserAndActState.QUEUE)){
 				throw new Business4JsonException("you joined this activity!");
 			}
 		}
@@ -125,11 +127,11 @@ public class ActivityService {
 		int maxJoin = act.getMaxJoin();
 		int curJoint = act.getCutJoin();
 		if(curJoint>=maxJoin){ //报名已满
-			uaa.setUaaState(DomainStateHelper.USER_AND_ACT_QUEUE);
-			result = DomainStateHelper.USER_AND_ACT_QUEUE;
+			uaa.setUaaState(UserAndActState.QUEUE);
+			result = UserAndActState.QUEUE;
 		}else{
-			uaa.setUaaState(DomainStateHelper.USER_AND_ACT_JOIN);
-			result = DomainStateHelper.USER_AND_ACT_JOIN;
+			uaa.setUaaState(UserAndActState.JOIN);
+			result = UserAndActState.JOIN;
 			uaa.setWaitCost(act.getJoinNeedPay());
 			
 			act.setCutJoin(act.getCutJoin()+1);
@@ -153,18 +155,18 @@ public class ActivityService {
 		}
 		
 		//如果用户是参加状态，则查询排队人员，更新为参加
-		if(uaa.getUaaState() == DomainStateHelper.USER_AND_ACT_JOIN){
+		if(uaa.getUaaState() == UserAndActState.JOIN){
 			//获得最近一条排队人员
-			List<UserAndAct> queueUsers = userAndActDao.loadByActAndState(actId,DomainStateHelper.USER_AND_ACT_QUEUE,new int[]{1});
+			List<UserAndAct> queueUsers = userAndActDao.loadByActAndState(actId,UserAndActState.QUEUE,new int[]{1});
 			if(queueUsers != null && queueUsers.size()>0){
 				UserAndAct queueUaa = queueUsers.get(0);
-				queueUaa.setUaaState(DomainStateHelper.USER_AND_ACT_JOIN);
+				queueUaa.setUaaState(UserAndActState.JOIN);
 				queueUaa.setWaitCost(uaa.getAct().getJoinNeedPay());
 				userAndActDao.update(queueUaa);
 			}
 		}
 		uaa.setWaitCost(0);
-		uaa.setUaaState(DomainStateHelper.USER_AND_ACT_CANCEL);
+		uaa.setUaaState(UserAndActState.CANCEL);
 		Activity act = uaa.getAct();
 		act.setCutJoin(act.getCutJoin()-1);
 		userAndActDao.update(uaa);
@@ -178,8 +180,7 @@ public class ActivityService {
 		Activity act = actDao.load(actId);
 		User user = act.getOwnUser();
 		if(user.getId().equals(userId)){
-			act.setState(DomainStateHelper.ACT_DEL);
-//			act.setUpdate_time(new Date());
+			act.setState(ACTState.DELETE);
 			actDao.updateActivity(act);
 		}else{
 			throw new BusinessException("登录用户无权删除此活动");
@@ -246,7 +247,7 @@ public class ActivityService {
 	 * @param uarState 权限状态标志
 	 * @return
 	 */
-	public Page<User> loadSpecialUserFromAct(String actId, int currPage,int pageSize,int uarState) {
+	public Page<User> loadSpecialUserFromAct(String actId, int currPage,int pageSize,UserAndActState uarState) {
 		return PageUtil.getPage(userDao.loadUserByActCount(actId,uarState), 0, userDao.loadUserByAct(actId, currPage, pageSize,uarState), pageSize);
 	}
 
@@ -255,12 +256,12 @@ public class ActivityService {
 	 * @param userId
 	 * @param actId
 	 */
-	public int loadCurUserStateInAct(String userId, String actId) {
+	public UserAndActState loadCurUserStateInAct(String userId, String actId) {
 		UserAndAct uaa = userAndActDao.loadByUserAndAct(userId, actId);	
 		if(uaa != null){
 			return uaa.getUaaState();
 		}else{
-			return -1;
+			return UserAndActState.CANCEL;
 		}
 	}
 

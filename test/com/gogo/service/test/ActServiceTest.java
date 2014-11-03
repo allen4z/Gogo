@@ -7,7 +7,7 @@ import org.junit.runner.RunWith;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.gogo.domain.Activity;
-import com.gogo.domain.helper.DomainStateHelper;
+import com.gogo.domain.enums.ACTState;
 import com.gogo.service.ActivityService;
 import com.gogo.test.AbstractContextTests;
 
@@ -22,7 +22,7 @@ public class ActServiceTest extends AbstractContextTests  {
 		Activity act = new Activity();
 		act.setId("2");
 		act.setName("更新测试");
-		act.setState(DomainStateHelper.ACT_STOP);
+		act.setState(ACTState.STOP);
 		service.deleteActivity("1", "1");
 	}
 	

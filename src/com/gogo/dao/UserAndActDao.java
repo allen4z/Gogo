@@ -5,9 +5,8 @@ import java.util.List;
 import org.hibernate.Query;
 import org.springframework.stereotype.Repository;
 
-import com.gogo.domain.User;
 import com.gogo.domain.UserAndAct;
-import com.gogo.domain.UserAndGroup;
+import com.gogo.domain.enums.UserAndActState;
 
 @Repository
 public class UserAndActDao extends BaseDao<UserAndAct> {
@@ -48,13 +47,13 @@ public class UserAndActDao extends BaseDao<UserAndAct> {
 	 * @param maxResult 最大返回条数
 	 * @return
 	 */
-	public List<UserAndAct> loadByActAndState(String actId,int uaaState,int...maxResult){
+	public List<UserAndAct> loadByActAndState(String actId,UserAndActState uaaState,int...maxResult){
 		String hql = "select ua from UserAndAct ua join ua.act a where a.id=:actId and ua.uaaState=:uaaState ";
 		
 		Query query = getSession().createQuery(hql);
 		
 		List<UserAndAct> uaas =query
-		.setString("actId", actId).setInteger("uaaState", uaaState)
+		.setString("actId", actId).setInteger("uaaState", uaaState.ordinal())
 		.list();
 		
 		if(maxResult!= null ){

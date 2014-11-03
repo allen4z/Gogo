@@ -23,6 +23,7 @@ import com.gogo.domain.GroupApplyInfo;
 import com.gogo.domain.Invite;
 import com.gogo.domain.Place;
 import com.gogo.domain.User;
+import com.gogo.domain.enums.InviteType;
 import com.gogo.domain.helper.DomainStateHelper;
 import com.gogo.exception.Business4JsonException;
 import com.gogo.helper.CommonConstant;
@@ -122,12 +123,26 @@ public class GroupController extends BaseController {
 	}
 	
 	
+	/**
+	 * 用户退出小组
+	 * @param user
+	 * @param friendId
+	 * @param groupId
+	 * @return
+	 */
 	@RequestMapping(value = "inviteJoinGroup/{friendId}/{groupId}")
 	@ResponseBody
 	public boolean InviteJoinGroup(@ModelAttribute(CommonConstant.USER_CONTEXT)User user,
 			@PathVariable String friendId,
 			@PathVariable String groupId){
 		inviteService.saveInviteJoinGroup(user, friendId, groupId);
+		return true;
+	}
+	
+	@RequestMapping(value = "quitGroup/{groupId}")
+	@ResponseBody
+	public boolean quitGroup(@ModelAttribute(CommonConstant.USER_CONTEXT)User user,@PathVariable String groupId){
+		groupService.quitGroup(user,groupId);
 		return true;
 	}
 	
@@ -138,7 +153,7 @@ public class GroupController extends BaseController {
 	 * @return
 	 */
 	public Page<Invite> loadAllGroupInvite(@ModelAttribute(CommonConstant.USER_CONTEXT)User user,int pn){
-		return inviteService.loadAllInvite(user,pn,DomainStateHelper.INVITE_TYPE_GROUP,CommonConstant.PAGE_SIZE);
+		return inviteService.loadAllInvite(user,InviteType.GROUP,pn,CommonConstant.PAGE_SIZE);
 	}
 	
 	public boolean passInviteGroup(@ModelAttribute(CommonConstant.USER_CONTEXT)User user,

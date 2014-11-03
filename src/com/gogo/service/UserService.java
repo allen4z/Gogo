@@ -15,7 +15,7 @@ import com.gogo.dao.UserDao;
 import com.gogo.domain.Activity;
 import com.gogo.domain.User;
 import com.gogo.domain.UserAndAct;
-import com.gogo.domain.helper.DomainStateHelper;
+import com.gogo.domain.enums.UserState;
 import com.gogo.exception.Business4JsonException;
 import com.gogo.helper.MD5Util;
 import com.gogo.page.Page;
@@ -35,7 +35,7 @@ public class UserService{
 	private UserAndActDao userAndActDao;
 	
 	public void saveUser(User user){
-		user.setState(DomainStateHelper.USER_NORMAL_STATE);
+		user.setState(UserState.FORMAL);
 		user.setRegisterTime(new Date());
 		user.setUpdate_time(new Date());
 		//使用MD5加密用户密码

@@ -24,7 +24,7 @@ import com.gogo.dao.UserAndGroupDao;
 import com.gogo.domain.Activity;
 import com.gogo.domain.Place;
 import com.gogo.domain.User;
-import com.gogo.domain.helper.DomainStateHelper;
+import com.gogo.domain.enums.UserAndActState;
 import com.gogo.exception.Business4JsonException;
 import com.gogo.helper.CommonConstant;
 import com.gogo.page.Page;
@@ -117,8 +117,8 @@ public class ActivityController extends BaseController {
 	@RequestMapping("join/{actId}")
 	@ResponseBody
 	public boolean joinActivity(@ModelAttribute(CommonConstant.USER_CONTEXT) User user,@PathVariable String actId){
-		int result = actService.saveUserJoinActivity(user.getId(),actId);
-		if(result ==  DomainStateHelper.USER_AND_ACT_QUEUE){
+		UserAndActState result = actService.saveUserJoinActivity(user.getId(),actId);
+		if(result ==  UserAndActState.QUEUE){
 			throw new Business4JsonException("act_join_full","Participate in the activity of the enrollment is full");
 		}
 		return true;
@@ -202,13 +202,13 @@ public class ActivityController extends BaseController {
 	@RequestMapping(value = "loadJoinUserFromAct/{actId}")
 	@ResponseBody
 	public Page<User> loadJoinUserFromAct(@PathVariable String actId,@RequestParam int pn){
-		return actService.loadSpecialUserFromAct(actId,pn,CommonConstant.PAGE_SIZE,DomainStateHelper.USER_AND_ACT_JOIN);
+		return actService.loadSpecialUserFromAct(actId,pn,CommonConstant.PAGE_SIZE, UserAndActState.JOIN);
 	}
 	
 	@RequestMapping(value = "loadQueueUserFromAct/{actId}")
 	@ResponseBody
 	public Page<User> loadQueueUserFromAct(@PathVariable String actId,@RequestParam int pn){
-		return actService.loadSpecialUserFromAct(actId,pn,CommonConstant.PAGE_SIZE,DomainStateHelper.USER_AND_ACT_QUEUE);
+		return actService.loadSpecialUserFromAct(actId,pn,CommonConstant.PAGE_SIZE, UserAndActState.QUEUE);
 	}
 	
 	
@@ -236,7 +236,7 @@ public class ActivityController extends BaseController {
 		
 		User user = getSessionUser(request.getSession());
 		
-		int uarState =-1;
+		UserAndActState uarState =UserAndActState.CANCEL;
 		
 		if(user != null){
 			uarState = actService.loadCurUserStateInAct(user.getId(),actId);

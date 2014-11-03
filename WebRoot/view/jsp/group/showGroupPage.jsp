@@ -11,6 +11,23 @@
 <title>Gogo-Main</title>
 <script type="text/javascript">
 
+$(document).ready(function(){
+	$("#quitGroup").click(function(){
+		var actionInfo = 'group/quitGroup/<%=groupId%>';	
+		
+		var success = function(id){
+			alert('成功退出小组');
+			location.href = '<%=basePath %>user/main'; 
+		};
+		
+		var failed = function(XMLHttpRequest,textStatus, errorThrown){
+	         alert(XMLHttpRequest.responseText);
+	    };
+		
+		send4Json(params,actionInfo,success,failed);
+	});
+});
+
 function getAct(groupId){
 	var action = 'group/loadGroupById/'+groupId;
 	var success = function(group){
@@ -52,4 +69,5 @@ function templatefill(data){
 </script>
 
 </body>
+<button id="quitGroup" name="quitGroup">退出小组</button>
 </html>

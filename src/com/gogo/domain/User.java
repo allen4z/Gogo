@@ -16,6 +16,8 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.validator.constraints.Length;
 
+import com.gogo.domain.enums.UserState;
+
 @Entity
 @Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
 @Table(name="t_user")
@@ -73,7 +75,7 @@ public class User {
 	
 	//用户状态：删除、正常
 	@Column(name="user_state",length=1,nullable=false)
-	private int state;	
+	private UserState state;	
 	
 	//版本信息
 	@Version
@@ -134,17 +136,18 @@ public class User {
 	public void setRegisterTime(Date registerTime) {
 		this.registerTime = registerTime;
 	}
-	public int getState() {
-		return state;
-	}
-	public void setState(int state) {
-		this.state = state;
-	}
+
 	public Date getUpdate_time() {
 		return update_time;
 	}
 	public void setUpdate_time(Date update_time) {
 		this.update_time = update_time;
+	}
+	public UserState getState() {
+		return state;
+	}
+	public void setState(UserState state) {
+		this.state = state;
 	}
 
 }

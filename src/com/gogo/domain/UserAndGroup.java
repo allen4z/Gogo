@@ -17,6 +17,8 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.GenericGenerator;
 
+import com.gogo.domain.enums.UserAndGroupState;
+
 /**
  * 角色和用户的关联关系
  * @author allen
@@ -51,6 +53,9 @@ public class UserAndGroup {
 	@Column(name="authority_state",length=1)
 	private int authorityState;
 	
+	//人员和小组关系状态 是否退出
+	@Column(name="user_group_state",length=1)
+	private UserAndGroupState state;
 	//版本
 	@Version
 	@Column(name="update_time",length=10,nullable=false)
@@ -96,5 +101,11 @@ public class UserAndGroup {
 		this.update_time = update_time;
 	}
 
-	
+	public UserAndGroupState getState() {
+		return state;
+	}
+
+	public void setState(UserAndGroupState state) {
+		this.state = state;
+	}
 }
