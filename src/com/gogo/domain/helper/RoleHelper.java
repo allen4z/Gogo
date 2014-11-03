@@ -1,6 +1,5 @@
 package com.gogo.domain.helper;
 
-import javax.management.relation.Role;
 
 
 /**

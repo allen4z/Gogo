@@ -96,9 +96,11 @@ public class Activity {
 	private int hotPoind;
 	
 	//活动地点
-	@ManyToOne
-	@JoinColumn(name="place_id")
-	private Place place;
+	@Column(name="act_placeid",length=10)
+	private String bdplaceId;
+	//@ManyToOne
+	//@JoinColumn(name="place_id")
+	//private Place place;
 	
 	//是否所有人可见
 	@Column(name="act_isopen",length=1)
@@ -272,14 +274,14 @@ public class Activity {
 		this.hotPoind = hotPoind;
 	}
 
-	public Place getPlace() {
+/*	public Place getPlace() {
 		return place;
 	}
 
 	public void setPlace(Place place) {
 		this.place = place;
 	}
-
+*/
 	public boolean isOpen() {
 		return open;
 	}

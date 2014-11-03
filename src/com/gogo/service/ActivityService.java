@@ -219,6 +219,10 @@ public class ActivityService {
 	 * @return
 	 */
 	public Page<Activity> loadActByPlace(User user,Place place,String ip,int currPage,int pageSize){
+		//更具经纬度检索百度地图
+		
+		
+		
 		Page<Activity> queryList = null;
 		if(place != null && place.getLongitude() != 0 && place.getLongitude() != 0){
 			queryList = PageUtil.getPage(actDao.lodActByPlaceCount(user,place),currPage , actDao.loadActByPlace(user,place, currPage, pageSize), pageSize);
