@@ -1,5 +1,8 @@
 package com.gogo.dao;
 
+import java.util.List;
+
+import org.hibernate.Query;
 import org.springframework.stereotype.Repository;
 
 import com.gogo.domain.UserAndGroup;
@@ -22,6 +25,15 @@ public class UserAndGroupDao extends BaseDao<UserAndGroup> {
 		String hql = "select count(uag) from  UserAndGroup uag where uag.group.id=?";
 		return getCount(hql, groupId);
 		
+	}
+	
+	public List<UserAndGroup> loadAllUserAndGroup(String userId,Integer[] auth){
+		String hql = "select uag from UserAndGroup uag left join uag.user u where u.id=:id and uag.authorityState in (:auth)";
+		
+		Query query =  getSession().createQuery(hql);
+		query.setString("id", userId);
+		query.setParameterList("auth", auth);
+		return query.list();
 	}
 
 }

@@ -1,3 +1,4 @@
+<%@page import="com.gogo.domain.GroupApplyInfo"%>
 <%@page import="com.gogo.domain.Group"%>
 <%@page import="com.gogo.page.Page"%>
 <%@page import="com.gogo.ctrl.model.UserMainModel"%>
@@ -18,6 +19,8 @@
 	List<User> requestFriend = (List)request.getAttribute("requestFriend");
 	
 	Page<Group> myGroups = (Page)request.getAttribute("myGroup");
+	
+	List<GroupApplyInfo> groupApplys = (List)request.getAttribute("groupApplys");
 	
 %>
 <html>
@@ -67,6 +70,24 @@
 			%></td><%
 			
 			%><td><a href="friend/agreeApply/<%=rfInfo.getId() %>">同意请求</a></td></tr><%
+		}
+	}
+	%>
+</table>
+
+
+<table border="1">
+<tr >
+		<td colspan="2" align="center">请求加入小组信息</td>
+	</tr>
+<%
+	if(groupApplys!= null && groupApplys.size()>0){
+		for(GroupApplyInfo gai : groupApplys){
+			%><tr>
+			<td>
+			用户：<%=gai.getUser().getAliasName()%>请求加入小组：<%=gai.getGroup().getName() %>
+			</td><%
+			%><td><a href="group/passApply/<%=gai.getId() %>">同意请求</a></td></tr><%
 		}
 	}
 	%>

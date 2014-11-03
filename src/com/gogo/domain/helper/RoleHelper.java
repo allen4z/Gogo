@@ -1,5 +1,7 @@
 package com.gogo.domain.helper;
 
+import javax.management.relation.Role;
+
 
 /**
  * 角色权限
@@ -18,6 +20,8 @@ public class RoleHelper {
 	public static final int THREE_AUTHORITY_INVITE=2;  //  010
 	//是否允许踢人
 	public static final int FOUR_AUTHORITY_EXPEL=4; //100
+	
+	public static final int MAX_AUTHORITY=FOUR_AUTHORITY_EXPEL;
 	
 	//--------------------------------------------------------------
 	
@@ -78,5 +82,20 @@ public class RoleHelper {
 		}
 		return result;
 	}
+	
+	public static Integer[] getAuthInfo(int start,int end){
+		int size = end - start + 1;
+		Integer[] result = new Integer[size];
+		
+		for (int i = 0; i <result.length; i++) {
+			result[i] = start+i;
+		}
+		
+		return result;
+	}
+	
+public static void main(String[] args) {
+	System.out.println(RoleHelper.mergeParamState(4));
+}
 	
 }

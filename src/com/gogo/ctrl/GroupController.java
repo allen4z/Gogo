@@ -24,7 +24,6 @@ import com.gogo.domain.Invite;
 import com.gogo.domain.Place;
 import com.gogo.domain.User;
 import com.gogo.domain.enums.InviteType;
-import com.gogo.domain.helper.DomainStateHelper;
 import com.gogo.exception.Business4JsonException;
 import com.gogo.helper.CommonConstant;
 import com.gogo.page.Page;
@@ -88,7 +87,7 @@ public class GroupController extends BaseController {
 	 * @return
 	 */
 	public List<GroupApplyInfo> loadAllApplyInfo(@ModelAttribute(CommonConstant.USER_CONTEXT) User user,String groupId){
-		return groupService.loadAllApplyInfo(user,groupId);
+		return groupService.loadAllApplyInfo(user);
 	}
 	
 	/**
@@ -97,10 +96,10 @@ public class GroupController extends BaseController {
 	 * @param groupId
 	 * @return
 	 */
-	@RequestMapping("passApply/{groupId}/{userId}")
+	@RequestMapping("passApply/{groupApplyId}")
 	@ResponseBody
-	public boolean passApply(@ModelAttribute(CommonConstant.USER_CONTEXT) User user,@PathVariable String groupId,@PathVariable String userId){
-		groupService.savePassApply(user,groupId,userId);
+	public boolean passApply(@ModelAttribute(CommonConstant.USER_CONTEXT) User user,@PathVariable String groupApplyId){
+		groupService.savePassApply(user,groupApplyId);
 		return true;
 	}
 	
@@ -142,7 +141,7 @@ public class GroupController extends BaseController {
 	@RequestMapping(value = "quitGroup/{groupId}")
 	@ResponseBody
 	public boolean quitGroup(@ModelAttribute(CommonConstant.USER_CONTEXT)User user,@PathVariable String groupId){
-		groupService.quitGroup(user,groupId);
+		groupService.updateQuitGroup(user,groupId);
 		return true;
 	}
 	

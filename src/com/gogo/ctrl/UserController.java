@@ -20,6 +20,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.gogo.domain.Activity;
 import com.gogo.domain.Group;
+import com.gogo.domain.GroupApplyInfo;
 import com.gogo.domain.User;
 import com.gogo.exception.Business4JsonException;
 import com.gogo.helper.CommonConstant;
@@ -166,8 +167,11 @@ public class UserController extends BaseController{
 		//查询好友列表
 		List<User> friends = friendService.loadFriends(userId);
 		
+		//小组信息
 		Page<Group> myGroup = groupService.loadGroup4User(user, currPage, CommonConstant.PAGE_SIZE);
 		
+		//申请加群信息
+		List<GroupApplyInfo> groupApplys = groupService.loadAllApplyInfo(user);
 		
 		mav.addObject("page",ownAct );
 		mav.addObject("joinpage",joinAct );
@@ -175,6 +179,7 @@ public class UserController extends BaseController{
 		mav.addObject("friends", friends);
 		mav.addObject("requestFriend", requestFriend);
 		mav.addObject("myGroup", myGroup);
+		mav.addObject("groupApplys", groupApplys);
 		
 		mav.setViewName("main");
 		

@@ -48,7 +48,7 @@ public class GroupService {
 		group.setMaxJoinUser(DomainStateHelper.GROUP_DEFAULT_USER_SIZE);
 		group.setCurJoinUser(1);
 		
-		int maxAuthority  = RoleHelper.FOUR_AUTHORITY_EXPEL;
+		int maxAuthority  = RoleHelper.MAX_AUTHORITY;
 		UserAndGroup uag =new UserAndGroup();
 		uag.setState(UserAndGroupState.FORMAL);
 		uag.setGroup(group);
@@ -71,7 +71,7 @@ public class GroupService {
 		}
 		
 		UserAndGroup uag = userAndGroupDao.loadUAG4UserAndGroup(user.getId(), groupId);
-		if(uag != null){
+		if(uag != null && uag.getState() == UserAndGroupState.FORMAL){
 			throw new Business4JsonException("您已经加入了小组");
 		}
 		
@@ -88,13 +88,15 @@ public class GroupService {
 	 * @param user
 	 * @param groupId
 	 */
-	public synchronized void savePassApply(User user,String groupId,String userId) {
-		checkAuth(user, groupId);
-		User applyUser = userDao.load(userId);
-		Group group = groupDao.load(groupId);
-		
+	public synchronized void savePassApply(User user,String groupApplyId) {
+		GroupApplyInfo gai = groupApplyInfoDao.load(groupApplyId);
+		Group group = gai.getGroup();
+		checkAuth(user, group.getId());
 		//0.判断是否超过人员上线
+		User applyUser = gai.getUser();
 		userAndGroupHandler(applyUser, group);
+		gai.setState(GroupApplyState.PASSED);
+		groupApplyInfoDao.update(gai);
 	}
 
 	/**
@@ -111,12 +113,32 @@ public class GroupService {
 	}
 	
 	/**
-	 * 查询改小组所有的申请信息
+	 * 查询该小组所有的申请信息
 	 * @author allen
 	 */
-	public List<GroupApplyInfo> loadAllApplyInfo(User user,String groupId) {
+	public List<GroupApplyInfo> loadAllApplyInfo(User user) {
+		//获得所有管理权限的用户
+		int maxAuth = RoleHelper.mergeParamState(RoleHelper.MAX_AUTHORITY);
+		
+		List<UserAndGroup> uagList =userAndGroupDao.loadAllUserAndGroup(user.getId(),
+				RoleHelper.getAuthInfo(RoleHelper.THREE_AUTHORITY_INVITE,maxAuth));
+		
+		String[] groupIds  = new String[uagList.size()];
+
+		for (int i = 0; i < uagList.size(); i++) {
+			UserAndGroup uag = uagList.get(i);
+			groupIds[i] = uag.getGroup().getId();
+		}
+		if(groupIds!= null && groupIds.length>0){
+			return groupApplyInfoDao.loadAllApplyInfo(groupIds);
+		}else{
+			return null;
+		}
+	}
+	
+	public List<GroupApplyInfo> loadGroupApplyInfo(User user,String groupId) {
 		checkAuth(user, groupId);
-		return groupApplyInfoDao.loadAllApplyInfo(groupId);
+		return groupApplyInfoDao.loadGroupApplyInfo(groupId);
 	}
 	
 	
@@ -161,10 +183,15 @@ public class GroupService {
 		}
 		
 		UserAndGroup checkUag = userAndGroupDao.loadUAG4UserAndGroup(applyUser.getId(), group.getId());
-		if(checkUag != null){
+		if(checkUag != null && checkUag.getState() == UserAndGroupState.FORMAL){
 			throw new Business4JsonException("您已经加入了小组");
 		}
-		UserAndGroup applyUag = new UserAndGroup();
+		UserAndGroup applyUag;
+		if(checkUag != null){
+			applyUag = checkUag;
+		}else{
+			applyUag = new UserAndGroup();
+		}
 		applyUag.setState(UserAndGroupState.FORMAL);
 		applyUag.setGroup(group);
 		applyUag.setUser(applyUser);
@@ -184,13 +211,17 @@ public class GroupService {
 		}
 	}
 
-	public void quitGroup(User user, String groupId) {
+	public void updateQuitGroup(User user, String groupId) {
 		UserAndGroup uag = userAndGroupDao.loadUAG4UserAndGroup(user.getId(), groupId);
 		if(uag == null){
 			throw new Business4JsonException("您不在此小组");
 		}
-		uag.setAuthorityState(RoleHelper.ONE_AUTHORITY_NONE);
+		//如果用户是最大权限的用户 -- 管理员
+		if(RoleHelper.judgeState(uag.getAuthorityState(), RoleHelper.MAX_AUTHORITY)){
+			throw new Business4JsonException("管理员退出小组需将管理员转移给其他人");
+		}
 		
+		uag.setAuthorityState(RoleHelper.ONE_AUTHORITY_NONE);
 		uag.setState(UserAndGroupState.QUIT);
 		userAndGroupDao.update(uag);
 	}

@@ -24,7 +24,7 @@ $(document).ready(function(){
 	         alert(XMLHttpRequest.responseText);
 	    };
 		
-		send4Json(params,actionInfo,success,failed);
+		send4Json(null,actionInfo,success,failed);
 	});
 });
 
@@ -60,8 +60,11 @@ function templatefill(data){
 		<h3>{{name}}<h3>
 		<br/>
 		
+		
 		{{each joinUser as value i}}
+		{{if value.state=='FORMAL'}}
 			<li>用户名：{{value.user.aliasName}}</li>
+		{{/if}}
 		{{/each}}
 		
 		</div>

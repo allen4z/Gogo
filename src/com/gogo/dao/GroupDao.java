@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Repository;
 
 import com.gogo.domain.Group;
+import com.gogo.domain.enums.UserAndGroupState;
 
 @Repository
 public class GroupDao extends BaseDao<Group> {
@@ -13,7 +14,7 @@ public class GroupDao extends BaseDao<Group> {
 	
 	private static final String HQL_LIST="FROM Group"; 
 	
-	
+	//获得所有小组
 	private String getAllGroupHql(boolean isCount){
 		StringBuffer hql = new StringBuffer();
 		
@@ -45,7 +46,7 @@ public class GroupDao extends BaseDao<Group> {
 		}else{
 			hql+= " uag.group";
 		}
-		hql +=" from UserAndGroup uag left join uag.user user where user.id=?";
+		hql +=" from UserAndGroup uag left join uag.user user where user.id=? and uag.state="+UserAndGroupState.FORMAL.ordinal();
 		
 		return hql;
 	}
@@ -63,9 +64,11 @@ public class GroupDao extends BaseDao<Group> {
 	
 	
 	public List<Group> loadGroup4User(String userId){
-		String hql = "select uag.group from UserAndGroup uag left join uag.user user where user.id=?";
+		String hql = "select uag.group from UserAndGroup uag left join uag.user user where user.id=? and uag.state="+UserAndGroupState.FORMAL.ordinal();
 		List<Group> groups = find(hql,userId);
 		return groups;
 	}
+	
+	
 
 }
