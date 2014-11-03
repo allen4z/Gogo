@@ -104,8 +104,8 @@ public class GroupService {
 	 */
 	public void savePassInviteGroup(User user, String inviteId) {
 		Invite invite= inviteDao.load(inviteId);
-		Group group = invite.getGroup();
-		
+//		Group group = invite.getGroup();
+		Group group = groupDao.load(invite.getEntityId());
 		userAndGroupHandler(user, group);
 		
 	}

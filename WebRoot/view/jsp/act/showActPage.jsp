@@ -1,3 +1,4 @@
+<%@page import="com.gogo.domain.enums.UserAndActState"%>
 <%@page import="com.gogo.domain.helper.DomainStateHelper"%>
 <%@page import="com.gogo.domain.Activity"%>
 <%@ page language="java" import="java.util.*" pageEncoding="utf-8"%>
@@ -5,7 +6,7 @@
 <%
 	String actId = (String)request.getAttribute("actId");
 
-	Integer uarState = (Integer)request.getAttribute("uarState");
+	UserAndActState uarState = (UserAndActState)request.getAttribute("uarState");
 %>
 
 <html>
@@ -49,17 +50,17 @@ function templatefill(data){
 		<br/>
 
 		<%
-			if(uarState == -1){
+			if(uarState ==UserAndActState.CANCEL){
 				
 		%>
 		<a href="activity/join/{{id}}">报名参加活动</a>
 		<%
-			}else if(uarState != DomainStateHelper.USER_AND_ACT_CANCEL ){
+			}else if(uarState !=UserAndActState.CANCEL ){
 				
 				%>
 				&nbsp;&nbsp;<a href="activity/cancelJoin/{{id}}">取消报名</a>
-				&nbsp;&nbsp;<a href='activity/showSpecialActUserPage/<%=DomainStateHelper.USER_AND_ACT_JOIN%>/{{id}}'>查看参加用户</a>
-				&nbsp;&nbsp;<a href="activity/showSpecialActUserPage/<%=DomainStateHelper.USER_AND_ACT_QUEUE%>/{{id}}">查看排队用户</a>
+				&nbsp;&nbsp;<a href='activity/showSpecialActUserPage/<%=UserAndActState.JOIN%>/{{id}}'>查看参加用户</a>
+				&nbsp;&nbsp;<a href="activity/showSpecialActUserPage/<%=UserAndActState.QUEUE%>/{{id}}">查看排队用户</a>
  				<br/><a href="activity/showActAllUserPage/{{id}}">查看活动小组所有用户</a><br/>
 				<%
 			}else{

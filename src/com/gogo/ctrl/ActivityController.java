@@ -291,7 +291,7 @@ public class ActivityController extends BaseController {
 	 * @throws Exception
 	 */
 	@RequestMapping("showSpecialActUserPage/{state}/{actId}")
-	public ModelAndView showSpecialActUserPage(@PathVariable int state,@PathVariable String actId) throws Exception{
+	public ModelAndView showSpecialActUserPage(@PathVariable UserAndActState state,@PathVariable String actId) throws Exception{
 		ModelAndView mav = new ModelAndView();
 		mav.addObject("actId", actId);
 		mav.addObject("state",state);

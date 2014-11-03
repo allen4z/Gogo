@@ -1,4 +1,5 @@
-<%@page import="com.gogo.domain.helper.DomainStateHelper"%>
+
+<%@page import="com.gogo.domain.enums.UserAndActState"%>
 <%@page import="com.gogo.domain.helper.RoleHelper"%>
 <%@page import="com.gogo.page.Page"%>
 <%@page import="com.gogo.domain.Activity"%>
@@ -8,7 +9,7 @@
 <%
 
 String actId = (String)request.getAttribute("actId");
-Integer state = (Integer)request.getAttribute("state");
+UserAndActState state = (UserAndActState)request.getAttribute("state");
 
 
 %>
@@ -19,9 +20,9 @@ Integer state = (Integer)request.getAttribute("state");
 <script type="text/javascript">
 function getActAllUser(pn,state){
 	var action;
-	if(state==<%=DomainStateHelper.USER_AND_ACT_JOIN%>){
+	if(state==<%=UserAndActState.JOIN.ordinal()%>){
 		action = 'activity/loadJoinUserFromAct/<%=actId%>?pn='+pn;
-	}else if(state==<%=DomainStateHelper.USER_AND_ACT_QUEUE%>){
+	}else if(state==<%=UserAndActState.QUEUE.ordinal()%>){
 		action = 'activity/loadQueueUserFromAct/<%=actId%>?pn='+pn;
 	}
 	
@@ -44,11 +45,11 @@ function templatefill(users){
 
 </script>
 </head>
-<body onload="getActAllUser(1,<%=state%>)">
+<body onload="getActAllUser(1,<%=state.ordinal()%>)">
 <%
-if(state == DomainStateHelper.USER_AND_ACT_JOIN){
+if(state == UserAndActState.JOIN){
 	%><h1>参与活动用户</h1><%
-}else if(state == DomainStateHelper.USER_AND_ACT_QUEUE){
+}else if(state == UserAndActState.QUEUE){
 	%><h1>活动排队用户</h1><%
 }
 %>

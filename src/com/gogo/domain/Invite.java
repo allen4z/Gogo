@@ -39,7 +39,7 @@ public class Invite {
 	@OrderBy("name ASC")
 	private User beInvited;
 	
-	@ManyToOne
+	/*@ManyToOne
 	@JoinColumn(name="invite_group")
 	@OrderBy("name ASC")
 	private Group group;
@@ -47,7 +47,9 @@ public class Invite {
 	@ManyToOne
 	@JoinColumn(name="invite_activity")
 	@OrderBy("name ASC")
-	private Activity activity;
+	private Activity activity;*/
+	@Column(name="invite_entityid",length=32,nullable=false)
+	private String entityId;
 	
 	
 	@Column(name="invite_type",length=1)
@@ -75,13 +77,6 @@ public class Invite {
 		this.type = type;
 	}
 
-	public Group getGroup() {
-		return group;
-	}
-
-	public void setGroup(Group group) {
-		this.group = group;
-	}
 
 	public String getId() {
 		return id;
@@ -107,12 +102,30 @@ public class Invite {
 		this.beInvited = beInvited;
 	}
 
-	public Activity getActivity() {
+	public String getEntityId() {
+		return entityId;
+	}
+
+	public void setEntityId(String entityId) {
+		this.entityId = entityId;
+	}
+
+/*	public Activity getActivity() {
 		return activity;
 	}
 
 	public void setActivity(Activity activity) {
 		this.activity = activity;
-	}	
+	}
+		public Group getGroup() {
+		return group;
+	}
+
+	public void setGroup(Group group) {
+		this.group = group;
+	}
+
+		*
+		*/
 	
 }

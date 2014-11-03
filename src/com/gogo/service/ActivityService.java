@@ -163,12 +163,16 @@ public class ActivityService {
 				queueUaa.setUaaState(UserAndActState.JOIN);
 				queueUaa.setWaitCost(uaa.getAct().getJoinNeedPay());
 				userAndActDao.update(queueUaa);
+				
+				//TODO 通知排队用户已经参加活动
+				
+			}else{
+				Activity act = uaa.getAct();
+				act.setCutJoin(act.getCutJoin()-1);
 			}
 		}
 		uaa.setWaitCost(0);
 		uaa.setUaaState(UserAndActState.CANCEL);
-		Activity act = uaa.getAct();
-		act.setCutJoin(act.getCutJoin()-1);
 		userAndActDao.update(uaa);
 	}
 	
@@ -248,7 +252,7 @@ public class ActivityService {
 	 * @return
 	 */
 	public Page<User> loadSpecialUserFromAct(String actId, int currPage,int pageSize,UserAndActState uarState) {
-		return PageUtil.getPage(userDao.loadUserByActCount(actId,uarState), 0, userDao.loadUserByAct(actId, currPage, pageSize,uarState), pageSize);
+		return PageUtil.getPage(userDao.loadUserByActCount(actId,uarState.ordinal()), 0, userDao.loadUserByAct(actId, currPage, pageSize,uarState.ordinal()), pageSize);
 	}
 
 	/**

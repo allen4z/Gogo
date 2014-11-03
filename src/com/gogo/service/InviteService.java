@@ -3,8 +3,6 @@ package com.gogo.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.gogo.dao.ActivityDao;
-import com.gogo.dao.GroupDao;
 import com.gogo.dao.InviteDao;
 import com.gogo.dao.UserDao;
 import com.gogo.domain.Invite;
@@ -19,16 +17,13 @@ public class InviteService {
 	private InviteDao inviteDao;
 	@Autowired
 	private UserDao userDao;
-	@Autowired
-	private GroupDao groupDao;
-	@Autowired
-	private ActivityDao activityDao;
 	
 	public void saveInviteJoinGroup(User user,String friendId,String groupId){
 		Invite invite = new Invite();
 		invite.setUser(user);
 		invite.setBeInvited(userDao.get(friendId));
-		invite.setGroup(groupDao.get(groupId));
+//		invite.setGroup(groupDao.get(groupId));
+		invite.setEntityId(groupId);
 		inviteDao.save(invite);
 		//TODO 推送邀请信息
 	}
@@ -37,7 +32,8 @@ public class InviteService {
 		Invite invite = new Invite();
 		invite.setUser(user);
 		invite.setBeInvited(userDao.get(friendId));
-		invite.setActivity(activityDao.get(actId));
+//		invite.setActivity(activityDao.get(actId));
+		invite.setEntityId(actId);
 		inviteDao.save(invite);
 		//TODO 推送邀请信息
 	}
