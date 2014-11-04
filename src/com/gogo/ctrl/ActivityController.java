@@ -22,11 +22,11 @@ import org.springframework.web.servlet.ModelAndView;
 import com.gogo.annotation.Token;
 import com.gogo.dao.UserAndGroupDao;
 import com.gogo.domain.Activity;
-import com.gogo.domain.Place;
 import com.gogo.domain.User;
 import com.gogo.domain.enums.UserAndActState;
 import com.gogo.exception.Business4JsonException;
 import com.gogo.helper.CommonConstant;
+import com.gogo.map.GoMapHelper;
 import com.gogo.page.Page;
 import com.gogo.service.ActivityService;
 import com.gogo.service.InviteService;
@@ -159,24 +159,33 @@ public class ActivityController extends BaseController {
 	}
 	
 	
+	
 	/**
-	 * 查找附近所有的活动信息
+	 * 根据地点信息查询附近活动
 	 * @param request
-	 * @param place
+	 * @param longitude 经度
+	 * @param latitude 纬度
+	 * @param pn 页数
 	 * @return
 	 */
 	@RequestMapping(value = "loadActByPlace")
 	@ResponseBody
 	public Page<Activity> loadActByPlace(
 			HttpServletRequest request, 
-			@RequestParam(required=false) Place place,
+			@RequestParam(required=false) double longitude,
+			@RequestParam(required=false) double latitude,
 			@RequestParam(value="pn",required=false) Integer pn){
 		
 		String remoteAddr =request.getRemoteAddr();
 		
+		//根据经纬度组装数据模型
+		GoMapHelper gmh = new GoMapHelper();
+		gmh.setLongitude(longitude);
+		gmh.setLongitude(longitude);
+		
 		User user = getSessionUser(request.getSession());
 		//如果用户不为空，需要去掉用户创建的活动
-		Page<Activity> queryList =  actService.loadActByPlace(user,place,remoteAddr,pn,CommonConstant.PAGE_SIZE);
+		Page<Activity> queryList =  actService.loadActByPlace(user,gmh,remoteAddr,pn,CommonConstant.PAGE_SIZE);
 		
 		return queryList;
 		

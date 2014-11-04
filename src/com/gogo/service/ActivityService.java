@@ -21,7 +21,6 @@ import com.gogo.domain.City;
 import com.gogo.domain.Group;
 import com.gogo.domain.Notify;
 import com.gogo.domain.NotifyAndGroup;
-import com.gogo.domain.Place;
 import com.gogo.domain.User;
 import com.gogo.domain.UserAndAct;
 import com.gogo.domain.enums.ACTState;
@@ -185,7 +184,7 @@ public class ActivityService {
 		User user = act.getOwnUser();
 		if(user.getId().equals(userId)){
 			act.setState(ACTState.DELETE);
-			actDao.updateActivity(act);
+			actDao.update(act);
 		}else{
 			throw new BusinessException("登录用户无权删除此活动");
 		}
@@ -204,7 +203,7 @@ public class ActivityService {
 			BeanUtils.copyProperties(act, act4db);
 			DomainStateHelper.copyPriperties(act, act4db);
 //			act4db.setUpdate_time(new Date());
-			actDao.updateActivity(act4db);
+			actDao.update(act4db);
 		}else{
 			throw new BusinessException("登录用户无权更新此活动");
 		}
@@ -218,14 +217,14 @@ public class ActivityService {
 	 * @param place
 	 * @return
 	 */
-	public Page<Activity> loadActByPlace(User user,Place place,String ip,int currPage,int pageSize){
-		//更具经纬度检索百度地图
-		
+	public Page<Activity> loadActByPlace(User user,GoMapHelper gmh,String ip,int currPage,int pageSize){
+		//根据经纬度检索百度地图
+		String[] mapIds = new String[]{};
 		
 		
 		Page<Activity> queryList = null;
-		if(place != null && place.getLongitude() != 0 && place.getLongitude() != 0){
-			queryList = PageUtil.getPage(actDao.lodActByPlaceCount(user,place),currPage , actDao.loadActByPlace(user,place, currPage, pageSize), pageSize);
+		if(gmh != null && gmh.getLongitude() != 0 && gmh.getLongitude() != 0){
+			queryList = PageUtil.getPage(actDao.lodActByPlaceCount(user,mapIds),currPage , actDao.loadActByPlace(user,mapIds, currPage, pageSize), pageSize);
 		}else if(ip != null ){
 			City city = GoMapHelper.getCityInfo(ip);
 			if(city != null){
