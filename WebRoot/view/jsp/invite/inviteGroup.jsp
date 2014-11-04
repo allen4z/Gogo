@@ -1,3 +1,4 @@
+<%@page import="com.gogo.domain.enums.UserAndActState"%>
 <%@page import="com.gogo.domain.helper.DomainStateHelper"%>
 <%@page import="com.gogo.domain.Activity"%>
 <%@ page language="java" import="java.util.*" pageEncoding="utf-8"%>
@@ -55,7 +56,7 @@ function templatefill(data){
 		<a href="activity/visitor/{{id}}">加入活动小组</a><br/>
 		<a href="activity/join/{{id}}">报名参加活动</a>
 		<%
-			}else if(uarState != DomainStateHelper.USER_AND_ACT_CANCEL ){
+			}else if(uarState != UserAndActState.CANCEL.ordinal() ){
 				
 				%>
 				&nbsp;&nbsp;<a href="activity/cancelJoin/{{id}}">取消报名</a>
