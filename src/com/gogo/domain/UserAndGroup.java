@@ -27,7 +27,7 @@ import com.gogo.domain.enums.UserAndGroupState;
 @Entity
 @Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
 @Table(name="t_user_group")
-public class UserAndGroup {
+public class UserAndGroup extends BaseDomain{
 	
 	//主键
 	@Id

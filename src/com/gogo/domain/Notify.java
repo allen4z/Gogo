@@ -27,7 +27,7 @@ import com.gogo.domain.enums.NotifyType;
 @Entity
 @Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
 @Table(name="t_notify")
-public class Notify {
+public class Notify extends BaseDomain{
 	
 	@Id
 	@GenericGenerator(name = "idGenerator", strategy = "uuid")

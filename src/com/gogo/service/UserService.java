@@ -115,7 +115,7 @@ public class UserService{
 		if(user == null ){
 			throw new Business4JsonException("user_username_or_password_error","username or password error");
 		}
-		
+		user.setPassword(loginUser.getPassword());
 		return user;
 	}
 	

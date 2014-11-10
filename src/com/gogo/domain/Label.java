@@ -27,7 +27,7 @@ import org.hibernate.validator.constraints.Length;
 @Entity
 @Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
 @Table(name="t_label")
-public class Label {
+public class Label extends BaseDomain{
 	
 	//主键
 	@Id

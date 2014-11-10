@@ -23,7 +23,7 @@ import com.gogo.domain.enums.UserAndActState;
 @Entity
 @Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
 @Table(name="t_user_activity")
-public class UserAndAct {
+public class UserAndAct extends BaseDomain{
 
 	
 	//主键

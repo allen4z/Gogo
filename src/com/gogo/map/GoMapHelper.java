@@ -7,10 +7,10 @@ public class GoMapHelper {
 	public static final float COORD_RANGE = 100.0f;
 	
 	//经度
-	private double longitude;
+	private Double longitude;
 	
 	//纬度
-	private double latitude;
+	private Double latitude;
 	/**
 	 * 根据ip得到城市信息
 	 * @param addr
@@ -20,17 +20,21 @@ public class GoMapHelper {
 		//TODO 通过ip获得城市信息
 		return null;
 	}
-	public double getLongitude() {
+	public Double getLongitude() {
 		return longitude;
 	}
-	public void setLongitude(double longitude) {
+	public void setLongitude(Double longitude) {
 		this.longitude = longitude;
 	}
-	public double getLatitude() {
+	public Double getLatitude() {
 		return latitude;
 	}
-	public void setLatitude(double latitude) {
+	public void setLatitude(Double latitude) {
 		this.latitude = latitude;
 	}
+	public static float getCoordRange() {
+		return COORD_RANGE;
+	}
+
 	
 }

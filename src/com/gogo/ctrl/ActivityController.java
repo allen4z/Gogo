@@ -19,11 +19,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.gogo.annotation.GoJsonFilter;
 import com.gogo.annotation.Token;
 import com.gogo.dao.UserAndGroupDao;
 import com.gogo.domain.Activity;
 import com.gogo.domain.User;
 import com.gogo.domain.enums.UserAndActState;
+import com.gogo.domain.filter.UserFilter;
 import com.gogo.exception.Business4JsonException;
 import com.gogo.helper.CommonConstant;
 import com.gogo.map.GoMapHelper;
@@ -170,18 +172,21 @@ public class ActivityController extends BaseController {
 	 */
 	@RequestMapping(value = "loadActByPlace")
 	@ResponseBody
+	@GoJsonFilter(mixin=UserFilter.class,target=User.class)
 	public Page<Activity> loadActByPlace(
 			HttpServletRequest request, 
-			@RequestParam(required=false) double longitude,
-			@RequestParam(required=false) double latitude,
+			@RequestParam(required=false) Double longitude,
+			@RequestParam(required=false) Double latitude,
 			@RequestParam(value="pn",required=false) Integer pn){
 		
 		String remoteAddr =request.getRemoteAddr();
-		
+		GoMapHelper gmh = null;
 		//根据经纬度组装数据模型
-		GoMapHelper gmh = new GoMapHelper();
-		gmh.setLongitude(longitude);
-		gmh.setLongitude(longitude);
+		if(longitude != null && latitude !=null){
+			gmh = new GoMapHelper();
+			gmh.setLongitude(longitude);
+			gmh.setLongitude(longitude);
+		}
 		
 		User user = getSessionUser(request.getSession());
 		//如果用户不为空，需要去掉用户创建的活动

@@ -25,7 +25,7 @@ import org.hibernate.validator.constraints.Length;
 @Entity
 @Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
 @Table(name="t_group")
-public class Group {
+public class Group extends BaseDomain{
 	//主键
 	@Id
 	@GenericGenerator(name = "idGenerator", strategy = "uuid")

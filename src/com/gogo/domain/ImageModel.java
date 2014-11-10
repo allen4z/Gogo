@@ -16,7 +16,7 @@ import org.hibernate.annotations.GenericGenerator;
 @Entity
 @Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
 @Table(name="t_imagemodel")
-public class ImageModel {
+public class ImageModel extends BaseDomain{
 
 	//主键
 	@Id

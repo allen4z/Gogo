@@ -14,7 +14,7 @@ import org.hibernate.annotations.GenericGenerator;
 @Entity
 @Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
 @Table(name="t_city")
-public class City {
+public class City extends BaseDomain{
 
 	//城市主键
 	@Id

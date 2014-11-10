@@ -21,7 +21,7 @@ import org.hibernate.annotations.GenericGenerator;
 @Entity
 @Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
 @Table(name="t_invite")
-public class Invite {
+public class Invite extends BaseDomain{
 
 	@Id
 	@GenericGenerator(name = "idGenerator", strategy = "uuid")

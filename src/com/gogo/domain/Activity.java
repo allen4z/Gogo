@@ -26,7 +26,7 @@ import com.gogo.domain.enums.ACTState;
 @Entity
 @Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
 @Table(name="t_act")
-public class Activity {
+public class Activity extends BaseDomain {
 	
 	//主键
 	@Id
@@ -328,5 +328,10 @@ public class Activity {
 
 	public void setUpdate_time(Date update_time) {
 		this.update_time = update_time;
+	}
+	
+	@Override
+	public String getCategory() {
+		return this.getClass().getName();
 	}
 }

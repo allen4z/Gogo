@@ -20,7 +20,7 @@ import org.hibernate.annotations.GenericGenerator;
 @Entity
 @Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
 @Table(name="t_notify_group")
-public class NotifyAndGroup {
+public class NotifyAndGroup extends BaseDomain{
 
 	@Id
 	@GenericGenerator(name = "idGenerator", strategy = "uuid")

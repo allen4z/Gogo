@@ -17,6 +17,8 @@ public class DomainStateHelper {
 	//活动小组默认人数
 	public static final int GROUP_DEFAULT_USER_SIZE=50;
 	
+	public static final String ERROR_FLAG = "error";
+	
 	
 	/**
 	 * 属性复制方法 -- 主要用于更新方法

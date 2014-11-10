@@ -21,7 +21,7 @@ import org.hibernate.validator.constraints.Length;
 @Entity
 @Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
 @Table(name="t_friendlist")
-public class FriendList {
+public class FriendList extends BaseDomain{
 
 	//主键
 	@Id

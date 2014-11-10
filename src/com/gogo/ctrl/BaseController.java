@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.support.RequestContextUtils;
 
+import com.gogo.domain.GoError;
 import com.gogo.domain.User;
 import com.gogo.exception.Business4JsonException;
 import com.gogo.exception.BusinessException;
@@ -50,17 +51,22 @@ public class BaseController {
 	
 	@ExceptionHandler(value=Business4JsonException.class)
 	@ResponseBody
-	public String exp4Json(Exception ex,HttpServletRequest request){
+	public GoError exp4Json(Exception ex,HttpServletRequest request){
 		Locale locale = RequestContextUtils.getLocale(request);
 		Business4JsonException e = (Business4JsonException) ex;
-		String returnMsg = null;
+		String msg = null;
 		String loaclMsg = messageSource.getMessage(e.getCode(), null, e.getMessage(), locale);
 		if(loaclMsg == null || loaclMsg.equals("")){
-			returnMsg = e.getMessage();
+			msg = e.getMessage();
 		}else{
-			returnMsg = loaclMsg;
+			msg = loaclMsg;
 		}
-		return returnMsg;
+		
+		//错误信息按json返回
+		GoError err= new GoError();
+		err.setCategory(e.getCode());
+		err.setMessage(msg);
+		return err;
 	}
 	
 	protected User getSessionUser(HttpSession session){

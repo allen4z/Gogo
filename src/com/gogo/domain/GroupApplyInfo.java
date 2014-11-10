@@ -21,7 +21,7 @@ import com.gogo.domain.enums.GroupApplyState;
 @Entity
 @Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
 @Table(name="t_groupapply")
-public class GroupApplyInfo {
+public class GroupApplyInfo extends BaseDomain{
 	
 	//主键
 	@Id

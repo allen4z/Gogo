@@ -19,7 +19,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.gogo.domain.User;
+import com.gogo.exception.Business4JsonException;
 import com.gogo.service.UserService;
+import com.gogo.smack.SmackTool;
 
 
 /**
@@ -67,8 +69,14 @@ public class LoginController extends BaseController{
 		User dbUser = userService.UserInfoCheck(loginUser);
 		if(dbUser!=null){
 			setSessionUser(session, dbUser);
+			
+			//聊天服务器登陆
+			//SmackTool smack = new SmackTool();
+			//smack.getConnect(dbUser);
 		}
+		
 		return dbUser;
+		
 	}
 
 	
