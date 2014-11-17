@@ -5,7 +5,6 @@ import java.util.List;
 import org.springframework.stereotype.Repository;
 
 import com.gogo.domain.Activity;
-import com.gogo.domain.City;
 import com.gogo.domain.User;
 import com.gogo.domain.enums.ACTState;
 import com.gogo.domain.enums.UserAndActState;
@@ -98,13 +97,13 @@ public class ActivityDao extends BaseDao<Activity>{
 	 * 根据当地热点地区信息查询活动信息
 	 * @return
 	 */
-	public List<Activity> loadActbyAddr(User user,City city,int pn,int pageSize) {
+	public List<Activity> loadActbyAddr(User user,String city,int pn,int pageSize) {
 		String hql =getHql4City(user, false);		
 		List<Activity> actList =findByPage(hql, pn, pageSize, null);
 		return actList;
 	}
 	
-	public int loadActbyAddrCount(User user,City city) {
+	public int loadActbyAddrCount(User user,String city) {
 		String hql =getHql4City(user, true);
 		return  getCount(hql, null);
 	}

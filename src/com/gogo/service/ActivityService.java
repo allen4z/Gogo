@@ -17,10 +17,10 @@ import com.gogo.dao.NotifyDao;
 import com.gogo.dao.UserAndActDao;
 import com.gogo.dao.UserDao;
 import com.gogo.domain.Activity;
-import com.gogo.domain.City;
 import com.gogo.domain.Group;
 import com.gogo.domain.Notify;
 import com.gogo.domain.NotifyAndGroup;
+import com.gogo.domain.Place;
 import com.gogo.domain.User;
 import com.gogo.domain.UserAndAct;
 import com.gogo.domain.enums.ACTState;
@@ -29,7 +29,7 @@ import com.gogo.domain.enums.UserAndActState;
 import com.gogo.domain.helper.DomainStateHelper;
 import com.gogo.exception.Business4JsonException;
 import com.gogo.exception.BusinessException;
-import com.gogo.map.GoMapHelper;
+import com.gogo.helper.MapHelper;
 import com.gogo.page.Page;
 import com.gogo.page.PageUtil;
 
@@ -217,16 +217,16 @@ public class ActivityService {
 	 * @param place
 	 * @return
 	 */
-	public Page<Activity> loadActByPlace(User user,GoMapHelper gmh,String ip,int currPage,int pageSize){
+	public Page<Activity> loadActByPlace(User user,Place place,String ip,int currPage,int pageSize){
 		//根据经纬度检索百度地图
 		String[] mapIds = new String[]{};
 		
 		
 		Page<Activity> queryList = null;
-		if(gmh != null && gmh.getLongitude() != 0 && gmh.getLongitude() != 0){
+		if(place != null && place.getLongitude() != 0 && place.getLongitude() != 0){
 			queryList = PageUtil.getPage(actDao.lodActByPlaceCount(user,mapIds),currPage , actDao.loadActByPlace(user,mapIds, currPage, pageSize), pageSize);
 		}else if(ip != null ){
-			City city = GoMapHelper.getCityInfo(ip);
+			String city = MapHelper.getCity(ip);
 			if(city != null){
 				queryList =PageUtil.getPage(actDao.loadActbyAddrCount(user,city), currPage, actDao.loadActbyAddr(user,city, currPage, pageSize), pageSize);
 			}else{

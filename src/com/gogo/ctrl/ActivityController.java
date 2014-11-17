@@ -23,12 +23,12 @@ import com.gogo.annotation.GoJsonFilter;
 import com.gogo.annotation.Token;
 import com.gogo.dao.UserAndGroupDao;
 import com.gogo.domain.Activity;
+import com.gogo.domain.Place;
 import com.gogo.domain.User;
 import com.gogo.domain.enums.UserAndActState;
 import com.gogo.domain.filter.UserFilter;
 import com.gogo.exception.Business4JsonException;
 import com.gogo.helper.CommonConstant;
-import com.gogo.map.GoMapHelper;
 import com.gogo.page.Page;
 import com.gogo.service.ActivityService;
 import com.gogo.service.InviteService;
@@ -103,7 +103,9 @@ public class ActivityController extends BaseController {
 		if(endDate.compareTo(startDate) <=0){
 			throw new Business4JsonException("act_savecheck_enddate_earlythen_startDate","end date early then start date");
 		}
-		
+		act.setSignTime(signDate);
+		act.setStartTime(startDate);
+		act.setEndTime(endDate);
 		return true;
 	}
 
@@ -172,7 +174,7 @@ public class ActivityController extends BaseController {
 	 */
 	@RequestMapping(value = "loadActByPlace")
 	@ResponseBody
-	@GoJsonFilter(mixin=UserFilter.class,target=User.class)
+//	@GoJsonFilter(mixin=UserFilter.class,target=User.class)
 	public Page<Activity> loadActByPlace(
 			HttpServletRequest request, 
 			@RequestParam(required=false) Double longitude,
@@ -180,17 +182,17 @@ public class ActivityController extends BaseController {
 			@RequestParam(value="pn",required=false) Integer pn){
 		
 		String remoteAddr =request.getRemoteAddr();
-		GoMapHelper gmh = null;
+		Place place = null;
 		//根据经纬度组装数据模型
 		if(longitude != null && latitude !=null){
-			gmh = new GoMapHelper();
-			gmh.setLongitude(longitude);
-			gmh.setLongitude(longitude);
+			place = new Place();
+			place.setLongitude(longitude);
+			place.setLongitude(longitude);
 		}
 		
 		User user = getSessionUser(request.getSession());
 		//如果用户不为空，需要去掉用户创建的活动
-		Page<Activity> queryList =  actService.loadActByPlace(user,gmh,remoteAddr,pn,CommonConstant.PAGE_SIZE);
+		Page<Activity> queryList =  actService.loadActByPlace(user,place,remoteAddr,pn,CommonConstant.PAGE_SIZE);
 		
 		return queryList;
 		

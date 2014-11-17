@@ -27,6 +27,15 @@ public class Place extends BaseDomain{
 	@Column(name="place_id",length=32)
 	private String id;
 	
+	
+	//百度地图主键
+	@Column(name="place_ddplaceId",length=10)
+	private String bdplaceId;
+	
+	//城市名称
+	@Column(name="place_cityName",length=10)
+	private String cityName;
+	
 	//地点编码
 	@Column(name="place_code",length=10)
 	private String code;
@@ -37,20 +46,15 @@ public class Place extends BaseDomain{
 	
 	//经度
 	@Column(name="place_longitude",length=20)
-	private float longitude;
+	private double longitude;
 	
 	//纬度
 	@Column(name="place_latitude",length=20)
-	private float latitude;
+	private double latitude;
 	
 	//热度
 	@Column(name="place_hotPoint",length=20)
 	private int hotPoint;
-	
-	//所在城市
-	@ManyToOne
-	@JoinColumn(name="city_id")
-	private City city;
 	
 	@Version
 	@Column(name="update_time",length=10,nullable=false)
@@ -80,19 +84,27 @@ public class Place extends BaseDomain{
 		this.name = name;
 	}
 
-	public float getLongitude() {
+	public String getCityName() {
+		return cityName;
+	}
+
+	public void setCityName(String cityName) {
+		this.cityName = cityName;
+	}
+
+	public double getLongitude() {
 		return longitude;
 	}
 
-	public void setLongitude(float longitude) {
+	public void setLongitude(double longitude) {
 		this.longitude = longitude;
 	}
 
-	public float getLatitude() {
+	public double getLatitude() {
 		return latitude;
 	}
 
-	public void setLatitude(float latitude) {
+	public void setLatitude(double latitude) {
 		this.latitude = latitude;
 	}
 
@@ -103,21 +115,21 @@ public class Place extends BaseDomain{
 	public void setHotPoint(int hotPoint) {
 		this.hotPoint = hotPoint;
 	}
-
-	public City getCity() {
-		return city;
-	}
-
-	public void setCity(City city) {
-		this.city = city;
-	}
-
+	
 	public Date getUpdateTime() {
 		return updateTime;
 	}
 
 	public void setUpdateTime(Date updateTime) {
 		this.updateTime = updateTime;
+	}
+
+	public String getBdplaceId() {
+		return bdplaceId;
+	}
+
+	public void setBdplaceId(String bdplaceId) {
+		this.bdplaceId = bdplaceId;
 	}
 
 }

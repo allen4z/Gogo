@@ -95,12 +95,10 @@ public class Activity extends BaseDomain {
 	@Column(name="act_hotpoint",length=10)
 	private int hotPoind;
 	
-	//活动地点
-	@Column(name="act_placeid",length=10)
-	private String bdplaceId;
-	//@ManyToOne
-	//@JoinColumn(name="place_id")
-	//private Place place;
+
+	@ManyToOne
+	@JoinColumn(name="place_id")
+	private Place place;
 	
 	//是否所有人可见
 	@Column(name="act_isopen",length=1)
@@ -133,12 +131,24 @@ public class Activity extends BaseDomain {
 	@Column(name="act_current_join",length=50)
 	private int cutJoin;
 	
+	//留言数量
+	@Column(name="act_current_message",length=50)
+	private int cutMessage;
+	
 	//版本
 	@Version
 	@Column(name="update_time",length=10,nullable=false)
 	private Date update_time;
 	
 	
+	public int getCutMessage() {
+		return cutMessage;
+	}
+
+	public void setCutMessage(int cutMessage) {
+		this.cutMessage = cutMessage;
+	}
+
 	public int getMinJoin() {
 		return minJoin;
 	}
@@ -330,6 +340,14 @@ public class Activity extends BaseDomain {
 		this.update_time = update_time;
 	}
 	
+	public Place getPlace() {
+		return place;
+	}
+
+	public void setPlace(Place place) {
+		this.place = place;
+	}
+
 	@Override
 	public String getCategory() {
 		return this.getClass().getName();

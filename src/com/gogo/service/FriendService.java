@@ -8,12 +8,11 @@ import org.springframework.stereotype.Service;
 
 import com.gogo.dao.FriendListDao;
 import com.gogo.dao.UserDao;
-import com.gogo.domain.City;
 import com.gogo.domain.FriendList;
 import com.gogo.domain.Place;
 import com.gogo.domain.User;
 import com.gogo.exception.Business4JsonException;
-import com.gogo.map.GoMapHelper;
+import com.gogo.helper.MapHelper;
 import com.gogo.page.Page;
 import com.gogo.page.PageUtil;
 
@@ -32,7 +31,7 @@ public class FriendService{
 //			queryList = PageUtil.getPage(friendGroupDao.lodActByPlaceCount(user,place),currPage , friendGroupDao.loadActByPlace(user,place, currPage, pageSize), pageSize);
 		}else if(ip != null ){
 			//TODO 按城市查询
-			City city = GoMapHelper.getCityInfo(ip);
+			String city = MapHelper.getCity(ip);
 			if(city != null){
 				//queryList =PageUtil.getPage(friendGroupDao.loadActbyAddrCount(user,city), currPage, friendGroupDao.loadActbyAddr(user,city, currPage, pageSize), pageSize);	
 			}else{
