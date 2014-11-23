@@ -55,10 +55,11 @@ public class ActivityController extends BaseController {
 	 * @return
 	 * @throws Exception 
 	 */
-	@Token(remove=true)
 	@RequestMapping("saveAct")
 	@ResponseBody
-	public boolean saveActivity(@ModelAttribute(CommonConstant.USER_CONTEXT) User user ,@Valid @RequestBody Activity act,BindingResult result) throws Exception{
+	public Activity saveActivity(@ModelAttribute(CommonConstant.USER_CONTEXT) User user ,
+			@Valid @RequestBody Activity act,
+			BindingResult result) throws Exception{
 		
 		//验证用户信息
 		if(result.hasErrors()){
@@ -71,10 +72,11 @@ public class ActivityController extends BaseController {
 		}
 		
 		if(checkActInfo(act)){
+			act.setOpen(true);
 			actService.saveActivity(act,user);
 		}
 		
-		return true;
+		return act;
 	}
 	
 	/**
@@ -90,22 +92,22 @@ public class ActivityController extends BaseController {
 		}
 		Date signDate =act.getSignTime();
 		Date startDate = act.getStartTime();
-		Date endDate =act.getEndTime();
+		//Date endDate =act.getEndTime();
 		
 		if(startDate.compareTo(signDate)<=0){
 			throw new Business4JsonException("act_savecheck_startdate_earlythen_signupDate","start date early then signup date");
 		}
 		
-		if(endDate.compareTo(signDate) <=0){
-			throw new Business4JsonException("act_savecheck_enddate_earlythen_signupDate","end date early then signup date");
-		}
-		
-		if(endDate.compareTo(startDate) <=0){
-			throw new Business4JsonException("act_savecheck_enddate_earlythen_startDate","end date early then start date");
-		}
+//		if(endDate.compareTo(signDate) <=0){
+//			throw new Business4JsonException("act_savecheck_enddate_earlythen_signupDate","end date early then signup date");
+//		}
+//		
+//		if(endDate.compareTo(startDate) <=0){
+//			throw new Business4JsonException("act_savecheck_enddate_earlythen_startDate","end date early then start date");
+//		}
 		act.setSignTime(signDate);
 		act.setStartTime(startDate);
-		act.setEndTime(endDate);
+		//act.setEndTime(endDate);
 		return true;
 	}
 

@@ -62,6 +62,7 @@ public class Activity extends BaseDomain {
 	private User ownUser;
 	
 	
+	
 	@OneToMany(mappedBy="act",cascade=CascadeType.ALL)
 	private Set<UserAndAct> joinUser;
 	
@@ -79,9 +80,9 @@ public class Activity extends BaseDomain {
 	private Date startTime;
 	
 	//结束时间
-	@NotNull(message="{act.actendtime.not.empty}")
-	@Column(name="act_end_time",length=10)
-	private Date endTime;
+	//@NotNull(message="{act.actendtime.not.empty}")
+	//@Column(name="act_end_time",length=10)
+	//private Date endTime;
 	
 	//报名时间
 	@Column(name="act_sign_time",length=10)
@@ -96,7 +97,7 @@ public class Activity extends BaseDomain {
 	private int hotPoind;
 	
 
-	@ManyToOne
+	@ManyToOne(cascade=CascadeType.ALL)
 	@JoinColumn(name="place_id")
 	private Place place;
 	
@@ -253,13 +254,13 @@ public class Activity extends BaseDomain {
 		this.startTime = startTime;
 	}
 
-	public Date getEndTime() {
-		return endTime;
-	}
-
-	public void setEndTime(Date endTime) {
-		this.endTime = endTime;
-	}
+//	public Date getEndTime() {
+//		return endTime;
+//	}
+//
+//	public void setEndTime(Date endTime) {
+//		this.endTime = endTime;
+//	}
 
 	public Date getSignTime() {
 		return signTime;

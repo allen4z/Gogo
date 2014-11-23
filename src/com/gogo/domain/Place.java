@@ -1,13 +1,14 @@
 package com.gogo.domain;
 
 import java.util.Date;
+import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Version;
 
@@ -27,6 +28,8 @@ public class Place extends BaseDomain{
 	@Column(name="place_id",length=32)
 	private String id;
 	
+	//@OneToMany(mappedBy="place",cascade=CascadeType.ALL)
+	//private Set<Activity> act;
 	
 	//百度地图主键
 	@Column(name="place_ddplaceId",length=10)
@@ -131,5 +134,13 @@ public class Place extends BaseDomain{
 	public void setBdplaceId(String bdplaceId) {
 		this.bdplaceId = bdplaceId;
 	}
+
+//	public Set<Activity> getAct() {
+//		return act;
+//	}
+//
+//	public void setAct(Set<Activity> act) {
+//		this.act = act;
+//	}
 
 }

@@ -14,6 +14,7 @@ import com.gogo.dao.ActivityDao;
 import com.gogo.dao.GroupDao;
 import com.gogo.dao.NotifyAndGroupDao;
 import com.gogo.dao.NotifyDao;
+import com.gogo.dao.PlaceDao;
 import com.gogo.dao.UserAndActDao;
 import com.gogo.dao.UserDao;
 import com.gogo.domain.Activity;
@@ -50,12 +51,22 @@ public class ActivityService {
 	private NotifyDao notifyDao;
 	@Autowired
 	private NotifyAndGroupDao notifyAndGroupDao;
+	@Autowired
+	private PlaceDao placeDao;
 	
 	public Activity loadActbyActId(String actId){
 		return actDao.get(actId);
 	}
 
-	public void saveActivity(Activity act,User user) throws UnsupportedEncodingException {
+	public Activity saveActivity(Activity act,User user) throws UnsupportedEncodingException {
+		
+		Place place = placeDao.findPlaceByNameAndLocal(act.getPlace());
+		if(place==null){
+			place = act.getPlace();
+			placeDao.save(place);
+		}else{
+			act.setPlace(place);
+		}
 		act.setActCreateTime(new Date());
 		act.setOwnUser(user);
 		//TODO 保存默认为发布状态
@@ -63,6 +74,8 @@ public class ActivityService {
 		actDao.save(act);
 		//建立消息信息
 		createActNotify(user,act);
+		
+		return act;
 	}
 	
 	/**
