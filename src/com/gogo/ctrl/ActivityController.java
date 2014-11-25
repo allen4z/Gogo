@@ -19,14 +19,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.gogo.annotation.GoJsonFilter;
 import com.gogo.annotation.Token;
 import com.gogo.dao.UserAndGroupDao;
 import com.gogo.domain.Activity;
 import com.gogo.domain.Place;
 import com.gogo.domain.User;
 import com.gogo.domain.enums.UserAndActState;
-import com.gogo.domain.filter.UserFilter;
 import com.gogo.exception.Business4JsonException;
 import com.gogo.helper.CommonConstant;
 import com.gogo.page.Page;
@@ -192,7 +190,7 @@ public class ActivityController extends BaseController {
 			place.setLongitude(longitude);
 		}
 		
-		User user = getSessionUser(request.getSession());
+		User user = getUserByToken(request);
 		//如果用户不为空，需要去掉用户创建的活动
 		Page<Activity> queryList =  actService.loadActByPlace(user,place,remoteAddr,pn,CommonConstant.PAGE_SIZE);
 		
@@ -252,7 +250,7 @@ public class ActivityController extends BaseController {
 	public ModelAndView toShowActPage(HttpServletRequest request,@PathVariable String actId) throws Exception{
 		ModelAndView mav = new ModelAndView();
 		
-		User user = getSessionUser(request.getSession());
+		User user = getUserByToken(request);
 		
 		UserAndActState uarState =UserAndActState.CANCEL;
 		

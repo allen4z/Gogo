@@ -16,7 +16,33 @@ function send4Json(params,actionInfo,success,failed){
 			success: success,
 	        error:failed
 		};
-	options.url = basePath+'/'+actionInfo;
+	options.url = basePath+'/'+actionInfo+'&access_token=2c9ba38149e639ce0149e63aa80b0000';
+	$.ajax(options);
+}
+
+function sendJsonGET(params,actionInfo,success,failed){
+	var basePath = getBasePathInfo();
+	var url = basePath+'/'+actionInfo;
+	var isFirst = true;
+	for(var key in params){
+		if(isFirst == true){
+			url += '?';
+		}else{
+			url += '&';
+		}
+		url+=key+'='+params[key];
+	}
+	url+='&access_token=2c9ba38149e639ce0149e63aa80b0000';
+	
+	var options = {
+			type: 'GET', 
+			dataType: 'json',
+	        contentType:'application/json;charset=UTF-8', 
+			success: success,
+	        error:failed,
+	        url:url
+	};
+	alert(url);
 	$.ajax(options);
 }
 

@@ -66,7 +66,7 @@ public class FriendController extends BaseController {
 		
 		String remoteAddr =request.getRemoteAddr();
 		
-		User user = getSessionUser(request.getSession());
+		User user = getUserByToken(request);
 		//如果用户不为空，需要去掉用户创建的活动
 		Page<User> queryList =  friendService.loadPersonByPlace(user,place,remoteAddr,pn,CommonConstant.PAGE_SIZE);
 		

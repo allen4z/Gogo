@@ -1,25 +1,28 @@
 package com.gogo.interceptor;
 
-import java.io.PrintWriter;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
-import com.gogo.domain.User;
-import com.gogo.helper.CommonConstant;
+import com.gogo.dao.UserTokenDao;
+import com.gogo.domain.UserToken;
+import com.gogo.exception.Business4JsonException;
 
 public class CommonInterceptor extends HandlerInterceptorAdapter {
 	
 	Logger log = Logger.getLogger(CommonInterceptor.class);	
 	//不需要过滤的url
 	private List<String> exceptFilter;
-	
 	//需要过滤的后缀
 	private List<String> needSuffix;
+	
+	@Autowired
+	private UserTokenDao userTokenDao;
 	
 	@Override
 	public boolean preHandle(HttpServletRequest request,
@@ -31,26 +34,17 @@ public class CommonInterceptor extends HandlerInterceptorAdapter {
 		if(uriFilter(uri)){
 			return true;
 		}
-		
-		Object obj = request.getSession().getAttribute(CommonConstant.USER_CONTEXT);
-		
-		if(null == obj){
-			 response.setCharacterEncoding("utf-8");  
-			 response.setContentType("text/html; charset=utf-8"); 
-			 PrintWriter out = response.getWriter();  
-            StringBuilder builder = new StringBuilder();  
-            builder.append("<script type=\"text/javascript\" charset=\"UTF-8\">");  
-            builder.append("alert(\"还没有登录，请先登录\");");  
-            builder.append("window.top.location.href=\"");  
-            builder.append("http://127.0.0.1:8080/Gogo");  
-            builder.append("/\";</script>");  
-            out.print(builder.toString());  
-            out.close();  
-			return false;
-		}else{
+		String token = request.getParameter("access_token");	
+		if(token != null && !token.equals("")){
+			UserToken  userToken = userTokenDao.getCurrentToken(token);
+			if(userToken==null){
+				throw new Business4JsonException("账号已过期，请重启登陆");
+			}
 			//记录日志
-			User user = (User) obj;
-			log.debug(user.getId()+" : "+ uri);
+			log.debug("ACCESS_TOKEN: "+ token);
+			
+		}else{
+			throw new Business4JsonException("用户未登陆");
 		}
 		return super.preHandle(request, response, handler);
 	}

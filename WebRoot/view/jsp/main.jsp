@@ -1,7 +1,6 @@
 <%@page import="com.gogo.domain.GroupApplyInfo"%>
 <%@page import="com.gogo.domain.Group"%>
 <%@page import="com.gogo.page.Page"%>
-<%@page import="com.gogo.ctrl.model.UserMainModel"%>
 <%@ page language="java" import="java.util.*" pageEncoding="utf-8"%>
 <%@include file="Head.jsp" %>
 <%@page import="com.gogo.domain.Activity"%>

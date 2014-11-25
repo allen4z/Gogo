@@ -10,7 +10,12 @@
 <title>Gogo-Main</title>
 <script type="text/javascript">
 function getNearAct(pn){
-	var action = 'activity/loadActByPlace?pn='+pn;
+	var action = 'activity/loadActByPlace';
+	
+	var params = {
+		pn:pn
+	};
+	
 	var success = function(page){
 		var acts = page.items;
 		templatefill(acts);
@@ -18,7 +23,7 @@ function getNearAct(pn){
 	var failed = function(XMLHttpRequest,textStatus, errorThrown){
          alert(XMLHttpRequest.responseText);
     };
-	send4Json(null,action,success,failed);
+	sendJsonGET(params,action,success,failed);
 }
 
 function templatefill(acts){

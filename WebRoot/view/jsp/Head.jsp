@@ -28,7 +28,7 @@
 		});
 
 		$("#searchActBtn").click(function(){
-			location.href = '<%=basePath %>activity/toShowAllPage'; 
+			location.href = '<%=basePath %>activity/toShowAllPage?access_token=2c9ba38149e639ce0149e63aa80b0000'; 
 		});
 		
 		$("#searchGroupBtn").click(function(){

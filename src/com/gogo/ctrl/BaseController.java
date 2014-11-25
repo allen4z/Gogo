@@ -12,8 +12,10 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.support.RequestContextUtils;
 
+import com.gogo.dao.UserTokenDao;
 import com.gogo.domain.GoError;
 import com.gogo.domain.User;
+import com.gogo.domain.UserToken;
 import com.gogo.exception.Business4JsonException;
 import com.gogo.exception.BusinessException;
 import com.gogo.exception.ParameterException;
@@ -29,6 +31,8 @@ import com.gogo.helper.CommonConstant;
 public class BaseController {
 	@Autowired
 	private MessageSource messageSource;
+	@Autowired
+	private UserTokenDao userTokenDao;
 	
 	protected static final String ERROR_MSG_KEY = "errorMsg";
 	
@@ -69,21 +73,29 @@ public class BaseController {
 		return err;
 	}
 	
-	protected User getSessionUser(HttpSession session){
-		Object obj4user = session.getAttribute(CommonConstant.USER_CONTEXT);
+	protected User getUserByToken(HttpServletRequest request){
+		String token = request.getParameter("access_token");
+		UserToken userToken = userTokenDao.get(token);
+		return userToken.getUser();
+	}
+	
+	
+	/*protected User getSessionUser(HttpServletRequest request){
+		Object obj4user = request.getSession().getAttribute(CommonConstant.USER_CONTEXT);
 		
 		if(obj4user != null){
 			return (User)obj4user;
+		}else{
+			//比较token
+			String token = request.getParameter("token");
 		}
-		
 		return null;
-		
-	}
+	}*/
 	
-	protected void setSessionUser(HttpSession session,User user){
+/*	protected void setSessionUser(HttpSession session,User user){
 		//req.getSession().setMaxInactiveInterval(5); 设置失效时间
 		session.setAttribute(CommonConstant.USER_CONTEXT, user);
-	}
+	}*/
 	
 	protected void removeSessionUser(HttpSession session){
 		Object object = session.getAttribute(CommonConstant.USER_CONTEXT);

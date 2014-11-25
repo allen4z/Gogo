@@ -171,12 +171,8 @@ public class GroupController extends BaseController {
 	public Page<Group> loadAllGroup(HttpServletRequest request, 
 			@RequestParam(required=false) Place place,
 			@RequestParam(value="pn",required=false) Integer pn){
-		
 		String remoteAddr =request.getRemoteAddr();
-		
-		User user = getSessionUser(request.getSession());
-		
-		return groupService.loadAllGroup(user,place,remoteAddr,pn, CommonConstant.PAGE_SIZE);
+		return groupService.loadAllGroup(place,remoteAddr,pn, CommonConstant.PAGE_SIZE);
 	}
 	
 	

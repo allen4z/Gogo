@@ -164,7 +164,7 @@ public class GroupService {
 	}
 
 	//@TODO 按地区未实现
-	public Page<Group> loadAllGroup(User user, Place place, String remoteAddr,
+	public Page<Group> loadAllGroup(Place place, String remoteAddr,
 			Integer pn, int pageSize){
 		return PageUtil.getPage(groupDao.loadAllGroupCount(), pn, groupDao.loadAllGroup(pn, pageSize), pageSize);
 	}
