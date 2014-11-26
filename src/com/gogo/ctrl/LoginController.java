@@ -4,8 +4,6 @@ import java.io.File;
 import java.util.Random;
 import java.util.ResourceBundle;
 
-import javax.servlet.http.HttpSession;
-
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -37,9 +35,8 @@ public class LoginController extends BaseController{
 	
 	@RequestMapping(value="doLogin4json")
 	@ResponseBody
-	public UserToken login4Json(HttpSession session,Model model, @RequestBody User loginUser) throws Exception{
+	public UserToken login4Json(Model model, @RequestBody User loginUser) throws Exception{
 		User user = userService.UserInfoCheck(loginUser);
-			//setSessionUser(session, dbUser);	
 		//生成token
 		UserToken token = userService.saveToken(user);			
 			//聊天服务器登陆
@@ -71,8 +68,13 @@ public class LoginController extends BaseController{
 	}
 	
 	@RequestMapping("doLogout")
-	public String Logout(HttpSession session) throws Exception{
-		removeSessionUser(session);
+	public String Logout() throws Exception{
 		return "redirect:/index.jsp";
 	}
+	
+	@RequestMapping("forwoardMain")
+	public String forwoardMain() throws Exception{
+		return "main";
+	}
+	
 }

@@ -5,11 +5,11 @@
 <%@page import="com.gogo.helper.CommonConstant"%>
 
 <% 
-	Object user4obj = request.getSession().getAttribute(CommonConstant.USER_CONTEXT);
-	User user = null;
-	if(user4obj != null){
-		user = (User)user4obj;
-	}
+	//Object user4obj = request.getSession().getAttribute(CommonConstant.USER_CONTEXT);
+	//User user = null;
+	//if(user4obj != null){
+//		user = (User)user4obj;
+	//}
  %>
 <html>
 <head>
@@ -55,38 +55,21 @@
 <button id="searchActBtn" >查找附近活动</button>
 &nbsp;
 
-<%  
-if(user!= null){
-%>
+
 
 <button id="searchUserBtn" >附近的人</button>
 
 <button id="searchGroupBtn" >附近的小组</button>
 
-<%
-}
-%>
+
 &nbsp;
 <button id="setterBtn" >个人设置</button>
 &nbsp;
-<!-- <button id="searchActBtn" >加入（赚钱）</button>
-&nbsp;
-<button id="searchActBtn" >投资</button>
-&nbsp;
-<button id="searchActBtn" >承办</button>
-&nbsp; -->
-<%  
-if(user!= null){
-%>
 
 <button id="doLogOut" name="doLogOut" >退出登录</button>
 
 &nbsp;
-<div id="backUserMain" style="float:right;display:inline;"> <img  height="44" width="44" src="<%=user.getImageUrl()%>"> <%=user.getAliasName()%>的主页 </div>
-
-<%
-}
-%>
+<div id="backUserMain" style="float:right;display:inline;"> <img height="44" width="44">主页 </div>
 
 
 <br/><br/>

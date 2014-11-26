@@ -5,7 +5,6 @@ import java.util.List;
 import org.springframework.stereotype.Repository;
 
 import com.gogo.domain.Activity;
-import com.gogo.domain.User;
 import com.gogo.domain.enums.ACTState;
 import com.gogo.domain.enums.UserAndActState;
 
@@ -50,29 +49,21 @@ public class ActivityDao extends BaseDao<Activity>{
 	 * @param place
 	 * @return
 	 */
-	public List<Activity> loadActByPlace(User user,String[] mapIds,int pn,int pageSize) {
-		String hql = getHql4Place(user,mapIds,false);
-		String userId = null;
-		if(user != null){
-			userId = user.getId();
-		}
-		List<Activity> actList =findByPage(hql, pn, pageSize, mapIds,userId);
+	public List<Activity> loadActByPlace(String[] mapIds,int pn,int pageSize) {
+		String hql = getHql4Place(mapIds,false);
+		List<Activity> actList =findByPage(hql, pn, pageSize, mapIds);
 		return actList;
 	}
 
 	
 	
-	public int lodActByPlaceCount(User user,String[] mapIds){
-		String hql = getHql4Place(user,mapIds, true);
-		String userId = null;
-		if(user != null){
-			userId = user.getId();
-		}
-		return  getCount(hql, mapIds,userId);
+	public int lodActByPlaceCount(String[] mapIds){
+		String hql = getHql4Place(mapIds, true);
+		return  getCount(hql, mapIds);
 	}
 	
 	
-	private String getHql4Place(User user,String[] mapIds,boolean isCount) {
+	private String getHql4Place(String[] mapIds,boolean isCount) {
 		StringBuffer hql = new StringBuffer();
 		
 		if(isCount){
@@ -84,10 +75,6 @@ public class ActivityDao extends BaseDao<Activity>{
 		hql.append(" "+HQL_LIST+" "+HQL_AILS+" ");
 		hql.append(" "+HQL_AILS+".bdplaceId in (:bdplaceId)");
 		
-		if(user != null){
-			hql.append("AND "+HQL_AILS+".ownUser.id !=:userId ");
-		}
-		
 		hql.append(" order by p.hotPoint");
 		return hql.toString();
 	}
@@ -97,14 +84,14 @@ public class ActivityDao extends BaseDao<Activity>{
 	 * 根据当地热点地区信息查询活动信息
 	 * @return
 	 */
-	public List<Activity> loadActbyAddr(User user,String city,int pn,int pageSize) {
-		String hql =getHql4City(user, false);		
+	public List<Activity> loadActbyAddr(String city,int pn,int pageSize) {
+		String hql =getHql4City(false);		
 		List<Activity> actList =findByPage(hql, pn, pageSize, null);
 		return actList;
 	}
 	
-	public int loadActbyAddrCount(User user,String city) {
-		String hql =getHql4City(user, true);
+	public int loadActbyAddrCount(String city) {
+		String hql =getHql4City( true);
 		return  getCount(hql, null);
 	}
 	
@@ -120,19 +107,19 @@ public class ActivityDao extends BaseDao<Activity>{
 	 * @param ip
 	 * @return
 	 */
-	public List<Activity> loadActByHotPoint(User user,int pn,int pageSize) {
+	public List<Activity> loadActByHotPoint(int pn,int pageSize) {
 		
-		String hql=getHql4City(user, false);
+		String hql=getHql4City(false);
 		List<Activity> actPage = findByPage(hql, pn, pageSize, null);
 		return actPage;
 	}
 	
-	public int loadActByHotPointCount(User user){
-		String hql=getHql4City(user, true);
+	public int loadActByHotPointCount(){
+		String hql=getHql4City( true);
 		return  getCount(hql, null);
 	}
 	
-	private String getHql4City(User user,boolean isCount){
+	private String getHql4City(boolean isCount){
 		StringBuffer hql = new StringBuffer();
 		
 		if(isCount){
@@ -146,10 +133,6 @@ public class ActivityDao extends BaseDao<Activity>{
 		hql.append(" where "+HQL_AILS+".open=true ");
 		//活动状态为发布则可以被查询
 		hql.append(" and "+HQL_AILS+".state="+ACTState.RELEASE.ordinal());
-		
-		if(user != null){
-			hql.append("  and "+HQL_AILS+".ownUser.id !='"+user.getId()+"'");
-		}
 		
 		
 		return hql.toString();

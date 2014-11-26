@@ -7,6 +7,9 @@
  */
 function send4Json(params,actionInfo,success,failed){
 	var basePath = getBasePathInfo();
+	
+	//params.put('access_token','2c9ba38149e639ce0149e63aa80b0000');
+	
 	var params4json = JSON.stringify(params);
 	var options = {
 			type: 'POST', 
@@ -16,7 +19,7 @@ function send4Json(params,actionInfo,success,failed){
 			success: success,
 	        error:failed
 		};
-	options.url = basePath+'/'+actionInfo+'&access_token=2c9ba38149e639ce0149e63aa80b0000';
+	options.url = basePath+'/'+actionInfo;
 	$.ajax(options);
 }
 

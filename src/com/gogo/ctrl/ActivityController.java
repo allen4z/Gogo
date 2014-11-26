@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.gogo.annotation.Token;
@@ -38,7 +37,6 @@ import com.gogo.service.InviteService;
  */
 @Controller
 @RequestMapping("/activity")
-@SessionAttributes(CommonConstant.USER_CONTEXT)
 public class ActivityController extends BaseController {
 
 	@Autowired
@@ -189,10 +187,9 @@ public class ActivityController extends BaseController {
 			place.setLongitude(longitude);
 			place.setLongitude(longitude);
 		}
-		
-		User user = getUserByToken(request);
+	
 		//如果用户不为空，需要去掉用户创建的活动
-		Page<Activity> queryList =  actService.loadActByPlace(user,place,remoteAddr,pn,CommonConstant.PAGE_SIZE);
+		Page<Activity> queryList =  actService.loadActByPlace(place,remoteAddr,pn,CommonConstant.PAGE_SIZE);
 		
 		return queryList;
 		
@@ -250,12 +247,13 @@ public class ActivityController extends BaseController {
 	public ModelAndView toShowActPage(HttpServletRequest request,@PathVariable String actId) throws Exception{
 		ModelAndView mav = new ModelAndView();
 		
-		User user = getUserByToken(request);
+//		User user = getUserByToken(request);
+		String token = getUserToken(request);
 		
 		UserAndActState uarState =UserAndActState.CANCEL;
 		
-		if(user != null){
-			uarState = actService.loadCurUserStateInAct(user.getId(),actId);
+		if(token != null){
+			uarState = actService.loadCurUserStateInAct(token,actId);
 		}
 		
 		mav.addObject("uarState", uarState);

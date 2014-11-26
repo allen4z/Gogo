@@ -12,7 +12,11 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 import com.gogo.annotation.Token;
 
 
-
+/**
+ * 
+ * @author allen
+ * @deprecated
+ */
 public class TokenInterceptor extends HandlerInterceptorAdapter {
 	
 	private static final String Token = "token";

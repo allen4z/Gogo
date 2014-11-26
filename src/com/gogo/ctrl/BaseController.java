@@ -3,7 +3,6 @@ package com.gogo.ctrl;
 import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,8 +13,6 @@ import org.springframework.web.servlet.support.RequestContextUtils;
 
 import com.gogo.dao.UserTokenDao;
 import com.gogo.domain.GoError;
-import com.gogo.domain.User;
-import com.gogo.domain.UserToken;
 import com.gogo.exception.Business4JsonException;
 import com.gogo.exception.BusinessException;
 import com.gogo.exception.ParameterException;
@@ -73,10 +70,14 @@ public class BaseController {
 		return err;
 	}
 	
-	protected User getUserByToken(HttpServletRequest request){
-		String token = request.getParameter("access_token");
-		UserToken userToken = userTokenDao.get(token);
-		return userToken.getUser();
+//	protected User getUserByToken(HttpServletRequest request){
+//		String token = request.getParameter("access_token");
+//		UserToken userToken = userTokenDao.get(token);
+//		return userToken.getUser();
+//	}
+	
+	protected String getUserToken(HttpServletRequest request){
+		return request.getParameter("access_token");
 	}
 	
 	
@@ -96,19 +97,6 @@ public class BaseController {
 		//req.getSession().setMaxInactiveInterval(5); 设置失效时间
 		session.setAttribute(CommonConstant.USER_CONTEXT, user);
 	}*/
-	
-	protected void removeSessionUser(HttpSession session){
-		Object object = session.getAttribute(CommonConstant.USER_CONTEXT);
-		if (object != null) {
-			try {  
-				System.out.println(session.getId());
-				session.removeAttribute(CommonConstant.USER_CONTEXT); 
-			} catch (Exception e) {    
-				object = null;   
-			}  
-		}
-		session.invalidate();
-	}
 	
 	
 	protected String getServletPath(HttpServletRequest request) {

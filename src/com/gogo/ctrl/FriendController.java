@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.SessionAttributes;
 
 import com.gogo.annotation.GoJsonFilter;
 import com.gogo.domain.Place;
@@ -22,7 +21,6 @@ import com.gogo.service.FriendService;
 
 @Controller
 @RequestMapping("/friend")
-@SessionAttributes(CommonConstant.USER_CONTEXT)
 public class FriendController extends BaseController {
 
 	@Autowired
@@ -65,10 +63,8 @@ public class FriendController extends BaseController {
 			@RequestParam(value="pn",required=false) Integer pn){
 		
 		String remoteAddr =request.getRemoteAddr();
-		
-		User user = getUserByToken(request);
-		//如果用户不为空，需要去掉用户创建的活动
-		Page<User> queryList =  friendService.loadPersonByPlace(user,place,remoteAddr,pn,CommonConstant.PAGE_SIZE);
+		String token = getUserToken(request);
+		Page<User> queryList =  friendService.loadPersonByPlace(token,place,remoteAddr,pn,CommonConstant.PAGE_SIZE);
 		
 		return queryList;
 		

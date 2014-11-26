@@ -134,19 +134,19 @@ public class UserDao extends BaseDao<User>{
 	}
 	
 	
-	public List<User> loadPersonAll(User user,int pn,int pageSize) {
+	public List<User> loadPersonAll(String userId,int pn,int pageSize) {
 		
-		String hql=getHql4City(user,  false);
+		String hql=getHql4City(userId,  false);
 		List<User> actPage = findByPage(hql, pn, pageSize, null);
 		return actPage;
 	}
 	
-	public int loadPersonAllCount(User user){
-		String hql=getHql4City(user, true);
+	public int loadPersonAllCount(String userId){
+		String hql=getHql4City(userId, true);
 		return getCount(hql, null);
 	}
 	
-	private String getHql4City(User user,boolean isCount){
+	private String getHql4City(String userId,boolean isCount){
 		StringBuffer hql = new StringBuffer();
 		
 		if(isCount){
@@ -156,7 +156,7 @@ public class UserDao extends BaseDao<User>{
 		}
 		hql.append(" "+HQL_LIST+" "+HQL_AILS+" ");
 	
-		hql.append(" where "+HQL_AILS+".id !='"+user.getId()+"' ");
+		hql.append(" where "+HQL_AILS+".id !='"+userId+"' ");
 		
 		return hql.toString();
 	}

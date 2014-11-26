@@ -38,9 +38,14 @@ public class Group extends BaseDomain{
 	@Length(min=4,max=20,message="{group.name.length.error}")
 	@Column(name="group_name",length=20,nullable=false)
 	private String name;
-//	
+
 //	@OneToMany(mappedBy="group",cascade=CascadeType.ALL)
 //	private Set<Activity> acts;
+	
+	//小组主场
+	@ManyToOne(cascade=CascadeType.ALL)
+	@JoinColumn(name="place_id")
+	private Place place;
 	
 	//活动拥有角色  (管理员、成员)
 	@OneToMany(mappedBy="group",cascade=CascadeType.ALL)
@@ -116,5 +121,13 @@ public class Group extends BaseDomain{
 
 	public void setCreateUser(User createUser) {
 		this.createUser = createUser;
+	}
+
+	public Place getPlace() {
+		return place;
+	}
+
+	public void setPlace(Place place) {
+		this.place = place;
 	}
 }
