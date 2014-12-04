@@ -249,16 +249,11 @@ public class ActivityController extends BaseController {
 	@RequestMapping("toShowActPage/{actId}")
 	public ModelAndView toShowActPage(HttpServletRequest request,@PathVariable String actId) throws Exception{
 		ModelAndView mav = new ModelAndView();
-		
-//		User user = getUserByToken(request);
 		String token = getUserToken(request);
-		
 		UserAndActState uarState =UserAndActState.CANCEL;
-		
 		if(token != null){
 			uarState = actService.loadCurUserStateInAct(token,actId);
 		}
-		
 		mav.addObject("uarState", uarState);
 		mav.addObject("actId", actId);
 		mav.setViewName("act/showActPage");

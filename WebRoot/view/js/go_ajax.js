@@ -30,11 +30,6 @@ function postWithOutToken(params, actionInfo, success, failed) {
 }
 function send4Json(params, actionInfo, success, failed) {
 	var basePath = getBasePathInfo();
-	//var token = {'access_token':'2c9ba38149e639ce0149e63aa80b0000'};
-	//for(var t in token){
-	//	params[t] = token[t];
-    //}
-	
 	var params4json = JSON.stringify(params);
 	var options = {
 		type : 'POST',

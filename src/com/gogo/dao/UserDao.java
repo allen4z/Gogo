@@ -15,14 +15,6 @@ public class UserDao extends BaseDao<User>{
 	
 	private static final String HQL_LIST="FROM User"; 
 	
-	public User loadUserById(int userId){
-		return load(userId);
-	}
-	
-	public User getUserById(int userId){
-		return get(userId);
-	}
-	
 	public List<User> loadUserByName(String userName){
 		String hql = "from User where name='"+userName+"'";
 		List<User> userList  = find(hql);

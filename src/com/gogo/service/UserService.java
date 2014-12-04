@@ -13,7 +13,6 @@ import com.gogo.dao.ActivityDao;
 import com.gogo.dao.UserAndActDao;
 import com.gogo.dao.UserAndGroupDao;
 import com.gogo.dao.UserDao;
-import com.gogo.dao.UserTokenDao;
 import com.gogo.domain.Activity;
 import com.gogo.domain.User;
 import com.gogo.domain.UserAndAct;
@@ -25,7 +24,7 @@ import com.gogo.page.Page;
 import com.gogo.page.PageUtil;
 
 @Service
-public class UserService{
+public class UserService extends BaseService{
 	@Autowired
 	private UserDao userDao;
 	
@@ -36,8 +35,6 @@ public class UserService{
 	private UserAndGroupDao userAndRoleDao;
 	@Autowired
 	private UserAndActDao userAndActDao;
-	@Autowired
-	private UserTokenDao userTokenDao;
 	
 	public void saveUser(User user){
 		user.setState(UserState.FORMAL);
@@ -56,7 +53,7 @@ public class UserService{
 	
 	@Transactional
 	public User loadUserById(int userId){
-		return userDao.getUserById(userId);
+		return userDao.get(userId);
 	}
 	
 	public List<User> loadUserByName(String userName){
@@ -70,24 +67,27 @@ public class UserService{
 		return user;
 	}
 	
-	public Page<Activity> loadJoinActivitesByUser(String userId,int currPage,int pageSize){
+	public Page<Activity> loadJoinActivitesByUser(String tokenId,int currPage,int pageSize){
+		User user = getUserbyToken(tokenId);
+		String userId = user.getId();
 		return PageUtil.getPage(actDao.loadJoinActivitesByUserCount(userId), 0, actDao.loadJoinActivitesByUser(userId, currPage, pageSize), pageSize);
 	}
 
-	public Page<Activity> loadOwnActivitesByUser(String userId,int currPage,int pageSize) {
-		
+	public Page<Activity> loadOwnActivitesByUser(String tokenId,int currPage,int pageSize) {
+		User user = getUserbyToken(tokenId);
+		String userId = user.getId();
 		return PageUtil.getPage(actDao.loadOwnActivitesByUserCount(userId), 0, actDao.loadOwnActivitesByUser(userId, currPage, pageSize), pageSize);
 		
 	}
 	
 	
-	public List<String> loadPayInfo(String userId){
+	public List<String> loadPayInfo(String tokenId){
+		User user = getUserbyToken(tokenId);
+		String userId = user.getId();
 		
 		List<String> payInfos = new ArrayList<String>();
-		
 		//查询所有用户拥有角色信息
 		List<UserAndAct> uaas = userAndActDao.loadUserAndActByUser(userId);
-		
 		for (UserAndAct uaa : uaas) {
 			if(uaa.getWaitCost() == 0){
 				continue;

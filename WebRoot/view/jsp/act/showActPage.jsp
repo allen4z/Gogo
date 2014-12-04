@@ -15,7 +15,7 @@
 <script type="text/javascript">
 
 function getAct(actId){
-	var action = 'activity/loadActByActId/'+actId;
+	var action = 'activity/loadActByActId/'+actId+'?flag=0';
 	var success = function(act){
 		templatefill(act);
 	};
