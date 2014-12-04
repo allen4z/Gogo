@@ -49,7 +49,7 @@ public class GroupController extends BaseController {
 	 */
 	@RequestMapping("saveGroup")
 	@ResponseBody		
-	public boolean saveGroup(@ModelAttribute(CommonConstant.USER_CONTEXT) User user ,@Valid @RequestBody Group group,BindingResult result) throws Exception{
+	public boolean saveGroup(HttpServletRequest request, @Valid @RequestBody Group group,BindingResult result) throws Exception{
 		//验证用户信息
 		if(result.hasErrors()){
 			List<ObjectError> errorList = result.getAllErrors();
@@ -59,9 +59,8 @@ public class GroupController extends BaseController {
 			}
 			throw new Business4JsonException(errMsg.toString());
 		}
-				
-			
-		groupService.saveGroup(group,user);
+		
+		groupService.saveGroup(group,getUserToken(request));
 			
 		return true;
 	}
@@ -74,8 +73,8 @@ public class GroupController extends BaseController {
 	 */
 	@RequestMapping("applyJoin/{groupId}")
 	@ResponseBody
-	public boolean applyJoinGroup(@ModelAttribute(CommonConstant.USER_CONTEXT) User user,@PathVariable String groupId){
-		groupService.saveApplyJoinGroup(user,groupId);
+	public boolean applyJoinGroup(HttpServletRequest request,@PathVariable String groupId){
+		groupService.saveApplyJoinGroup(getUserToken(request),groupId);
 		return true;
 	}
 	
@@ -84,8 +83,8 @@ public class GroupController extends BaseController {
 	 * @param user
 	 * @return
 	 */
-	public List<GroupApplyInfo> loadAllApplyInfo(@ModelAttribute(CommonConstant.USER_CONTEXT) User user,String groupId){
-		return groupService.loadAllApplyInfo(user);
+	public List<GroupApplyInfo> loadAllApplyInfo(HttpServletRequest request,String groupId){
+		return groupService.loadAllApplyInfo(getUserToken(request));
 	}
 	
 	/**
@@ -96,8 +95,8 @@ public class GroupController extends BaseController {
 	 */
 	@RequestMapping("passApply/{groupApplyId}")
 	@ResponseBody
-	public boolean passApply(@ModelAttribute(CommonConstant.USER_CONTEXT) User user,@PathVariable String groupApplyId){
-		groupService.savePassApply(user,groupApplyId);
+	public boolean passApply(HttpServletRequest request,@PathVariable String groupApplyId){
+		groupService.savePassApply(getUserToken(request),groupApplyId);
 		return true;
 	}
 	
@@ -111,11 +110,11 @@ public class GroupController extends BaseController {
 	 */
 	@RequestMapping("updateAuth/{authority}/{groupId}/{userId}")
 	@ResponseBody
-	public boolean updateUserAuthority(@ModelAttribute(CommonConstant.USER_CONTEXT) User user,
+	public boolean updateUserAuthority(HttpServletRequest request,
 			@PathVariable String groupId,
 			@PathVariable String userId,
 			@PathVariable int authority){
-		groupService.updateUserAuthority(user,groupId,userId,authority);
+		groupService.updateUserAuthority(getUserToken(request),groupId,userId,authority);
 		return true;
 	}
 	
@@ -129,17 +128,17 @@ public class GroupController extends BaseController {
 	 */
 	@RequestMapping(value = "inviteJoinGroup/{friendId}/{groupId}")
 	@ResponseBody
-	public boolean InviteJoinGroup(@ModelAttribute(CommonConstant.USER_CONTEXT)User user,
+	public boolean InviteJoinGroup(HttpServletRequest request,
 			@PathVariable String friendId,
 			@PathVariable String groupId){
-		inviteService.saveInviteJoinGroup(user, friendId, groupId);
+		inviteService.saveInviteJoinGroup(getUserToken(request), friendId, groupId);
 		return true;
 	}
 	
 	@RequestMapping(value = "quitGroup/{groupId}")
 	@ResponseBody
-	public boolean quitGroup(@ModelAttribute(CommonConstant.USER_CONTEXT)User user,@PathVariable String groupId){
-		groupService.updateQuitGroup(user,groupId);
+	public boolean quitGroup(HttpServletRequest request,@PathVariable String groupId){
+		groupService.updateQuitGroup(getUserToken(request),groupId);
 		return true;
 	}
 	
@@ -149,13 +148,13 @@ public class GroupController extends BaseController {
 	 * @param pn
 	 * @return
 	 */
-	public Page<Invite> loadAllGroupInvite(@ModelAttribute(CommonConstant.USER_CONTEXT)User user,int pn){
-		return inviteService.loadAllInvite(user,InviteType.GROUP,pn,CommonConstant.PAGE_SIZE);
+	public Page<Invite> loadAllGroupInvite(HttpServletRequest request,int pn){
+		return inviteService.loadAllInvite(getUserToken(request),InviteType.GROUP,pn,CommonConstant.PAGE_SIZE);
 	}
 	
-	public boolean passInviteGroup(@ModelAttribute(CommonConstant.USER_CONTEXT)User user,
+	public boolean passInviteGroup(HttpServletRequest request,
 			@PathVariable String inviteId){
-		groupService.savePassInviteGroup(user,inviteId);
+		groupService.savePassInviteGroup(getUserToken(request),inviteId);
 		return true;
 	}
 	

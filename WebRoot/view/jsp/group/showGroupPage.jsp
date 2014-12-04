@@ -17,7 +17,7 @@ $(document).ready(function(){
 		
 		var success = function(id){
 			alert('成功退出小组');
-			location.href = '<%=basePath %>user/main'; 
+			location.href = '<%=basePath %>user/forwoardMain'; 
 		};
 		
 		var failed = function(XMLHttpRequest,textStatus, errorThrown){

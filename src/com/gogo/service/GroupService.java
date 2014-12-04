@@ -25,7 +25,7 @@ import com.gogo.page.Page;
 import com.gogo.page.PageUtil;
 
 @Service
-public class GroupService {
+public class GroupService extends BaseService {
 
 	@Autowired
 	private GroupDao groupDao;
@@ -43,7 +43,8 @@ public class GroupService {
 	 * @param group
 	 * @param user
 	 */
-	public void saveGroup(Group group, User user) {
+	public void saveGroup(Group group, String tokenId) {
+		User user  =  getUserbyToken(tokenId);
 		group.setCreateUser(user);
 		group.setMaxJoinUser(DomainStateHelper.GROUP_DEFAULT_USER_SIZE);
 		group.setCurJoinUser(1);
@@ -63,7 +64,9 @@ public class GroupService {
 	 * @param user
 	 * @param groupId
 	 */
-	public void saveApplyJoinGroup(User user, String groupId) {
+	public void saveApplyJoinGroup(String tokenId, String groupId) {
+		User user  =  getUserbyToken(tokenId);
+		
 		Group group = groupDao.load(groupId);
 		//0.判断是否超过人员上线
 		if(group.getCurJoinUser()>=group.getMaxJoinUser()){
@@ -88,7 +91,9 @@ public class GroupService {
 	 * @param user
 	 * @param groupId
 	 */
-	public synchronized void savePassApply(User user,String groupApplyId) {
+	public synchronized void savePassApply(String tokenId,String groupApplyId) {
+		User user  =  getUserbyToken(tokenId);
+		
 		GroupApplyInfo gai = groupApplyInfoDao.load(groupApplyId);
 		Group group = gai.getGroup();
 		checkAuth(user, group.getId());
@@ -104,9 +109,10 @@ public class GroupService {
 	 * @param user
 	 * @param inviteId
 	 */
-	public void savePassInviteGroup(User user, String inviteId) {
+	public void savePassInviteGroup(String tokenId, String inviteId) {
+		User user  =  getUserbyToken(tokenId);
+		
 		Invite invite= inviteDao.load(inviteId);
-//		Group group = invite.getGroup();
 		Group group = groupDao.load(invite.getEntityId());
 		userAndGroupHandler(user, group);
 		
@@ -116,7 +122,9 @@ public class GroupService {
 	 * 查询该小组所有的申请信息
 	 * @author allen
 	 */
-	public List<GroupApplyInfo> loadAllApplyInfo(User user) {
+	public List<GroupApplyInfo> loadAllApplyInfo(String tokenId) {
+		User user  =  getUserbyToken(tokenId);
+		
 		//获得所有管理权限的用户
 		int maxAuth = RoleHelper.mergeParamState(RoleHelper.MAX_AUTHORITY);
 		
@@ -136,7 +144,9 @@ public class GroupService {
 		}
 	}
 	
-	public List<GroupApplyInfo> loadGroupApplyInfo(User user,String groupId) {
+	public List<GroupApplyInfo> loadGroupApplyInfo(String tokenId,String groupId) {
+		User user  =  getUserbyToken(tokenId);
+		
 		checkAuth(user, groupId);
 		return groupApplyInfoDao.loadGroupApplyInfo(groupId);
 	}
@@ -149,7 +159,9 @@ public class GroupService {
 	 * @param userId
 	 * @param authority
 	 */
-	public synchronized void updateUserAuthority(User user, String groupId, String userId,int authority) {
+	public synchronized void updateUserAuthority(String tokenId, String groupId, String userId,int authority) {
+		User user  =  getUserbyToken(tokenId);
+		
 		//判断是否允许修改
 		UserAndGroup  uag = userAndGroupDao.loadUAG4UserAndGroup(user.getId(), groupId);
 		
@@ -169,7 +181,8 @@ public class GroupService {
 		return PageUtil.getPage(groupDao.loadAllGroupCount(), pn, groupDao.loadAllGroup(pn, pageSize), pageSize);
 	}
 	
-	public Page<Group> loadGroup4User(User user,int currPage,int pageSize) {
+	public Page<Group> loadGroup4User(String tokenId,int currPage,int pageSize) {
+		User user = getUserbyToken(tokenId);
 		return PageUtil.getPage(groupDao.loadGroup4UserCount(user.getId()), 0, groupDao.loadGroup4User(user.getId(), currPage, pageSize), pageSize);
 	}
 
@@ -211,7 +224,9 @@ public class GroupService {
 		}
 	}
 
-	public void updateQuitGroup(User user, String groupId) {
+	public void updateQuitGroup(String tokenId, String groupId) {
+		User user  =  getUserbyToken(tokenId);
+		
 		UserAndGroup uag = userAndGroupDao.loadUAG4UserAndGroup(user.getId(), groupId);
 		if(uag == null){
 			throw new Business4JsonException("您不在此小组");

@@ -11,13 +11,13 @@
 
 	$(document).ready(function(){
 		$("#addGroupBtn").click(function(){
-			var actionInfo = 'group/saveGroup';	
+			var actionInfo = 'group/saveGroup?pn=1';	
 			var params = {
 				name : $("#group_name").val()
 			};
 			
 			var success = function(id){
-				location.href = '<%=basePath %>user/main'; 
+				location.href = '<%=basePath %>user/forwoardMain?access_token=2c9ba38149e639ce0149e63aa80b0000'; 
 			};
 			
 			var failed = function(XMLHttpRequest,textStatus, errorThrown){

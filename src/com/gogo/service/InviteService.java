@@ -12,13 +12,14 @@ import com.gogo.page.Page;
 import com.gogo.page.PageUtil;
 
 @Service
-public class InviteService {
+public class InviteService extends BaseService{
 	@Autowired
 	private InviteDao inviteDao;
 	@Autowired
 	private UserDao userDao;
 	
-	public void saveInviteJoinGroup(User user,String friendId,String groupId){
+	public void saveInviteJoinGroup(String tokenId,String friendId,String groupId){
+		User user = getUserbyToken(tokenId);
 		Invite invite = new Invite();
 		invite.setUser(user);
 		invite.setBeInvited(userDao.get(friendId));
@@ -28,7 +29,8 @@ public class InviteService {
 		//TODO 推送邀请信息
 	}
 
-	public void saveInviteJoinAct(User user, String friendId, String actId) {
+	public void saveInviteJoinAct(String tokenId, String friendId, String actId) {
+		User user = getUserbyToken(tokenId);
 		Invite invite = new Invite();
 		invite.setUser(user);
 		invite.setBeInvited(userDao.get(friendId));
@@ -38,7 +40,8 @@ public class InviteService {
 		//TODO 推送邀请信息
 	}
 
-	public Page<Invite> loadAllInvite(User user,InviteType type,int pn,int ps) {
+	public Page<Invite> loadAllInvite(String tokenId,InviteType type,int pn,int ps) {
+		User user = getUserbyToken(tokenId);
 		return PageUtil.getPage(inviteDao.loadAllInviteCount(user.getId(),type), pn, inviteDao.loadAllInvite(user.getId(),type),ps);
 	}
 

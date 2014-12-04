@@ -19,7 +19,7 @@ import com.gogo.page.Page;
 import com.gogo.page.PageUtil;
 
 @Service
-public class FriendService{
+public class FriendService extends BaseService{
 	
 	@Autowired
 	private FriendListDao friendListDao;
@@ -30,8 +30,6 @@ public class FriendService{
 	
 	
 	public Page<User> loadPersonByPlace(String token,Place place,String ip,int currPage,int pageSize){
-		
-		
 		UserToken userToken = userTokenDao.get(token);
 		String userId = userToken.getUser().getId();
 		Page<User> queryList = null;
@@ -55,7 +53,10 @@ public class FriendService{
 	 * @param belongUser
 	 * @param friendUserId
 	 */
-	public void saveFriendRequest(User belongUser,String friendUserId){
+	public void saveFriendRequest(String tokenId,String friendUserId){
+		
+		User belongUser = getUserbyToken(tokenId);
+		
 		
 		if(belongUser.getId().equals(friendUserId)){
 			throw new Business4JsonException("friend_request_yourself","don't request yourself!");
@@ -89,7 +90,8 @@ public class FriendService{
 	 * @param belongUser
 	 * @param friendUserId
 	 */
-	public void saveAgreeApply(User belongUser,String friendUserId){
+	public void saveAgreeApply(String tokenId,String friendUserId){
+		User belongUser = getUserbyToken(tokenId);
 		
 		if(belongUser.getId().equals(friendUserId)){
 			throw new Business4JsonException("friend_request_yourself","don't request yourself!");
@@ -108,13 +110,16 @@ public class FriendService{
 		friendListDao.save(fl);
 	}
 	
-	public List<User> loadFriends(String userId) throws Exception{
-		 List<User> friends = userDao.loadAllFriends(userId);
+	public List<User> loadFriends(String tokenId) throws Exception{
+		 User user = getUserbyToken(tokenId);
+		
+		 List<User> friends = userDao.loadAllFriends(user.getId());
 		 return friends;
 	}
 	
-	public List<User> loadFriendRequestList(String userId) throws Exception{
-		 List<User> friends = userDao.loadFriendRequestList(userId);
+	public List<User> loadFriendRequestList(String tokenId) throws Exception{
+		User user = getUserbyToken(tokenId);
+		 List<User> friends = userDao.loadFriendRequestList(user.getId());
 		 return friends;
 	}
 	

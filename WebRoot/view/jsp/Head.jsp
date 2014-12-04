@@ -20,7 +20,7 @@
 		});
 		
 		$("#backUserMain").click(function(){
-			location.href = '<%=basePath %>user/main'; 
+			location.href = '<%=basePath %>user/forwoardMain'; 
 		});
 		
 		$("#doLogOut").click(function(){

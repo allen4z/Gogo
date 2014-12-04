@@ -70,34 +70,9 @@ public class BaseController {
 		return err;
 	}
 	
-//	protected User getUserByToken(HttpServletRequest request){
-//		String token = request.getParameter("access_token");
-//		UserToken userToken = userTokenDao.get(token);
-//		return userToken.getUser();
-//	}
-	
 	protected String getUserToken(HttpServletRequest request){
 		return request.getParameter("access_token");
 	}
-	
-	
-	/*protected User getSessionUser(HttpServletRequest request){
-		Object obj4user = request.getSession().getAttribute(CommonConstant.USER_CONTEXT);
-		
-		if(obj4user != null){
-			return (User)obj4user;
-		}else{
-			//比较token
-			String token = request.getParameter("token");
-		}
-		return null;
-	}*/
-	
-/*	protected void setSessionUser(HttpSession session,User user){
-		//req.getSession().setMaxInactiveInterval(5); 设置失效时间
-		session.setAttribute(CommonConstant.USER_CONTEXT, user);
-	}*/
-	
 	
 	protected String getServletPath(HttpServletRequest request) {
 		return request.getServletPath();

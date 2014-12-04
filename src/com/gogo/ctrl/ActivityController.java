@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -53,10 +52,9 @@ public class ActivityController extends BaseController {
 	 */
 	@RequestMapping("saveAct")
 	@ResponseBody
-	public Activity saveActivity(@ModelAttribute(CommonConstant.USER_CONTEXT) User user ,
+	public Activity saveActivity(HttpServletRequest request,
 			@Valid @RequestBody Activity act,
 			BindingResult result) throws Exception{
-		
 		//验证用户信息
 		if(result.hasErrors()){
 			List<ObjectError> errorList = result.getAllErrors();
@@ -69,7 +67,8 @@ public class ActivityController extends BaseController {
 		
 		if(checkActInfo(act)){
 			act.setOpen(true);
-			actService.saveActivity(act,user);
+			String tokenId = getUserToken(request);
+			actService.saveActivity(act,tokenId);
 		}
 		
 		return act;
@@ -118,8 +117,9 @@ public class ActivityController extends BaseController {
 	 */
 	@RequestMapping("join/{actId}")
 	@ResponseBody
-	public boolean joinActivity(@ModelAttribute(CommonConstant.USER_CONTEXT) User user,@PathVariable String actId){
-		UserAndActState result = actService.saveUserJoinActivity(user.getId(),actId);
+	public boolean joinActivity(HttpServletRequest request,@PathVariable String actId){
+		String tokenId = getUserToken(request);
+		UserAndActState result = actService.saveUserJoinActivity(tokenId,actId);
 		if(result ==  UserAndActState.QUEUE){
 			throw new Business4JsonException("act_join_full","Participate in the activity of the enrollment is full");
 		}
@@ -134,8 +134,9 @@ public class ActivityController extends BaseController {
 	 */
 	@RequestMapping("cancelJoin/{actId}")
 	@ResponseBody
-	public boolean cancelJoinActivity(@ModelAttribute(CommonConstant.USER_CONTEXT) User user,@PathVariable String actId){
-		actService.updateUserJoinActivity(actId,user);
+	public boolean cancelJoinActivity(HttpServletRequest request,@PathVariable String actId){
+		String tokenId = getUserToken(request);
+		actService.updateUserJoinActivity(actId,tokenId);
 		return true;
 	}
 	
@@ -144,8 +145,9 @@ public class ActivityController extends BaseController {
 	 * @param actId
 	 * @return
 	 */
-	public void updateActivity(@ModelAttribute(CommonConstant.USER_CONTEXT) User user,@RequestBody Activity act)throws Exception{
-		actService.updateActivity(act, user.getId());
+	public void updateActivity(HttpServletRequest request,@RequestBody Activity act)throws Exception{
+		String tokenId = getUserToken(request);
+		actService.updateActivity(act, tokenId);
 	}
 	
 	/**
@@ -228,10 +230,11 @@ public class ActivityController extends BaseController {
 	
 	@RequestMapping(value = "inviteJoinAct/{friendId}/{actId}")
 	@ResponseBody
-	public boolean InviteJoinGroup(@ModelAttribute(CommonConstant.USER_CONTEXT)User user,
+	public boolean InviteJoinGroup(HttpServletRequest request,
 			@PathVariable String friendId,
 			@PathVariable String actId){
-		inviteService.saveInviteJoinAct(user, friendId, actId);
+		String tokenId = getUserToken(request);
+		inviteService.saveInviteJoinAct(tokenId, friendId, actId);
 		return true;
 	}
 	

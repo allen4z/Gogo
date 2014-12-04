@@ -34,16 +34,17 @@
 			},null);
 		});
 	});
+	
 </script>
 </head>
 <body>
 <br/>
 <br/>
-<form action="activity/toAddActPage" method="post">
+<form action="activity/toAddActPage?access_token=2c9ba38149e639ce0149e63aa80b0000" method="post">
 <input id="addActBtn" name="addActBtn"  type="submit" value="新增活動"></input>
 </form>
 
-<form action="group/toAddGroupPage" method="post">
+<form action="group/toAddGroupPage?access_token=2c9ba38149e639ce0149e63aa80b0000" method="post">
 <input id="addGroupBtn" name="addGroupBtn"  type="submit" value="新增小组"></input>
 </form>
 
@@ -187,7 +188,7 @@
 	%>
 	
 </table>
-<pagenav:pageV2 url="user/main"/>
+<pagenav:pageV2 url="user/forwoardMain"/>
 
 
 <table border="1">
@@ -237,7 +238,7 @@
 	%>
 	
 </table>
-<pagenav:pageV2 url="user/main"/>
+<pagenav:pageV2 url="user/forwoardMain"/>
 
 </div>
 

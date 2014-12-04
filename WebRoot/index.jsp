@@ -19,7 +19,7 @@
 			var actionInfo = 'login/doLogin4json';
 			var success = function(result) {
 				if (result != null) {
-					location.href = '<%=basePath%>login/forwoardMain';
+					location.href = '<%=basePath%>user/forwoardMain?access_token=2c9ba3814a1317db014a132d4cba0000';
 				}
 			};
 			
@@ -27,7 +27,7 @@
 		         alert(XMLHttpRequest.responseText);
 		    };
 
-			send4Json(params, actionInfo, success, failed);
+		    postWithOutToken(params, actionInfo, success, failed);
 		});
 	});
 </script>
@@ -55,6 +55,9 @@
 <br/><br/>
 <hr style="float:left;width:10000px;"/>
 
+<a href="http://127.0.0.1:8080/Gogo/user/forwoardMain?access_token=2c9ba38149e639ce0149e63aa80b0000">AAAA</a>
+<a href="http://127.0.0.1:8080/Gogo/user/forwoardMain?access_token=2c9ba3814a1317db014a132d4cba0000">BBBB</a>
+<a href="http://127.0.0.1:8080/Gogo/user/forwoardMain?access_token=2c9ba38149e639ce0149e63aa80b0000">CCCC</a>
 
 </body>
 </html>

@@ -37,7 +37,7 @@ import com.gogo.page.Page;
 import com.gogo.page.PageUtil;
 
 @Service
-public class ActivityService {
+public class ActivityService extends BaseService {
 	
 	Logger log = Logger.getLogger(ActivityService.class);
 	
@@ -62,14 +62,17 @@ public class ActivityService {
 		return actDao.get(actId);
 	}
 
-	public Activity saveActivity(Activity act,User user) throws UnsupportedEncodingException {
+	public Activity saveActivity(Activity act,String tokenId) throws UnsupportedEncodingException {
+		User user = getUserbyToken(tokenId);
 		
-		Place place = placeDao.findPlaceByNameAndLocal(act.getPlace());
-		if(place==null){
-			place = act.getPlace();
-			placeDao.save(place);
-		}else{
-			act.setPlace(place);
+		if( act.getPlace() != null){
+			Place place = placeDao.findPlaceByNameAndLocal(act.getPlace());
+			if(place==null){
+				place = act.getPlace();
+				placeDao.save(place);
+			}else{
+				act.setPlace(place);
+			}
 		}
 		act.setActCreateTime(new Date());
 		act.setOwnUser(user);
@@ -120,11 +123,10 @@ public class ActivityService {
 	 * @param actId  活动ID
 	 * @param user  用户信息
 	 */
-	public synchronized UserAndActState saveUserJoinActivity(String userId, String actId) {
-		
+	public synchronized UserAndActState saveUserJoinActivity(String tokenId, String actId) {
+		User user = getUserbyToken(tokenId);
 		UserAndActState result = UserAndActState.CANCEL;
-		User user = userDao.get(userId);
-		UserAndAct uaa = userAndActDao.loadByUserAndAct(userId, actId);
+		UserAndAct uaa = userAndActDao.loadByUserAndAct(user.getId(), actId);
 		
 		Activity act = actDao.load(actId);
 		
@@ -164,7 +166,8 @@ public class ActivityService {
 	 * @param actId
 	 * @param user
 	 */
-	public synchronized void updateUserJoinActivity(String actId, User user) {
+	public synchronized void updateUserJoinActivity(String actId, String tokenId) {
+		User  user= getUserbyToken(tokenId);
 		UserAndAct uaa = userAndActDao.loadByUserAndAct(user.getId(),actId);
 		if(uaa == null){
 			throw new Business4JsonException("您没有报名此活动");
@@ -210,13 +213,13 @@ public class ActivityService {
 	/**
 	 * 更新活动信息，将前台传入的数据赋值到查询出的活动 并更新
 	 */
-	public void updateActivity(Activity act, String userId) throws Exception {
+	public void updateActivity(Activity act, String tokenId) throws Exception {
 		String actId = act.getId();
 		
 		Activity act4db = actDao.load(actId);
 		User user = act4db.getOwnUser();
 		
-		if(user.getId().equals(userId)){
+		if(user.getId().equals(getUserbyToken(tokenId).getId())){
 			BeanUtils.copyProperties(act, act4db);
 			DomainStateHelper.copyPriperties(act, act4db);
 //			act4db.setUpdate_time(new Date());
