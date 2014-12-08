@@ -42,6 +42,7 @@ public class Group extends BaseDomain{
 	@Column(name="group_content",length=200)
 	private String content;
 
+
 //	@OneToMany(mappedBy="group",cascade=CascadeType.ALL)
 //	private Set<Activity> acts;
 	
@@ -130,6 +131,7 @@ public class Group extends BaseDomain{
 		this.createUser = createUser;
 	}
 
+
 	public String getContent() {
 		return content;
 	}
@@ -138,4 +140,13 @@ public class Group extends BaseDomain{
 		this.content = content;
 	}
 	
+
+	public Place getPlace() {
+		return place;
+	}
+
+	public void setPlace(Place place) {
+		this.place = place;
+	}
+
 }

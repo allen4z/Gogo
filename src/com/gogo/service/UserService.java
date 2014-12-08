@@ -1,6 +1,7 @@
 package com.gogo.service;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -15,6 +16,7 @@ import com.gogo.dao.UserDao;
 import com.gogo.domain.Activity;
 import com.gogo.domain.User;
 import com.gogo.domain.UserAndAct;
+import com.gogo.domain.UserToken;
 import com.gogo.domain.enums.UserState;
 import com.gogo.exception.Business4JsonException;
 import com.gogo.helper.MD5Util;
@@ -22,7 +24,7 @@ import com.gogo.page.Page;
 import com.gogo.page.PageUtil;
 
 @Service
-public class UserService{
+public class UserService extends BaseService{
 	@Autowired
 	private UserDao userDao;
 	
@@ -51,7 +53,7 @@ public class UserService{
 	
 	@Transactional
 	public User loadUserById(int userId){
-		return userDao.getUserById(userId);
+		return userDao.get(userId);
 	}
 	
 	public List<User> loadUserByName(String userName){
@@ -65,24 +67,27 @@ public class UserService{
 		return user;
 	}
 	
-	public Page<Activity> loadJoinActivitesByUser(String userId,int currPage,int pageSize){
+	public Page<Activity> loadJoinActivitesByUser(String tokenId,int currPage,int pageSize){
+		User user = getUserbyToken(tokenId);
+		String userId = user.getId();
 		return PageUtil.getPage(actDao.loadJoinActivitesByUserCount(userId), 0, actDao.loadJoinActivitesByUser(userId, currPage, pageSize), pageSize);
 	}
 
-	public Page<Activity> loadOwnActivitesByUser(String userId,int currPage,int pageSize) {
-		
+	public Page<Activity> loadOwnActivitesByUser(String tokenId,int currPage,int pageSize) {
+		User user = getUserbyToken(tokenId);
+		String userId = user.getId();
 		return PageUtil.getPage(actDao.loadOwnActivitesByUserCount(userId), 0, actDao.loadOwnActivitesByUser(userId, currPage, pageSize), pageSize);
 		
 	}
 	
 	
-	public List<String> loadPayInfo(String userId){
+	public List<String> loadPayInfo(String tokenId){
+		User user = getUserbyToken(tokenId);
+		String userId = user.getId();
 		
 		List<String> payInfos = new ArrayList<String>();
-		
 		//查询所有用户拥有角色信息
 		List<UserAndAct> uaas = userAndActDao.loadUserAndActByUser(userId);
-		
 		for (UserAndAct uaa : uaas) {
 			if(uaa.getWaitCost() == 0){
 				continue;
@@ -115,9 +120,24 @@ public class UserService{
 		if(user == null ){
 			throw new Business4JsonException("user_username_or_password_error","username or password error");
 		}
-		user.setPassword(loginUser.getPassword());
+//		user.setPassword(loginUser.getPassword());
 		return user;
 	}
 	
+	
+	public UserToken saveToken(User user){
+		UserToken token = userTokenDao.findTokenByUser(user);
+		if(token == null){
+			token = new UserToken();
+			token.setUser(user);
+			Calendar c = Calendar.getInstance();
+			token.setStartDate(c.getTime());
+			c.add(Calendar.MONTH, 6);
+			token.setEndDate(c.getTime());
+		}
+		userTokenDao.save(token);
+		
+		return token;
+	}
 	
 }

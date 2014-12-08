@@ -2,20 +2,19 @@ package com.gogo.ctrl;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.gogo.domain.Activity;
@@ -36,7 +35,6 @@ import com.gogo.service.UserService;
  */
 @Controller
 @RequestMapping("/user")
-@SessionAttributes(CommonConstant.USER_CONTEXT)
 public class UserController extends BaseController{
 	
 
@@ -114,17 +112,6 @@ public class UserController extends BaseController{
 	}
 	
 	/**
-	 * 根据用户ID获得用户参加的所有活动信息
-	 * @param userId
-	 * @return
-	 */
-	/*@RequestMapping("loadJoinAct/{userId}")
-	@ResponseBody
-	public List<Activity> loadJoinActivitesByUser(int userId){
-		return userService.loadJoinActivitesByUser(userId);
-	}*/
-	
-	/**
 	 * 根据用户ID获得用户拥有的所有活动信息
 	 * @param userId
 	 * @return
@@ -150,28 +137,31 @@ public class UserController extends BaseController{
 	 * 返回用户主页
 	 * @return
 	 */
-	@RequestMapping(value="main")
+	@RequestMapping("forwoardMain")
 	public ModelAndView backUserMain(
-			@ModelAttribute(CommonConstant.USER_CONTEXT) User user,
+			HttpServletRequest request,
 			@RequestParam(value="pn",defaultValue="0",required=false) int currPage) throws Exception{
+		
+		String tokenId = getUserToken(request);
+		
 		ModelAndView mav = new ModelAndView();
-		String userId = user.getId();
+		
 		//查询拥有活动
-		Page<Activity> ownAct = userService.loadOwnActivitesByUser(userId,currPage,CommonConstant.PAGE_SIZE);
+		Page<Activity> ownAct = userService.loadOwnActivitesByUser(tokenId,currPage,CommonConstant.PAGE_SIZE);
 		//查询相关活动
-		Page<Activity> joinAct = userService.loadJoinActivitesByUser(userId,currPage,CommonConstant.PAGE_SIZE);
+		Page<Activity> joinAct = userService.loadJoinActivitesByUser(tokenId,currPage,CommonConstant.PAGE_SIZE);
 		//查询需要支付信息
-		List<String> payInfo = userService.loadPayInfo(userId);	
+		List<String> payInfo = userService.loadPayInfo(tokenId);	
 		//查询请求列表
-		List<User> requestFriend = friendService.loadFriendRequestList(userId);
+		List<User> requestFriend = friendService.loadFriendRequestList(tokenId);
 		//查询好友列表
-		List<User> friends = friendService.loadFriends(userId);
+		List<User> friends = friendService.loadFriends(tokenId);
 		
 		//小组信息
-		Page<Group> myGroup = groupService.loadGroup4User(user, currPage, CommonConstant.PAGE_SIZE);
+		Page<Group> myGroup = groupService.loadGroup4User(tokenId, currPage, CommonConstant.PAGE_SIZE);
 		
 		//申请加群信息
-		List<GroupApplyInfo> groupApplys = groupService.loadAllApplyInfo(user);
+		List<GroupApplyInfo> groupApplys = groupService.loadAllApplyInfo(tokenId);
 		
 		mav.addObject("page",ownAct );
 		mav.addObject("joinpage",joinAct );

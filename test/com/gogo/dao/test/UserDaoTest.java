@@ -22,7 +22,7 @@ public class UserDaoTest extends AbstractContextTests  {
 	
 	//@Test
 	public void loadUserByIdTest() throws Exception{
-		User user = userDao.loadUserById(1);
+		User user = userDao.get(1);
 		Assert.assertEquals(user.getName(), "1");
 	}
 	
@@ -35,14 +35,14 @@ public class UserDaoTest extends AbstractContextTests  {
 	
 	//@Test
 	public void updateUserTest() throws Exception{
-		User user = userDao.loadUserById(4);
+		User user = userDao.get(4);
 		user.setName("Allen4z");
 		user.setAliasName("Allen4z");
 		userDao.update(user);
 	}
 	@Test
 	public void delUserTest()  throws Exception {
-		User user = userDao.loadUserById(2);
+		User user = userDao.get(2);
 		userDao.remove(user);
 	}
 }

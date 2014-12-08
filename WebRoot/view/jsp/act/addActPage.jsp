@@ -55,7 +55,6 @@
 				name : $("#act_name").val(),
 				content : $("#act_content").val(),
 				startTime : $("#act_starttime").val(),
-				endTime : $("#act_endtime").val(),
 				signTime : $("#act_signtime").val(),
 				open:$("#act_isOpen").attr("checked"),
 				amount:$("#act_needAmount").val(),
@@ -71,7 +70,7 @@
 				//alert(id);
 				//跳转到展示页面
 				//location.href = "showPage/"+id;
-				location.href = '<%=basePath %>user/main'; 
+				location.href = '<%=basePath %>user/forwoardMain'; 
 			};
 			
 			var failed = function(XMLHttpRequest,textStatus, errorThrown){
@@ -107,7 +106,6 @@
 
 是否为循环任务：<input id="act_isLoop" name="act_isLoop" type="checkbox"/><br/>
 开始时间：<input id="act_starttime" name="act_starttime" type="date"/><br/>
-结束时间：<input id="act_endtime" name="act_endtime" type="date"/><br/>
 报名时间：<input id="act_signtime" name="act_signtime" type="date"/><br/>
 
 <img id="loading" src="view/images/loading.gif" style="display:none;">

@@ -10,23 +10,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.gogo.annotation.GoJsonFilter;
 import com.gogo.annotation.Token;
 import com.gogo.dao.UserAndGroupDao;
 import com.gogo.domain.Activity;
 import com.gogo.domain.Place;
 import com.gogo.domain.User;
 import com.gogo.domain.enums.UserAndActState;
-import com.gogo.domain.filter.UserFilter;
 import com.gogo.exception.Business4JsonException;
 import com.gogo.helper.CommonConstant;
 import com.gogo.page.Page;
@@ -40,7 +36,6 @@ import com.gogo.service.InviteService;
  */
 @Controller
 @RequestMapping("/activity")
-@SessionAttributes(CommonConstant.USER_CONTEXT)
 public class ActivityController extends BaseController {
 
 	@Autowired
@@ -57,10 +52,9 @@ public class ActivityController extends BaseController {
 	 */
 	@RequestMapping("saveAct")
 	@ResponseBody
-	public Activity saveActivity(@ModelAttribute(CommonConstant.USER_CONTEXT) User user ,
+	public Activity saveActivity(HttpServletRequest request,
 			@Valid @RequestBody Activity act,
 			BindingResult result) throws Exception{
-		
 		//验证用户信息
 		if(result.hasErrors()){
 			List<ObjectError> errorList = result.getAllErrors();
@@ -73,7 +67,8 @@ public class ActivityController extends BaseController {
 		
 		if(checkActInfo(act)){
 			act.setOpen(true);
-			actService.saveActivity(act,user);
+			String tokenId = getUserToken(request);
+			actService.saveActivity(act,tokenId);
 		}
 		
 		return act;
@@ -122,8 +117,9 @@ public class ActivityController extends BaseController {
 	 */
 	@RequestMapping("join/{actId}")
 	@ResponseBody
-	public boolean joinActivity(@ModelAttribute(CommonConstant.USER_CONTEXT) User user,@PathVariable String actId){
-		UserAndActState result = actService.saveUserJoinActivity(user.getId(),actId);
+	public boolean joinActivity(HttpServletRequest request,@PathVariable String actId){
+		String tokenId = getUserToken(request);
+		UserAndActState result = actService.saveUserJoinActivity(tokenId,actId);
 		if(result ==  UserAndActState.QUEUE){
 			throw new Business4JsonException("act_join_full","Participate in the activity of the enrollment is full");
 		}
@@ -138,8 +134,9 @@ public class ActivityController extends BaseController {
 	 */
 	@RequestMapping("cancelJoin/{actId}")
 	@ResponseBody
-	public boolean cancelJoinActivity(@ModelAttribute(CommonConstant.USER_CONTEXT) User user,@PathVariable String actId){
-		actService.updateUserJoinActivity(actId,user);
+	public boolean cancelJoinActivity(HttpServletRequest request,@PathVariable String actId){
+		String tokenId = getUserToken(request);
+		actService.updateUserJoinActivity(actId,tokenId);
 		return true;
 	}
 	
@@ -148,8 +145,9 @@ public class ActivityController extends BaseController {
 	 * @param actId
 	 * @return
 	 */
-	public void updateActivity(@ModelAttribute(CommonConstant.USER_CONTEXT) User user,@RequestBody Activity act)throws Exception{
-		actService.updateActivity(act, user.getId());
+	public void updateActivity(HttpServletRequest request,@RequestBody Activity act)throws Exception{
+		String tokenId = getUserToken(request);
+		actService.updateActivity(act, tokenId);
 	}
 	
 	/**
@@ -191,10 +189,9 @@ public class ActivityController extends BaseController {
 			place.setLongitude(longitude);
 			place.setLongitude(longitude);
 		}
-		
-		User user = getSessionUser(request.getSession());
+	
 		//如果用户不为空，需要去掉用户创建的活动
-		Page<Activity> queryList =  actService.loadActByPlace(user,place,remoteAddr,pn,CommonConstant.PAGE_SIZE);
+		Page<Activity> queryList =  actService.loadActByPlace(place,remoteAddr,pn,CommonConstant.PAGE_SIZE);
 		
 		return queryList;
 		
@@ -233,10 +230,11 @@ public class ActivityController extends BaseController {
 	
 	@RequestMapping(value = "inviteJoinAct/{friendId}/{actId}")
 	@ResponseBody
-	public boolean InviteJoinGroup(@ModelAttribute(CommonConstant.USER_CONTEXT)User user,
+	public boolean InviteJoinGroup(HttpServletRequest request,
 			@PathVariable String friendId,
 			@PathVariable String actId){
-		inviteService.saveInviteJoinAct(user, friendId, actId);
+		String tokenId = getUserToken(request);
+		inviteService.saveInviteJoinAct(tokenId, friendId, actId);
 		return true;
 	}
 	
@@ -251,15 +249,11 @@ public class ActivityController extends BaseController {
 	@RequestMapping("toShowActPage/{actId}")
 	public ModelAndView toShowActPage(HttpServletRequest request,@PathVariable String actId) throws Exception{
 		ModelAndView mav = new ModelAndView();
-		
-		User user = getSessionUser(request.getSession());
-		
+		String token = getUserToken(request);
 		UserAndActState uarState =UserAndActState.CANCEL;
-		
-		if(user != null){
-			uarState = actService.loadCurUserStateInAct(user.getId(),actId);
+		if(token != null){
+			uarState = actService.loadCurUserStateInAct(token,actId);
 		}
-		
 		mav.addObject("uarState", uarState);
 		mav.addObject("actId", actId);
 		mav.setViewName("act/showActPage");

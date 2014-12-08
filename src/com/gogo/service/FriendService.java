@@ -8,23 +8,30 @@ import org.springframework.stereotype.Service;
 
 import com.gogo.dao.FriendListDao;
 import com.gogo.dao.UserDao;
+import com.gogo.dao.UserTokenDao;
 import com.gogo.domain.FriendList;
 import com.gogo.domain.Place;
 import com.gogo.domain.User;
+import com.gogo.domain.UserToken;
 import com.gogo.exception.Business4JsonException;
 import com.gogo.helper.MapHelper;
 import com.gogo.page.Page;
 import com.gogo.page.PageUtil;
 
 @Service
-public class FriendService{
+public class FriendService extends BaseService{
 	
 	@Autowired
 	private FriendListDao friendListDao;
 	@Autowired
 	private UserDao userDao;
+	@Autowired
+	private UserTokenDao userTokenDao;
 	
-	public Page<User> loadPersonByPlace(User user,Place place,String ip,int currPage,int pageSize){
+	
+	public Page<User> loadPersonByPlace(String token,Place place,String ip,int currPage,int pageSize){
+		UserToken userToken = userTokenDao.get(token);
+		String userId = userToken.getUser().getId();
 		Page<User> queryList = null;
 		if(place != null && place.getLongitude() != 0 && place.getLongitude() != 0){
 			//TODO 按地图查询
@@ -35,7 +42,7 @@ public class FriendService{
 			if(city != null){
 				//queryList =PageUtil.getPage(friendGroupDao.loadActbyAddrCount(user,city), currPage, friendGroupDao.loadActbyAddr(user,city, currPage, pageSize), pageSize);	
 			}else{
-				queryList =PageUtil.getPage(userDao.loadPersonAllCount(user), currPage, userDao.loadPersonAll(user, currPage, pageSize), pageSize);	
+				queryList =PageUtil.getPage(userDao.loadPersonAllCount(userId), currPage, userDao.loadPersonAll(userId, currPage, pageSize), pageSize);	
 			}
 		}
 		return queryList;
@@ -46,7 +53,10 @@ public class FriendService{
 	 * @param belongUser
 	 * @param friendUserId
 	 */
-	public void saveFriendRequest(User belongUser,String friendUserId){
+	public void saveFriendRequest(String tokenId,String friendUserId){
+		
+		User belongUser = getUserbyToken(tokenId);
+		
 		
 		if(belongUser.getId().equals(friendUserId)){
 			throw new Business4JsonException("friend_request_yourself","don't request yourself!");
@@ -80,7 +90,8 @@ public class FriendService{
 	 * @param belongUser
 	 * @param friendUserId
 	 */
-	public void saveAgreeApply(User belongUser,String friendUserId){
+	public void saveAgreeApply(String tokenId,String friendUserId){
+		User belongUser = getUserbyToken(tokenId);
 		
 		if(belongUser.getId().equals(friendUserId)){
 			throw new Business4JsonException("friend_request_yourself","don't request yourself!");
@@ -99,13 +110,16 @@ public class FriendService{
 		friendListDao.save(fl);
 	}
 	
-	public List<User> loadFriends(String userId) throws Exception{
-		 List<User> friends = userDao.loadAllFriends(userId);
+	public List<User> loadFriends(String tokenId) throws Exception{
+		 User user = getUserbyToken(tokenId);
+		
+		 List<User> friends = userDao.loadAllFriends(user.getId());
 		 return friends;
 	}
 	
-	public List<User> loadFriendRequestList(String userId) throws Exception{
-		 List<User> friends = userDao.loadFriendRequestList(userId);
+	public List<User> loadFriendRequestList(String tokenId) throws Exception{
+		User user = getUserbyToken(tokenId);
+		 List<User> friends = userDao.loadFriendRequestList(user.getId());
 		 return friends;
 	}
 	

@@ -17,6 +17,7 @@ import com.gogo.dao.NotifyDao;
 import com.gogo.dao.PlaceDao;
 import com.gogo.dao.UserAndActDao;
 import com.gogo.dao.UserDao;
+import com.gogo.dao.UserTokenDao;
 import com.gogo.domain.Activity;
 import com.gogo.domain.Group;
 import com.gogo.domain.Notify;
@@ -24,6 +25,7 @@ import com.gogo.domain.NotifyAndGroup;
 import com.gogo.domain.Place;
 import com.gogo.domain.User;
 import com.gogo.domain.UserAndAct;
+import com.gogo.domain.UserToken;
 import com.gogo.domain.enums.ACTState;
 import com.gogo.domain.enums.NotifyType;
 import com.gogo.domain.enums.UserAndActState;
@@ -35,7 +37,7 @@ import com.gogo.page.Page;
 import com.gogo.page.PageUtil;
 
 @Service
-public class ActivityService {
+public class ActivityService extends BaseService {
 	
 	Logger log = Logger.getLogger(ActivityService.class);
 	
@@ -53,19 +55,24 @@ public class ActivityService {
 	private NotifyAndGroupDao notifyAndGroupDao;
 	@Autowired
 	private PlaceDao placeDao;
+	@Autowired
+	private UserTokenDao userTokenDao;
 	
 	public Activity loadActbyActId(String actId){
 		return actDao.get(actId);
 	}
 
-	public Activity saveActivity(Activity act,User user) throws UnsupportedEncodingException {
+	public Activity saveActivity(Activity act,String tokenId) throws UnsupportedEncodingException {
+		User user = getUserbyToken(tokenId);
 		
-		Place place = placeDao.findPlaceByNameAndLocal(act.getPlace());
-		if(place==null){
-			place = act.getPlace();
-			placeDao.save(place);
-		}else{
-			act.setPlace(place);
+		if( act.getPlace() != null){
+			Place place = placeDao.findPlaceByNameAndLocal(act.getPlace());
+			if(place==null){
+				place = act.getPlace();
+				placeDao.save(place);
+			}else{
+				act.setPlace(place);
+			}
 		}
 		act.setActCreateTime(new Date());
 		act.setOwnUser(user);
@@ -116,11 +123,10 @@ public class ActivityService {
 	 * @param actId  活动ID
 	 * @param user  用户信息
 	 */
-	public synchronized UserAndActState saveUserJoinActivity(String userId, String actId) {
-		
+	public synchronized UserAndActState saveUserJoinActivity(String tokenId, String actId) {
+		User user = getUserbyToken(tokenId);
 		UserAndActState result = UserAndActState.CANCEL;
-		User user = userDao.get(userId);
-		UserAndAct uaa = userAndActDao.loadByUserAndAct(userId, actId);
+		UserAndAct uaa = userAndActDao.loadByUserAndAct(user.getId(), actId);
 		
 		Activity act = actDao.load(actId);
 		
@@ -160,7 +166,8 @@ public class ActivityService {
 	 * @param actId
 	 * @param user
 	 */
-	public synchronized void updateUserJoinActivity(String actId, User user) {
+	public synchronized void updateUserJoinActivity(String actId, String tokenId) {
+		User  user= getUserbyToken(tokenId);
 		UserAndAct uaa = userAndActDao.loadByUserAndAct(user.getId(),actId);
 		if(uaa == null){
 			throw new Business4JsonException("您没有报名此活动");
@@ -206,13 +213,13 @@ public class ActivityService {
 	/**
 	 * 更新活动信息，将前台传入的数据赋值到查询出的活动 并更新
 	 */
-	public void updateActivity(Activity act, String userId) throws Exception {
+	public void updateActivity(Activity act, String tokenId) throws Exception {
 		String actId = act.getId();
 		
 		Activity act4db = actDao.load(actId);
 		User user = act4db.getOwnUser();
 		
-		if(user.getId().equals(userId)){
+		if(user.getId().equals(getUserbyToken(tokenId).getId())){
 			BeanUtils.copyProperties(act, act4db);
 			DomainStateHelper.copyPriperties(act, act4db);
 //			act4db.setUpdate_time(new Date());
@@ -230,20 +237,20 @@ public class ActivityService {
 	 * @param place
 	 * @return
 	 */
-	public Page<Activity> loadActByPlace(User user,Place place,String ip,int currPage,int pageSize){
+	public Page<Activity> loadActByPlace(Place place,String ip,int currPage,int pageSize){
 		//根据经纬度检索百度地图
 		String[] mapIds = new String[]{};
 		
 		
 		Page<Activity> queryList = null;
 		if(place != null && place.getLongitude() != 0 && place.getLongitude() != 0){
-			queryList = PageUtil.getPage(actDao.lodActByPlaceCount(user,mapIds),currPage , actDao.loadActByPlace(user,mapIds, currPage, pageSize), pageSize);
+			queryList = PageUtil.getPage(actDao.lodActByPlaceCount(mapIds),currPage , actDao.loadActByPlace(mapIds, currPage, pageSize), pageSize);
 		}else if(ip != null ){
 			String city = MapHelper.getCity(ip);
 			if(city != null){
-				queryList =PageUtil.getPage(actDao.loadActbyAddrCount(user,city), currPage, actDao.loadActbyAddr(user,city, currPage, pageSize), pageSize);
+				queryList =PageUtil.getPage(actDao.loadActbyAddrCount(city), currPage, actDao.loadActbyAddr(city, currPage, pageSize), pageSize);
 			}else{
-				queryList =PageUtil.getPage(actDao.loadActByHotPointCount(user), currPage, actDao.loadActByHotPoint(user, currPage, pageSize), pageSize);
+				queryList =PageUtil.getPage(actDao.loadActByHotPointCount(), currPage, actDao.loadActByHotPoint(currPage, pageSize), pageSize);
 			}
 		}
 		return queryList;
@@ -276,8 +283,11 @@ public class ActivityService {
 	 * @param userId
 	 * @param actId
 	 */
-	public UserAndActState loadCurUserStateInAct(String userId, String actId) {
-		UserAndAct uaa = userAndActDao.loadByUserAndAct(userId, actId);	
+	public UserAndActState loadCurUserStateInAct(String token, String actId) {
+		
+		UserToken userToken = userTokenDao.get(token);
+		
+		UserAndAct uaa = userAndActDao.loadByUserAndAct(userToken.getUser().getId(), actId);	
 		if(uaa != null){
 			return uaa.getUaaState();
 		}else{

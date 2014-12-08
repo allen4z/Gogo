@@ -9,20 +9,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.gogo.domain.Group;
 import com.gogo.domain.GroupApplyInfo;
 import com.gogo.domain.Invite;
 import com.gogo.domain.Place;
-import com.gogo.domain.User;
 import com.gogo.domain.enums.InviteType;
 import com.gogo.exception.Business4JsonException;
 import com.gogo.helper.CommonConstant;
@@ -32,7 +29,6 @@ import com.gogo.service.InviteService;
 
 @Controller
 @RequestMapping("/group")
-@SessionAttributes(CommonConstant.USER_CONTEXT)
 public class GroupController extends BaseController {
 
 	@Autowired
@@ -51,7 +47,7 @@ public class GroupController extends BaseController {
 	 */
 	@RequestMapping("saveGroup")
 	@ResponseBody		
-	public boolean saveGroup(@ModelAttribute(CommonConstant.USER_CONTEXT) User user ,@Valid @RequestBody Group group,BindingResult result) throws Exception{
+	public boolean saveGroup(HttpServletRequest request, @Valid @RequestBody Group group,BindingResult result) throws Exception{
 		//验证用户信息
 		if(result.hasErrors()){
 			List<ObjectError> errorList = result.getAllErrors();
@@ -61,9 +57,8 @@ public class GroupController extends BaseController {
 			}
 			throw new Business4JsonException(errMsg.toString());
 		}
-				
-			
-		groupService.saveGroup(group,user);
+		
+		groupService.saveGroup(group,getUserToken(request));
 			
 		return true;
 	}
@@ -76,8 +71,8 @@ public class GroupController extends BaseController {
 	 */
 	@RequestMapping("applyJoin/{groupId}")
 	@ResponseBody
-	public boolean applyJoinGroup(@ModelAttribute(CommonConstant.USER_CONTEXT) User user,@PathVariable String groupId){
-		groupService.saveApplyJoinGroup(user,groupId);
+	public boolean applyJoinGroup(HttpServletRequest request,@PathVariable String groupId){
+		groupService.saveApplyJoinGroup(getUserToken(request),groupId);
 		return true;
 	}
 	
@@ -86,8 +81,8 @@ public class GroupController extends BaseController {
 	 * @param user
 	 * @return
 	 */
-	public List<GroupApplyInfo> loadAllApplyInfo(@ModelAttribute(CommonConstant.USER_CONTEXT) User user,String groupId){
-		return groupService.loadAllApplyInfo(user);
+	public List<GroupApplyInfo> loadAllApplyInfo(HttpServletRequest request,String groupId){
+		return groupService.loadAllApplyInfo(getUserToken(request));
 	}
 	
 	/**
@@ -98,8 +93,8 @@ public class GroupController extends BaseController {
 	 */
 	@RequestMapping("passApply/{groupApplyId}")
 	@ResponseBody
-	public boolean passApply(@ModelAttribute(CommonConstant.USER_CONTEXT) User user,@PathVariable String groupApplyId){
-		groupService.savePassApply(user,groupApplyId);
+	public boolean passApply(HttpServletRequest request,@PathVariable String groupApplyId){
+		groupService.savePassApply(getUserToken(request),groupApplyId);
 		return true;
 	}
 	
@@ -113,11 +108,11 @@ public class GroupController extends BaseController {
 	 */
 	@RequestMapping("updateAuth/{authority}/{groupId}/{userId}")
 	@ResponseBody
-	public boolean updateUserAuthority(@ModelAttribute(CommonConstant.USER_CONTEXT) User user,
+	public boolean updateUserAuthority(HttpServletRequest request,
 			@PathVariable String groupId,
 			@PathVariable String userId,
 			@PathVariable int authority){
-		groupService.updateUserAuthority(user,groupId,userId,authority);
+		groupService.updateUserAuthority(getUserToken(request),groupId,userId,authority);
 		return true;
 	}
 	
@@ -131,17 +126,17 @@ public class GroupController extends BaseController {
 	 */
 	@RequestMapping(value = "inviteJoinGroup/{friendId}/{groupId}")
 	@ResponseBody
-	public boolean InviteJoinGroup(@ModelAttribute(CommonConstant.USER_CONTEXT)User user,
+	public boolean InviteJoinGroup(HttpServletRequest request,
 			@PathVariable String friendId,
 			@PathVariable String groupId){
-		inviteService.saveInviteJoinGroup(user, friendId, groupId);
+		inviteService.saveInviteJoinGroup(getUserToken(request), friendId, groupId);
 		return true;
 	}
 	
 	@RequestMapping(value = "quitGroup/{groupId}")
 	@ResponseBody
-	public boolean quitGroup(@ModelAttribute(CommonConstant.USER_CONTEXT)User user,@PathVariable String groupId){
-		groupService.updateQuitGroup(user,groupId);
+	public boolean quitGroup(HttpServletRequest request,@PathVariable String groupId){
+		groupService.updateQuitGroup(getUserToken(request),groupId);
 		return true;
 	}
 	
@@ -151,13 +146,13 @@ public class GroupController extends BaseController {
 	 * @param pn
 	 * @return
 	 */
-	public Page<Invite> loadAllGroupInvite(@ModelAttribute(CommonConstant.USER_CONTEXT)User user,int pn){
-		return inviteService.loadAllInvite(user,InviteType.GROUP,pn,CommonConstant.PAGE_SIZE);
+	public Page<Invite> loadAllGroupInvite(HttpServletRequest request,int pn){
+		return inviteService.loadAllInvite(getUserToken(request),InviteType.GROUP,pn,CommonConstant.PAGE_SIZE);
 	}
 	
-	public boolean passInviteGroup(@ModelAttribute(CommonConstant.USER_CONTEXT)User user,
+	public boolean passInviteGroup(HttpServletRequest request,
 			@PathVariable String inviteId){
-		groupService.savePassInviteGroup(user,inviteId);
+		groupService.savePassInviteGroup(getUserToken(request),inviteId);
 		return true;
 	}
 	
@@ -171,12 +166,8 @@ public class GroupController extends BaseController {
 	public Page<Group> loadAllGroup(HttpServletRequest request, 
 			@RequestParam(required=false) Place place,
 			@RequestParam(value="pn",required=false) Integer pn){
-		
 		String remoteAddr =request.getRemoteAddr();
-		
-		User user = getSessionUser(request.getSession());
-		
-		return groupService.loadAllGroup(user,place,remoteAddr,pn, CommonConstant.PAGE_SIZE);
+		return groupService.loadAllGroup(place,remoteAddr,pn, CommonConstant.PAGE_SIZE);
 	}
 	
 	
