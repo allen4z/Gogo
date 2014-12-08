@@ -33,25 +33,35 @@ public class Group extends BaseDomain{
 	@Column(name="group_id",length=32,nullable=false)
 	private String id;
 	
-	//活动名称
+	//小组名称
 	@NotNull(message="{group.name.not.empty}")
 	@Length(min=4,max=20,message="{group.name.length.error}")
 	@Column(name="group_name",length=20,nullable=false)
 	private String name;
-//	
+	
+	@Column(name="group_content",length=200)
+	private String content;
+
 //	@OneToMany(mappedBy="group",cascade=CascadeType.ALL)
 //	private Set<Activity> acts;
+	
+	//小组主场
+	@ManyToOne(cascade=CascadeType.ALL)
+	@JoinColumn(name="place_id")
+	private Place place;
 	
 	//活动拥有角色  (管理员、成员)
 	@OneToMany(mappedBy="group",cascade=CascadeType.ALL)
 	private Set<UserAndGroup> joinUser;
 
+	//最多加入人数
 	@Column(name="group_max_user",length=20,nullable=false)
 	private int maxJoinUser;
-	
+	//当前小组人数
 	@Column(name="group_current_user",length=20,nullable=false)
 	private int curJoinUser;
 	
+	//创建人
 	@ManyToOne
 	@JoinColumn(name="group_create_user")
 	@OrderBy("userName ASC")
@@ -61,6 +71,8 @@ public class Group extends BaseDomain{
 	@Version
 	@Column(name="update_time",length=10,nullable=false)
 	private Date update_time;
+	
+	
 	
 	public Date getUpdate_time() {
 		return update_time;
@@ -117,4 +129,13 @@ public class Group extends BaseDomain{
 	public void setCreateUser(User createUser) {
 		this.createUser = createUser;
 	}
+
+	public String getContent() {
+		return content;
+	}
+
+	public void setContent(String content) {
+		this.content = content;
+	}
+	
 }
