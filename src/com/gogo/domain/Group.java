@@ -39,12 +39,14 @@ public class Group extends BaseDomain{
 	@Column(name="group_name",length=20,nullable=false)
 	private String name;
 	
+	//简介
 	@Column(name="group_content",length=200)
 	private String content;
 
+	//是否调整期（暂停）
+	@Column(name="group_adjustment",length=1)
+	private boolean isAdjustment;
 
-//	@OneToMany(mappedBy="group",cascade=CascadeType.ALL)
-//	private Set<Activity> acts;
 	
 	//小组主场
 	@ManyToOne(cascade=CascadeType.ALL)

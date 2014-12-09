@@ -49,7 +49,7 @@ public class GroupService extends BaseService {
 		group.setMaxJoinUser(DomainStateHelper.GROUP_DEFAULT_USER_SIZE);
 		group.setCurJoinUser(1);
 		
-		int maxAuthority  = RoleHelper.MAX_AUTHORITY;
+		int maxAuthority  = RoleHelper.ROLE_SUPERMANAGER;
 		UserAndGroup uag =new UserAndGroup();
 		uag.setState(UserAndGroupState.FORMAL);
 		uag.setGroup(group);
@@ -119,17 +119,14 @@ public class GroupService extends BaseService {
 	}
 	
 	/**
-	 * 查询该小组所有的申请信息
+	 * 查询当前用户所管理的小组的申请信息
 	 * @author allen
 	 */
 	public List<GroupApplyInfo> loadAllApplyInfo(String tokenId) {
 		User user  =  getUserbyToken(tokenId);
-		
-		//获得所有管理权限的用户
-		int maxAuth = RoleHelper.mergeParamState(RoleHelper.MAX_AUTHORITY);
-		
+		//获得所有是管理员和超级管理员的小组
 		List<UserAndGroup> uagList =userAndGroupDao.loadAllUserAndGroup(user.getId(),
-				RoleHelper.getAuthInfo(RoleHelper.THREE_AUTHORITY_INVITE,maxAuth));
+				RoleHelper.getAuthInfo(RoleHelper.ROLE_MANAGER,RoleHelper.ROLE_SUPERMANAGER));
 		
 		String[] groupIds  = new String[uagList.size()];
 
@@ -232,7 +229,7 @@ public class GroupService extends BaseService {
 			throw new Business4JsonException("您不在此小组");
 		}
 		//如果用户是最大权限的用户 -- 管理员
-		if(RoleHelper.judgeState(uag.getAuthorityState(), RoleHelper.MAX_AUTHORITY)){
+		if(RoleHelper.judgeState(uag.getAuthorityState(), RoleHelper.ROLE_SUPERMANAGER)){
 			throw new Business4JsonException("管理员退出小组需将管理员转移给其他人");
 		}
 		

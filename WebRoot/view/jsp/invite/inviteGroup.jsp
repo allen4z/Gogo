@@ -60,14 +60,14 @@ function templatefill(data){
 				
 				%>
 				&nbsp;&nbsp;<a href="activity/cancelJoin/{{id}}">取消报名</a>
-				&nbsp;&nbsp;<a href='activity/showSpecialActUserPage/<%=DomainStateHelper.USER_AND_ACT_JOIN%>/{{id}}'>查看参加用户</a>
-				&nbsp;&nbsp;<a href="activity/showSpecialActUserPage/<%=DomainStateHelper.USER_AND_ACT_QUEUE%>/{{id}}">查看排队用户</a>
- 				<br/><a href="activity/showActAllUserPage/{{id}}">查看活动小组所有用户</a><br/>
+				&nbsp;&nbsp;<a href='activity/toShowSpecialActUserPage/<%=DomainStateHelper.USER_AND_ACT_JOIN%>/{{id}}'>查看参加用户</a>
+				&nbsp;&nbsp;<a href="activity/toShowSpecialActUserPage/<%=DomainStateHelper.USER_AND_ACT_QUEUE%>/{{id}}">查看排队用户</a>
+ 				<br/><a href="activity/toShowActAllUserPage/{{id}}">查看活动小组所有用户</a><br/>
 				<%
 			}else{
 				%>
 				  <a href="activity/join/{{id}}">报名参加活动</a><br/>
- 				<br/><a href="activity/showActAllUserPage/{{id}}">查看活动小组所有用户</a><br/>
+ 				<br/><a href="activity/toShowActAllUserPage/{{id}}">查看活动小组所有用户</a><br/>
 				<%
 			}
 		%>

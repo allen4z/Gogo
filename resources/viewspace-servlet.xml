@@ -57,17 +57,14 @@
 						<value>doLogin</value>
 						<value>doRegister</value>
 						<value>doLogin4json</value>
-						<value>forwoard*</value>
-		<!-- 				<value>toShowAllPage</value>
-						<value>toShowActPage</value>
-						<value>loadActByPlace</value>
-						<value>loadActByActId</value>
-						<value>uploadUserHead</value> -->
+						<value>forwoard\w*</value>
+						<value>toShow\w*</value>
+						<value>toAdd\w*</value>
 					</list>
 				</property>
 				<property name="needSuffix">
 					<list>
-						<value>*.jsp</value>
+						<value>.*.jsp</value>
 					</list>
 				</property>
 			</bean>

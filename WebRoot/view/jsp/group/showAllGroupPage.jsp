@@ -41,7 +41,7 @@ function templatefill(groups){
 		<br/>
 		<br/>
 		<a href="group/applyJoin/{{group.id}}">加入小组</a>
-		<a href="group/toShowGroupPage/{{group.id}}">查看小组人员</a>
+		<a href="group/toShowGroupPage?groupId={{group.id}}">查看小组人员</a>
 		</div>
 {{/each}}
 </script>

@@ -13,7 +13,7 @@
 
 $(document).ready(function(){
 	$("#quitGroup").click(function(){
-		var actionInfo = 'group/quitGroup/<%=groupId%>';	
+		var actionInfo = 'group/quitGroup/<%=groupId%>?flag=0';	
 		
 		var success = function(id){
 			alert('成功退出小组');
@@ -29,7 +29,7 @@ $(document).ready(function(){
 });
 
 function getAct(groupId){
-	var action = 'group/loadGroupById/'+groupId;
+	var action = 'group/loadGroupById/'+groupId+'?flag=0';
 	var success = function(group){
 		templatefill(group);
 	};

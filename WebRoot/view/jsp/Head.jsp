@@ -5,11 +5,7 @@
 <%@page import="com.gogo.helper.CommonConstant"%>
 
 <% 
-	//Object user4obj = request.getSession().getAttribute(CommonConstant.USER_CONTEXT);
-	//User user = null;
-	//if(user4obj != null){
-//		user = (User)user4obj;
-	//}
+
  %>
 <html>
 <head>
@@ -36,11 +32,11 @@
 		});
 		
 		$("#searchUserBtn").click(function(){
-			location.href = '<%=basePath %>friend/toFriendPage'; 
+			location.href = '<%=basePath %>friend/toShowFriendPage'; 
 		});
 		
 		$("#setterBtn").click(function(){
-			location.href = '<%=basePath %>user/toSetterPage'; 
+			location.href = '<%=basePath %>user/toShowSetterPage'; 
 		});
 		
 	});

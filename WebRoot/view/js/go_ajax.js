@@ -66,7 +66,7 @@ function sendJsonGET(params, actionInfo, success, failed) {
 		error : failed,
 		url : url
 	};
-	alert(url);
+//	alert(url);
 	$.ajax(options);
 }
 

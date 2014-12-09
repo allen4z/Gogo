@@ -7,6 +7,7 @@
 
 
 <%
+	String tokenId = (String)request.getAttribute("tokenId");
 	Page<Activity> ownAct =(Page)request.getAttribute("page");
 
 	Page<Activity> joinAct =(Page)request.getAttribute("joinpage");
@@ -40,11 +41,11 @@
 <body>
 <br/>
 <br/>
-<form action="activity/toAddActPage?access_token=2c9ba38149e639ce0149e63aa80b0000" method="post">
+<form action="activity/toAddActPage" method="post">
 <input id="addActBtn" name="addActBtn"  type="submit" value="新增活動"></input>
 </form>
 
-<form action="group/toAddGroupPage?access_token=2c9ba38149e639ce0149e63aa80b0000" method="post">
+<form action="group/toAddGroupPage" method="post">
 <input id="addGroupBtn" name="addGroupBtn"  type="submit" value="新增小组"></input>
 </form>
 
@@ -69,7 +70,7 @@
 			
 			%></td><%
 			
-			%><td><a href="friend/agreeApply/<%=rfInfo.getId() %>">同意请求</a></td></tr><%
+			%><td><a href="friend/agreeApply/<%=rfInfo.getId()%>?access_token=<%=tokenId%>">同意请求</a></td></tr><%
 		}
 	}
 	%>
@@ -87,7 +88,7 @@
 			<td>
 			用户：<%=gai.getUser().getAliasName()%>请求加入小组：<%=gai.getGroup().getName() %>
 			</td><%
-			%><td><a href="group/passApply/<%=gai.getId() %>">同意请求</a></td></tr><%
+			%><td><a href="group/passApply/<%=gai.getId() %>?access_token=<%=tokenId%>">同意请求</a></td></tr><%
 		}
 	}
 	%>
@@ -112,7 +113,7 @@
 					List<Group> glist = myGroups.getItems();
 					for(Group group : glist){
 					%>
-						<a href="group/inviteJoinGroup/<%=friend.getId()%>/<%=group.getId()%>"><%=group.getName() %></a><br/>		
+						<a href="group/inviteJoinGroup/<%=friend.getId()%>/<%=group.getId()%>?access_token=<%=tokenId%>"><%=group.getName() %></a><br/>		
 						
 					<%
 					}
@@ -125,14 +126,14 @@
 				List<Activity> list = ownAct.getItems();
 				for(Activity act : list){
 				%>
-					<a href="activity/inviteJoinAct/<%=friend.getId()%>/<%=act.getId()%>"><%=act.getName() %></a><br/>
+					<a href="activity/inviteJoinAct/<%=friend.getId()%>/<%=act.getId()%>?access_token=<%=tokenId%>"><%=act.getName() %></a><br/>
 				<%
 				}
 				
 				List<Activity> jlist = joinAct.getItems();
 				for(Activity act : jlist){
 				%>
-					<a href="activity/inviteJoinAct/<%=friend.getId()%>/<%=act.getId()%>"><%=act.getName() %></a><br/>
+					<a href="activity/inviteJoinAct/<%=friend.getId()%>/<%=act.getId()%>?access_token=<%=tokenId%>"><%=act.getName() %></a><br/>
 				<%
 				}
 				%>
@@ -179,7 +180,7 @@
 			for(Activity act : list){
 		%>
 		<tr>
-			<td><a href="activity/toShowActPage/<%=act.getId()%>"><%=act.getName() %></a></td>
+			<td><a href="activity/toShowActPage?actId=<%=act.getId()%>"><%=act.getName() %></a></td>
 			<td><%=act.getContent() %></td>
 		</tr>
 		<%
@@ -205,7 +206,7 @@
 			for(Activity act : jlist){
 		%>
 		<tr>
-			<td><a href="activity/toShowActPage/<%=act.getId()%>"><%=act.getName() %></a></td>
+			<td><a href="activity/toShowActPage?actId=<%=act.getId()%>"><%=act.getName() %></a></td>
 			<td><%=act.getContent() %></td>
 		</tr>
 		<%
@@ -229,7 +230,7 @@
 			for(Group group : glist){
 		%>
 		<tr>
-			<td><a href="group/toShowGroupPage/<%=group.getId()%>"><%=group.getName() %></a></td>
+			<td><a href="group/toShowGroupPage?groupId=<%=group.getId()%>"><%=group.getName() %></a></td>
 			
 		</tr>
 		<%

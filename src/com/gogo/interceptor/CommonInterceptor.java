@@ -59,12 +59,6 @@ public class CommonInterceptor extends HandlerInterceptorAdapter {
 		log.debug("开始过滤URI");
 		
 		log.debug("uri："+uri);
-		//不拦截的过滤
-		for (String  noFilterInfo : exceptFilter) {
-			if(uri.indexOf(noFilterInfo) != -1){
-				return true;
-			}
-		}
 		
 		String[] uris = uri.split("/");
 		//获得请求的最后一部分
@@ -73,12 +67,20 @@ public class CommonInterceptor extends HandlerInterceptorAdapter {
 		//正则表达式判断是否有后缀名
 		if(end.indexOf(".") != -1){
 			for (String suffix : needSuffix) {
-				if(end.endsWith(suffix)){
+				if(end.matches(suffix)){
 					return false;
 				}
 			}
 			return true;
 		}
+				
+		//不拦截的过滤
+		for (String  noFilterInfo : exceptFilter) {
+			if(end.matches(noFilterInfo)){
+				return true;
+			}
+		}
+		
 		
 		return false;
 	}

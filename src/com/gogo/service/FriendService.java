@@ -40,7 +40,7 @@ public class FriendService extends BaseService{
 			//TODO 按城市查询
 			String city = MapHelper.getCity(ip);
 			if(city != null){
-				//queryList =PageUtil.getPage(friendGroupDao.loadActbyAddrCount(user,city), currPage, friendGroupDao.loadActbyAddr(user,city, currPage, pageSize), pageSize);	
+				queryList =PageUtil.getPage(userDao.loadPersonAllCount(userId), currPage, userDao.loadPersonAll(userId, currPage, pageSize), pageSize);	
 			}else{
 				queryList =PageUtil.getPage(userDao.loadPersonAllCount(userId), currPage, userDao.loadPersonAll(userId, currPage, pageSize), pageSize);	
 			}

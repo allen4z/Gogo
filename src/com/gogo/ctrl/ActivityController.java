@@ -246,8 +246,8 @@ public class ActivityController extends BaseController {
 	 * @return
 	 * @throws Exception
 	 */
-	@RequestMapping("toShowActPage/{actId}")
-	public ModelAndView toShowActPage(HttpServletRequest request,@PathVariable String actId) throws Exception{
+	@RequestMapping("toShowActPage")
+	public ModelAndView toShowActPage(HttpServletRequest request,@RequestParam String actId) throws Exception{
 		ModelAndView mav = new ModelAndView();
 		String token = getUserToken(request);
 		UserAndActState uarState =UserAndActState.CANCEL;
@@ -287,8 +287,8 @@ public class ActivityController extends BaseController {
 	 * @return
 	 * @throws Exception
 	 */
-	@RequestMapping("showActAllUserPage/{actId}")
-	public ModelAndView toShowActAllUserPage(@PathVariable String actId) throws Exception{
+	@RequestMapping("toShowActAllUserPage")
+	public ModelAndView toShowActAllUserPage(@RequestParam String actId) throws Exception{
 		ModelAndView mav = new ModelAndView();
 		mav.addObject("actId", actId);
 		mav.setViewName("act/user/showActAllUserPage");
@@ -302,8 +302,8 @@ public class ActivityController extends BaseController {
 	 * @return
 	 * @throws Exception
 	 */
-	@RequestMapping("showSpecialActUserPage/{state}/{actId}")
-	public ModelAndView showSpecialActUserPage(@PathVariable UserAndActState state,@PathVariable String actId) throws Exception{
+	@RequestMapping("toShowSpecialActUserPage")
+	public ModelAndView showSpecialActUserPage(@RequestParam UserAndActState state,@RequestParam String actId) throws Exception{
 		ModelAndView mav = new ModelAndView();
 		mav.addObject("actId", actId);
 		mav.addObject("state",state);

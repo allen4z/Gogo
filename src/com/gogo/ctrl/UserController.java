@@ -170,6 +170,7 @@ public class UserController extends BaseController{
 		mav.addObject("requestFriend", requestFriend);
 		mav.addObject("myGroup", myGroup);
 		mav.addObject("groupApplys", groupApplys);
+		mav.addObject("tokenId", tokenId);
 		
 		mav.setViewName("main");
 		

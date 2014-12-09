@@ -40,7 +40,7 @@ function templatefill(users){
 		<a>{{user.aliasName}}</a>
 		<br/>
 		<br/>
-		<a href="friend/friendRequest/{{user.id}}">添加</a>
+		<a href="friend/friendRequest/{{user.id}}?access_token=2c9ba38149e639ce0149e63aa80b0000">添加</a>
 		</div>
 {{/each}}
 </script>
