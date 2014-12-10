@@ -6,6 +6,7 @@ import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 
 import com.gogo.domain.User;
+import com.gogo.domain.enums.FriendListState;
 
 @Repository
 public class UserDao extends BaseDao<User>{
@@ -107,7 +108,7 @@ public class UserDao extends BaseDao<User>{
 		
 		List firends = getSession().createQuery(hql)
 				.setString("userId", userId)
-				.setBoolean("passed", true)
+				.setParameter("passed", FriendListState.Agree)
 				.list();
 		return firends;
 	}
@@ -120,7 +121,8 @@ public class UserDao extends BaseDao<User>{
 		
 		List firends = getSession().createQuery(hql)
 				.setString("userId", userId)
-				.setBoolean("passed", false)
+				.setParameter("passed", FriendListState.Wait)
+//				.setInteger("passed", FriendListState.Agree)
 				.list();
 		return firends;
 	}

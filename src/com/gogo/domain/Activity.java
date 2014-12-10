@@ -61,8 +61,6 @@ public class Activity extends BaseDomain {
 	@OrderBy("name ASC")
 	private User ownUser;
 	
-	
-	
 	@OneToMany(mappedBy="act",cascade=CascadeType.ALL)
 	private Set<UserAndAct> joinUser;
 	
@@ -78,11 +76,6 @@ public class Activity extends BaseDomain {
 	@NotNull(message="{act.actstarttime.not.empty}")
 	@Column(name="act_start_time",length=10)
 	private Date startTime;
-	
-	//结束时间
-	//@NotNull(message="{act.actendtime.not.empty}")
-	//@Column(name="act_end_time",length=10)
-	//private Date endTime;
 	
 	//报名时间
 	@Column(name="act_sign_time",length=10)
@@ -135,6 +128,10 @@ public class Activity extends BaseDomain {
 	//留言数量
 	@Column(name="act_current_message",length=50)
 	private int cutMessage;
+	
+	@ManyToOne(cascade=CascadeType.ALL)
+	@JoinColumn(name="group_id")
+	private Group gorup;
 	
 	//版本
 	@Version
@@ -254,14 +251,6 @@ public class Activity extends BaseDomain {
 		this.startTime = startTime;
 	}
 
-//	public Date getEndTime() {
-//		return endTime;
-//	}
-//
-//	public void setEndTime(Date endTime) {
-//		this.endTime = endTime;
-//	}
-
 	public Date getSignTime() {
 		return signTime;
 	}
@@ -347,6 +336,14 @@ public class Activity extends BaseDomain {
 
 	public void setPlace(Place place) {
 		this.place = place;
+	}
+
+	public Group getGorup() {
+		return gorup;
+	}
+
+	public void setGorup(Group gorup) {
+		this.gorup = gorup;
 	}
 
 	@Override

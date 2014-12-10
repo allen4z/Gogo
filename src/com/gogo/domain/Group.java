@@ -39,6 +39,22 @@ public class Group extends BaseDomain{
 	@Column(name="group_name",length=20,nullable=false)
 	private String name;
 	
+	//简称
+	@Column(name="group_nickName",length=20,nullable=false)
+	private String nickName;
+	
+	//小组LOGO
+	@Column(name="group_logo",length=100)
+	private String logoUrl;
+	
+	public String getLogoUrl() {
+		return logoUrl;
+	}
+
+	public void setLogoUrl(String logoUrl) {
+		this.logoUrl = logoUrl;
+	}
+
 	//简介
 	@Column(name="group_content",length=200)
 	private String content;
@@ -46,7 +62,6 @@ public class Group extends BaseDomain{
 	//是否调整期（暂停）
 	@Column(name="group_adjustment",length=1)
 	private boolean isAdjustment;
-
 	
 	//小组主场
 	@ManyToOne(cascade=CascadeType.ALL)
@@ -76,7 +91,6 @@ public class Group extends BaseDomain{
 	private Date update_time;
 	
 	
-	
 	public Date getUpdate_time() {
 		return update_time;
 	}
@@ -99,6 +113,14 @@ public class Group extends BaseDomain{
 
 	public void setCurJoinUser(int curJoinUser) {
 		this.curJoinUser = curJoinUser;
+	}
+	
+	public String getNickName() {
+		return nickName;
+	}
+
+	public void setNickName(String nickName) {
+		this.nickName = nickName;
 	}
 
 	public int getMaxJoinUser() {
@@ -149,6 +171,14 @@ public class Group extends BaseDomain{
 
 	public void setPlace(Place place) {
 		this.place = place;
+	}
+
+	public boolean isAdjustment() {
+		return isAdjustment;
+	}
+
+	public void setAdjustment(boolean isAdjustment) {
+		this.isAdjustment = isAdjustment;
 	}
 
 }

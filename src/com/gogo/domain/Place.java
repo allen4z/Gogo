@@ -45,6 +45,10 @@ public class Place extends BaseDomain{
 	@Column(name="place_latitude",length=20)
 	private double latitude;
 	
+	//多少人球场  11人标准场
+	@Column(name="place_count",length=10)
+	private int userCount;
+	
 	//热度
 	@Column(name="place_hotPoint",length=20)
 	private int hotPoint;
@@ -83,6 +87,14 @@ public class Place extends BaseDomain{
 
 	public void setCityName(String cityName) {
 		this.cityName = cityName;
+	}
+
+	public int getUserCount() {
+		return userCount;
+	}
+
+	public void setUserCount(int userCount) {
+		this.userCount = userCount;
 	}
 
 	public double getLongitude() {

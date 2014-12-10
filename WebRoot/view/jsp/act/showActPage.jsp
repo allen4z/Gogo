@@ -53,19 +53,19 @@ function templatefill(data){
 			if(uarState ==UserAndActState.CANCEL){
 				
 		%>
-				<a href="activity/join/{{id}}?access_token=2c9ba38149e639ce0149e63aa80b0000">报名参加活动</a>
+				<a href="activity/join/{{id}}?access_token=<%=tokenId%>">报名参加活动</a>
 		<%
 			}else if(uarState !=UserAndActState.CANCEL ){
 				
 				%>
-				&nbsp;&nbsp;<a href="activity/cancelJoin/{{id}}">取消报名</a>
+				&nbsp;&nbsp;<a href="activity/cancelJoin/{{id}}?access_token=<%=tokenId%>">取消报名</a>
 				&nbsp;&nbsp;<a href='activity/toShowSpecialActUserPage?state=<%=UserAndActState.JOIN%>&actId={{id}}'>查看参加用户</a>
 				&nbsp;&nbsp;<a href="activity/toShowSpecialActUserPage?state=<%=UserAndActState.QUEUE%>&actId={{id}}">查看排队用户</a>
  				<br/><a href="activity/toShowActAllUserPage?actId={{id}}">查看活动小组所有用户</a><br/>
 				<%
 			}else{
 				%>
-				 <a href="activity/join/{{id}}?access_token=2c9ba38149e639ce0149e63aa80b0000">报名参加活动</a>
+				 <a href="activity/join/{{id}}?access_token=<%=tokenId%>">报名参加活动</a>
  				<br/><a href="activity/toShowActAllUserPage?actId={{id}}">查看活动小组所有用户</a><br/>
 				<%
 			}

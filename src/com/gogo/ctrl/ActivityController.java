@@ -254,6 +254,7 @@ public class ActivityController extends BaseController {
 		if(token != null){
 			uarState = actService.loadCurUserStateInAct(token,actId);
 		}
+		mav.addObject("tokenId",token);
 		mav.addObject("uarState", uarState);
 		mav.addObject("actId", actId);
 		mav.setViewName("act/showActPage");

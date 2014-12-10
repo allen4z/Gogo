@@ -18,6 +18,8 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.validator.constraints.Length;
 
+import com.gogo.domain.enums.FriendListState;
+
 @Entity
 @Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
 @Table(name="t_friendlist")
@@ -49,7 +51,7 @@ public class FriendList extends BaseDomain{
 	
 	//是否通过认证
 	@Column(name="fg_passed",length=1)
-	private boolean passed;
+	private FriendListState passed;
 	
 	//版本
 	@Version
@@ -89,11 +91,11 @@ public class FriendList extends BaseDomain{
 		this.friendUser = friendUser;
 	}
 
-	public boolean isPassed() {
+	public FriendListState getPassed() {
 		return passed;
 	}
 
-	public void setPassed(boolean passed) {
+	public void setPassed(FriendListState passed) {
 		this.passed = passed;
 	}
 

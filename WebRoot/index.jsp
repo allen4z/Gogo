@@ -19,7 +19,7 @@
 			var actionInfo = 'login/doLogin4json';
 			var success = function(result) {
 				if (result != null) {
-					location.href = '<%=basePath%>user/forwoardMain?access_token=2c9ba3814a1317db014a132d4cba0000';
+					location.href = '<%=basePath%>user/forwoardMain?access_token='+result.id;
 				}
 			};
 			

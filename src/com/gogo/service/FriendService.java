@@ -13,6 +13,7 @@ import com.gogo.domain.FriendList;
 import com.gogo.domain.Place;
 import com.gogo.domain.User;
 import com.gogo.domain.UserToken;
+import com.gogo.domain.enums.FriendListState;
 import com.gogo.exception.Business4JsonException;
 import com.gogo.helper.MapHelper;
 import com.gogo.page.Page;
@@ -71,10 +72,10 @@ public class FriendService extends BaseService{
 			fl.setBelongUser(belongUser);
 			fl.setFriendUser(friendUser);
 			fl.setfAliasName(friendUser.getAliasName());
-			fl.setPassed(false);
+			fl.setPassed(FriendListState.Wait);
 		}else{
 			
-			if(fl.isPassed()){
+			if(fl.getPassed().equals(FriendListState.Agree)){
 				throw new Business4JsonException("friend_already_friends","You are already friends!");
 			}else{
 				fl.setUpdate_time(new Date());
@@ -98,14 +99,14 @@ public class FriendService extends BaseService{
 		}
 		
 		FriendList applyList = friendListDao.loadFriendListByUserId(friendUserId,belongUser.getId());
-		applyList.setPassed(true);
+		applyList.setPassed(FriendListState.Agree);
 		
 		User friendUser = userDao.load(friendUserId);
 		FriendList fl = new FriendList();
 		fl.setBelongUser(belongUser);
 		fl.setFriendUser(friendUser);
 		fl.setfAliasName(friendUser.getAliasName());
-		fl.setPassed(true);
+		fl.setPassed(FriendListState.Agree);
 		
 		friendListDao.save(fl);
 	}
