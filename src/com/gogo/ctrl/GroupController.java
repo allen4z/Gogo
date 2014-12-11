@@ -12,6 +12,7 @@ import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
@@ -161,20 +162,22 @@ public class GroupController extends BaseController {
 	 * @param currPage
 	 * @return
 	 */
-	@RequestMapping("loadAllGroup")
+	@RequestMapping(value="loadAllGroup",method=RequestMethod.GET)
 	@ResponseBody
 	public Page<Group> loadAllGroup(HttpServletRequest request, 
 			@RequestParam(required=false) Place place,
-			@RequestParam(value="pn",required=false) Integer pn){
+			@RequestParam(value="pn",required=false) Integer pn,
+			@RequestParam(value="access_token") String tokenId){
 		String remoteAddr =request.getRemoteAddr();
 		return groupService.loadAllGroup(place,remoteAddr,pn, CommonConstant.PAGE_SIZE);
 	}
 	
 	
 	
-	@RequestMapping("loadGroupById/{groupId}")
+	@RequestMapping(value="loadGroupById/{groupId}",method=RequestMethod.GET)
 	@ResponseBody
-	public Group loadGroupById(@PathVariable String groupId){
+	public Group loadGroupById(@PathVariable String groupId,
+			@RequestParam(value="access_token") String tokenId){
 		Group group = groupService.loadGroupById(groupId);
 		return group;
 	}
@@ -185,19 +188,24 @@ public class GroupController extends BaseController {
 	 * @throws Exception
 	 */
 	@RequestMapping("toAddGroupPage")
-	public String toAddGroupPage() throws Exception{
-		return "group/addGroupPage";
-		
+	public ModelAndView toAddGroupPage(@RequestParam(value="access_token") String tokenId) throws Exception{
+		ModelAndView mav = new ModelAndView();
+		mav.addObject("tokenId", tokenId);
+		mav.setViewName("group/addGroupPage");
+		return mav;
 	}
 	
 	@RequestMapping("toShowAllPage")
-	public String toShowAllPage() throws Exception{
-		return "group/showAllGroupPage";
+	public ModelAndView toShowAllPage(@RequestParam(value="access_token") String tokenId) throws Exception{
+		ModelAndView mav = new ModelAndView();
+		mav.addObject("tokenId", tokenId);
+		mav.setViewName("group/showAllGroupPage");
+		return mav;
 		
 	}
 	
 	@RequestMapping("toShowGroupPage")
-	public ModelAndView toAddActPage(@RequestParam String groupId) throws Exception{
+	public ModelAndView toAddActPage(@RequestParam String groupId,@RequestParam(value="access_token") String tokenId) throws Exception{
 		ModelAndView mav = new ModelAndView();
 		mav.addObject("groupId", groupId);
 		mav.setViewName("group/showGroupPage");

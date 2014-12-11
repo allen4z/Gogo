@@ -70,14 +70,14 @@
 				//alert(id);
 				//跳转到展示页面
 				//location.href = "showPage/"+id;
-				location.href = '<%=basePath %>user/forwoardMain'; 
+				location.href = '<%=basePath %>user/forwoardMain?access_token=<%=tokenId%>'; 
 			};
 			
 			var failed = function(XMLHttpRequest,textStatus, errorThrown){
 		         alert(XMLHttpRequest.responseText);
 		    };
 			
-			send4Json(params,actionInfo,success,failed);
+			post4Json(params,actionInfo,success,failed);
 		});
 		
 	});

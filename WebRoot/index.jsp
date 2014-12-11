@@ -19,6 +19,7 @@
 			var actionInfo = 'login/doLogin4json';
 			var success = function(result) {
 				if (result != null) {
+					setTokenId(result.id);
 					location.href = '<%=basePath%>user/forwoardMain?access_token='+result.id;
 				}
 			};

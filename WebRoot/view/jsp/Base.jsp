@@ -23,5 +23,10 @@ String tokenId = (String)request.getAttribute("tokenId");
 	<script src="view/js/jquery.js"></script>
 	<script src="view/js/template.js"></script>
 	<script src="view/js/go_ajax.js"></script>
+	<script type="text/javascript">
+		$(document).ready(function(){
+			setTokenId('<%=tokenId%>');
+		});
+	</script>
   </head>
 </html>

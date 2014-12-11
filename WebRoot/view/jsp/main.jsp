@@ -30,7 +30,7 @@
 	
 	$(document).ready(function(){
 		$("#searchUserBtn").click(function(){
-			send4Json(null,'user/load/1',function(user){
+			get4Json(null,'user/load/1',function(user){
 				alert(user.userName);
 			},null);
 		});
@@ -42,11 +42,11 @@
 
 <br/>
 <br/>
-<form action="activity/toAddActPage" method="post">
+<form action="activity/toAddActPage?access_token=<%=tokenId %>" method="post">
 <input id="addActBtn" name="addActBtn"  type="submit" value="新增活動"></input>
 </form>
 
-<form action="group/toAddGroupPage" method="post">
+<form action="group/toAddGroupPage?access_token=<%=tokenId %>" method="post">
 <input id="addGroupBtn" name="addGroupBtn"  type="submit" value="新增小组"></input>
 </form>
 

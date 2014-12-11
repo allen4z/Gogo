@@ -24,7 +24,7 @@ $(document).ready(function(){
 	         alert(XMLHttpRequest.responseText);
 	    };
 		
-		send4Json(null,actionInfo,success,failed);
+		post4Json(null,actionInfo,success,failed);
 	});
 });
 
@@ -36,7 +36,7 @@ function getAct(groupId){
 	var failed = function(XMLHttpRequest,textStatus, errorThrown){
          alert(XMLHttpRequest.responseText);
     };
-	send4Json(null,action,success,failed);
+	get4Json(null,action,success,failed);
 }
 
 

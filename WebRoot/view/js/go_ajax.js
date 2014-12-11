@@ -1,4 +1,8 @@
-var tokenId="2c9ba38149e639ce0149e63aa80b0000";
+var tokenId;
+
+function setTokenId(curTokenId){
+	tokenId = curTokenId;
+}
 
 /**
  * 封装发送方法
@@ -28,7 +32,7 @@ function postWithOutToken(params, actionInfo, success, failed) {
 	options.url = basePath + '/' + actionInfo;
 	$.ajax(options);
 }
-function send4Json(params, actionInfo, success, failed) {
+function post4Json(params, actionInfo, success, failed) {
 	var basePath = getBasePathInfo();
 	var params4json = JSON.stringify(params);
 	var options = {
@@ -39,12 +43,12 @@ function send4Json(params, actionInfo, success, failed) {
 		success : success,
 		error : failed
 	};
-	var url = '&access_token=2c9ba38149e639ce0149e63aa80b0000';
+	var url = '&access_token='+tokenId;
 	options.url = basePath + '/' + actionInfo+url;
 	$.ajax(options);
 }
 
-function sendJsonGET(params, actionInfo, success, failed) {
+function get4Json(params, actionInfo, success, failed) {
 	var basePath = getBasePathInfo();
 	var url = basePath + '/' + actionInfo;
 	var isFirst = true;
@@ -56,7 +60,7 @@ function sendJsonGET(params, actionInfo, success, failed) {
 		}
 		url += key + '=' + params[key];
 	}
-	url += '&access_token=2c9ba38149e639ce0149e63aa80b0000';
+	url += '&access_token='+tokenId;
 
 	var options = {
 		type : 'GET',

@@ -16,27 +16,27 @@
 		});
 		
 		$("#backUserMain").click(function(){
-			location.href = '<%=basePath %>user/forwoardMain'; 
+			location.href = '<%=basePath %>user/forwoardMain?access_token=<%=tokenId%>'; 
 		});
 		
 		$("#doLogOut").click(function(){
-			location.href = '<%=basePath %>login/doLogout'; 
+			location.href = '<%=basePath %>login/doLogout?access_token=<%=tokenId%>'; 
 		});
 
 		$("#searchActBtn").click(function(){
-			location.href = '<%=basePath %>activity/toShowAllPage?access_token=2c9ba38149e639ce0149e63aa80b0000'; 
+			location.href = '<%=basePath %>activity/toShowAllPage?access_token=<%=tokenId%>'; 
 		});
 		
 		$("#searchGroupBtn").click(function(){
-			location.href = '<%=basePath %>group/toShowAllPage'; 
+			location.href = '<%=basePath %>group/toShowAllPage?access_token=<%=tokenId%>'; 
 		});
 		
 		$("#searchUserBtn").click(function(){
-			location.href = '<%=basePath %>friend/toShowFriendPage'; 
+			location.href = '<%=basePath %>friend/toShowFriendPage?access_token=<%=tokenId%>'; 
 		});
 		
 		$("#setterBtn").click(function(){
-			location.href = '<%=basePath %>user/toShowSetterPage'; 
+			location.href = '<%=basePath %>user/toShowSetterPage?access_token=<%=tokenId%>'; 
 		});
 		
 	});

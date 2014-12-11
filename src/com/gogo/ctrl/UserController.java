@@ -83,9 +83,11 @@ public class UserController extends BaseController{
 	 * @param userId
 	 * @return
 	 */
-	@RequestMapping("load/{userId}")
+	@RequestMapping(value="load/{userId}",method=RequestMethod.GET)
 	@ResponseBody
-	public User loadUserByUserId(@PathVariable int userId){
+	public User loadUserByUserId(
+			@PathVariable int userId,
+			@RequestParam(value="access_token") String tokenId){
 		return userService.loadUserById(userId);
 	}
 	
@@ -100,7 +102,8 @@ public class UserController extends BaseController{
 	@ResponseBody
 	public List<User> loadUserByUserName(@PathVariable String userName,
 			@RequestParam(required=false) Integer curPage,
-			@RequestParam(required=false) Integer pagesize){
+			@RequestParam(required=false) Integer pagesize,
+			@RequestParam(value="access_token") String tokenId){
 		
 		List<User> users = null;
 		if(curPage == null || curPage == 0){
@@ -116,9 +119,11 @@ public class UserController extends BaseController{
 	 * @param userId
 	 * @return
 	 */
-	@RequestMapping("loadOwnAct/{userId}")
+	@RequestMapping(value="loadOwnAct/{userId}",method=RequestMethod.GET)
 	@ResponseBody
-	public Page<Activity> loadOwnActivitesByUser(String userId,@RequestParam(defaultValue="0",required=false) int pn){
+	public Page<Activity> loadOwnActivitesByUser(String userId,
+			@RequestParam(defaultValue="0",required=false) int pn,
+			@RequestParam(value="access_token") String tokenId){
 		return userService.loadOwnActivitesByUser(userId,pn,CommonConstant.PAGE_SIZE);
 	}
 	

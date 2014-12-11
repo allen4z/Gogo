@@ -13,18 +13,19 @@
 		$("#addGroupBtn").click(function(){
 			var actionInfo = 'group/saveGroup?pn=1';	
 			var params = {
-				name : $("#group_name").val()
+				name : $("#group_name").val(),
+				nickName:$("#group_nickname").val()
 			};
 			
 			var success = function(id){
-				location.href = '<%=basePath %>user/forwoardMain?access_token=2c9ba38149e639ce0149e63aa80b0000'; 
+				location.href = '<%=basePath %>user/forwoardMain?access_token=<%=tokenId%>'; 
 			};
 			
 			var failed = function(XMLHttpRequest,textStatus, errorThrown){
 		         alert(XMLHttpRequest.responseText);
 		    };
 			
-			send4Json(params,actionInfo,success,failed);
+			post4Json(params,actionInfo,success,failed);
 		});
 		
 	});
@@ -37,7 +38,9 @@
 <br/>
 <br/>
 <form>
-小组名称：<input id="group_name" name="group_name" type="text"/>	<br/>
+球队名称：<input id="group_name" name="group_name" type="text"/>	<br/>
+简称：<input id="group_nickname" name="group_nickname" type="text"/>	<br/>
+
 <input id="addGroupBtn" name="addGroupBtn"  type="button" value="保存"/>
 </form>
 </body>

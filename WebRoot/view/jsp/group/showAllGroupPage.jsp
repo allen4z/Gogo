@@ -18,7 +18,7 @@ function getNearAct(pn){
 	var failed = function(XMLHttpRequest,textStatus, errorThrown){
          alert(XMLHttpRequest.responseText);
     };
-	send4Json(null,action,success,failed);
+    get4Json(null,action,success,failed);
 }
 
 function templatefill(groups){

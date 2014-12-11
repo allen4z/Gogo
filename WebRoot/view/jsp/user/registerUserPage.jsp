@@ -36,7 +36,7 @@
 		         alert(XMLHttpRequest.responseText);
 		        };
 		        
-		    send4Json(params,actionInfo,success,failed);
+		    post4Json(params,actionInfo,success,failed);
 		});
 	});
 	

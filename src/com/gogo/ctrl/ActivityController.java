@@ -13,6 +13,7 @@ import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
@@ -87,22 +88,12 @@ public class ActivityController extends BaseController {
 		}
 		Date signDate =act.getSignTime();
 		Date startDate = act.getStartTime();
-		//Date endDate =act.getEndTime();
-		
+
 		if(startDate.compareTo(signDate)<=0){
 			throw new Business4JsonException("act_savecheck_startdate_earlythen_signupDate","start date early then signup date");
 		}
-		
-//		if(endDate.compareTo(signDate) <=0){
-//			throw new Business4JsonException("act_savecheck_enddate_earlythen_signupDate","end date early then signup date");
-//		}
-//		
-//		if(endDate.compareTo(startDate) <=0){
-//			throw new Business4JsonException("act_savecheck_enddate_earlythen_startDate","end date early then start date");
-//		}
 		act.setSignTime(signDate);
 		act.setStartTime(startDate);
-		//act.setEndTime(endDate);
 		return true;
 	}
 
@@ -155,9 +146,11 @@ public class ActivityController extends BaseController {
 	 * @param actId
 	 * @return
 	 */
-	@RequestMapping(value = "loadActByActId/{actId}")
+	@RequestMapping(value = "loadActByActId/{actId}",method=RequestMethod.GET)
 	@ResponseBody
-	public Activity loadActByActId(@PathVariable String actId)throws Exception{
+	public Activity loadActByActId(
+			@PathVariable String actId,
+			@RequestParam(value="access_token") String tokenId)throws Exception{
 		Activity act = actService.loadActbyActId(actId);
 		return act;
 	}
@@ -172,14 +165,15 @@ public class ActivityController extends BaseController {
 	 * @param pn 页数
 	 * @return
 	 */
-	@RequestMapping(value = "loadActByPlace")
+	@RequestMapping(value = "loadActByPlace",method=RequestMethod.GET)
 	@ResponseBody
 //	@GoJsonFilter(mixin=UserFilter.class,target=User.class)
 	public Page<Activity> loadActByPlace(
 			HttpServletRequest request, 
 			@RequestParam(required=false) Double longitude,
 			@RequestParam(required=false) Double latitude,
-			@RequestParam(value="pn",required=false) Integer pn){
+			@RequestParam(value="pn",required=false) Integer pn,
+			@RequestParam(value="access_token") String tokenId){
 		
 		String remoteAddr =request.getRemoteAddr();
 		Place place = null;
@@ -202,9 +196,12 @@ public class ActivityController extends BaseController {
 	 * @param actId
 	 * @return
 	 */
-	@RequestMapping(value = "loadAllUserFromAct/{actId}")
+	@RequestMapping(value = "loadAllUserFromAct/{actId}",method=RequestMethod.GET)
 	@ResponseBody
-	public Page<User> loadAllUserFromAct(@PathVariable String actId,@RequestParam int pn){
+	public Page<User> loadAllUserFromAct(
+			@PathVariable String actId,
+			@RequestParam int pn,
+			@RequestParam(value="access_token") String tokenId){
 		 Page<User> page = actService.loadAllUserFromAct(actId,pn,CommonConstant.PAGE_SIZE);
 		 return page;
 	}
@@ -214,15 +211,21 @@ public class ActivityController extends BaseController {
 	 * @param curPage
 	 * @return
 	 */
-	@RequestMapping(value = "loadJoinUserFromAct/{actId}")
+	@RequestMapping(value = "loadJoinUserFromAct/{actId}",method=RequestMethod.GET)
 	@ResponseBody
-	public Page<User> loadJoinUserFromAct(@PathVariable String actId,@RequestParam int pn){
+	public Page<User> loadJoinUserFromAct(
+			@PathVariable String actId,
+			@RequestParam int pn,
+			@RequestParam(value="access_token") String tokenId){
 		return actService.loadSpecialUserFromAct(actId,pn,CommonConstant.PAGE_SIZE, UserAndActState.JOIN);
 	}
 	
-	@RequestMapping(value = "loadQueueUserFromAct/{actId}")
+	@RequestMapping(value = "loadQueueUserFromAct/{actId}",method=RequestMethod.GET)
 	@ResponseBody
-	public Page<User> loadQueueUserFromAct(@PathVariable String actId,@RequestParam int pn){
+	public Page<User> loadQueueUserFromAct(
+			@PathVariable String actId,
+			@RequestParam int pn,
+			@RequestParam(value="access_token") String tokenId){
 		return actService.loadSpecialUserFromAct(actId,pn,CommonConstant.PAGE_SIZE, UserAndActState.QUEUE);
 	}
 	
@@ -268,8 +271,11 @@ public class ActivityController extends BaseController {
 	 */
 	@Token(save=true)
 	@RequestMapping("toAddActPage")
-	public String toAddActPage() throws Exception{
-		return "act/addActPage";
+	public ModelAndView toAddActPage(@RequestParam String access_token) throws Exception{
+		ModelAndView mav = new ModelAndView();
+		mav.addObject("tokenId", access_token);
+		mav.setViewName("act/addActPage");
+		return mav;
 	}
 	
 	/**
@@ -278,8 +284,13 @@ public class ActivityController extends BaseController {
 	 * @throws Exception
 	 */
 	@RequestMapping("toShowAllPage")
-	public String toShowAllPage() throws Exception{
-		return "act/showAllActPage";
+	public ModelAndView toShowAllPage(@RequestParam String access_token) throws Exception{
+		
+		ModelAndView mav = new ModelAndView();
+		mav.addObject("tokenId", access_token);
+		mav.setViewName("act/showAllActPage");
+		
+		return mav;
 	}
 	
 	/**

@@ -6,8 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.gogo.annotation.GoJsonFilter;
 import com.gogo.domain.Place;
@@ -57,13 +59,14 @@ public class FriendController extends BaseController {
 	 * @param pn
 	 * @return
 	 */
-	@RequestMapping(value = "loadFriendByPlace")
+	@RequestMapping(value = "loadFriendByPlace",method=RequestMethod.GET)
 	@ResponseBody
 	@GoJsonFilter(mixin=UserFilter.class,target=User.class)
 	public Page<User> loadPersonByPlace(
 			HttpServletRequest request, 
 			@RequestParam(required=false) Place place,
-			@RequestParam(value="pn",required=false) Integer pn){
+			@RequestParam(value="pn",required=false) Integer pn,
+			@RequestParam(value="access_token") String tokenId){
 		
 		String remoteAddr =request.getRemoteAddr();
 		String token = getUserToken(request);
@@ -74,8 +77,11 @@ public class FriendController extends BaseController {
 	}
 	
 	@RequestMapping("toShowFriendPage")
-	public String toFriendPage() throws Exception{
-		return "friend/showAllPersonPage";
+	public ModelAndView toFriendPage(@RequestParam(value="access_token") String tokenId) throws Exception{
+		ModelAndView mav = new ModelAndView();
+		mav.addObject("tokenId", tokenId);
+		mav.setViewName("friend/showAllPersonPage");
+		return mav;
 	}
 	
 }

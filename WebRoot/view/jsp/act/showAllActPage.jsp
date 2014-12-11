@@ -23,7 +23,7 @@ function getNearAct(pn){
 	var failed = function(XMLHttpRequest,textStatus, errorThrown){
          alert(XMLHttpRequest.responseText);
     };
-	sendJsonGET(params,action,success,failed);
+    get4Json(params,action,success,failed);
 }
 
 function templatefill(acts){
