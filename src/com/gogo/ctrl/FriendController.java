@@ -76,8 +76,8 @@ public class FriendController extends BaseController {
 		
 	}
 	
-	@RequestMapping("toShowFriendPage")
-	public ModelAndView toFriendPage(@RequestParam(value="access_token") String tokenId) throws Exception{
+	@RequestMapping("toShowAllPage")
+	public ModelAndView toShowAllPage(@RequestParam(value="access_token") String tokenId) throws Exception{
 		ModelAndView mav = new ModelAndView();
 		mav.addObject("tokenId", tokenId);
 		mav.setViewName("friend/showAllPersonPage");

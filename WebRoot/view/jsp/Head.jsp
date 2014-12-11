@@ -32,7 +32,7 @@
 		});
 		
 		$("#searchUserBtn").click(function(){
-			location.href = '<%=basePath %>friend/toShowFriendPage?access_token=<%=tokenId%>'; 
+			location.href = '<%=basePath %>friend/toShowAllPage?access_token=<%=tokenId%>'; 
 		});
 		
 		$("#setterBtn").click(function(){

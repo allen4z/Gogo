@@ -205,8 +205,9 @@ public class GroupController extends BaseController {
 	}
 	
 	@RequestMapping("toShowGroupPage")
-	public ModelAndView toAddActPage(@RequestParam String groupId,@RequestParam(value="access_token") String tokenId) throws Exception{
+	public ModelAndView toShowGroupPage(@RequestParam String groupId,@RequestParam(value="access_token") String tokenId) throws Exception{
 		ModelAndView mav = new ModelAndView();
+		mav.addObject("tokenId", tokenId);
 		mav.addObject("groupId", groupId);
 		mav.setViewName("group/showGroupPage");
 		return mav;
