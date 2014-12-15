@@ -89,7 +89,7 @@ public class Activity extends BaseDomain {
 	@Column(name="act_hotpoint",length=10)
 	private int hotPoind;
 	
-
+	//关联的地点
 	@ManyToOne(cascade=CascadeType.ALL)
 	@JoinColumn(name="place_id")
 	private Place place;
@@ -129,9 +129,15 @@ public class Activity extends BaseDomain {
 	@Column(name="act_current_message",length=50)
 	private int cutMessage;
 	
+	//球队
 	@ManyToOne(cascade=CascadeType.ALL)
 	@JoinColumn(name="group_id")
 	private Group gorup;
+	
+	//比赛
+	@ManyToOne(cascade=CascadeType.ALL)
+	@JoinColumn(name="match_id")
+	private MatchList matchList;
 	
 	//版本
 	@Version
@@ -344,6 +350,14 @@ public class Activity extends BaseDomain {
 
 	public void setGorup(Group gorup) {
 		this.gorup = gorup;
+	}
+
+	public MatchList getMatchList() {
+		return matchList;
+	}
+
+	public void setMatchList(MatchList matchList) {
+		this.matchList = matchList;
 	}
 
 	@Override
