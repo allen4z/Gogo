@@ -90,6 +90,11 @@ public class Activity extends BaseDomain {
 //	private int hotPoind;
 	
 	//关联的地点
+	//热度
+	@Column(name="act_hotpoint",length=10)
+	private int hotPoind;
+	
+	//关联的地点
 	@ManyToOne(cascade=CascadeType.ALL)
 	@JoinColumn(name="place_id")
 	private Place place;
