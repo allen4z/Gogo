@@ -86,13 +86,13 @@ public class ActivityController extends BaseController {
 		if(act.getMinJoin()>act.getMaxJoin()){
 			throw new Business4JsonException("act_savecheck_minjoin_morethen_maxjoin","min join people more then max join people!");
 		}
-		Date signDate =act.getSignTime();
+//		Date signDate =act.getSignTime();
 		Date startDate = act.getStartTime();
 
-		if(startDate.compareTo(signDate)<=0){
-			throw new Business4JsonException("act_savecheck_startdate_earlythen_signupDate","start date early then signup date");
-		}
-		act.setSignTime(signDate);
+//		if(startDate.compareTo(signDate)<=0){
+//			throw new Business4JsonException("act_savecheck_startdate_earlythen_signupDate","start date early then signup date");
+//		}
+//		act.setSignTime(signDate);
 		act.setStartTime(startDate);
 		return true;
 	}
@@ -250,7 +250,8 @@ public class ActivityController extends BaseController {
 	 * @throws Exception
 	 */
 	@RequestMapping("toShowActPage")
-	public ModelAndView toShowActPage(HttpServletRequest request,@RequestParam String actId) throws Exception{
+	public ModelAndView toShowActPage(HttpServletRequest request,@RequestParam String actId,
+			@RequestParam(value="access_token") String tokenId) throws Exception{
 		ModelAndView mav = new ModelAndView();
 		String token = getUserToken(request);
 		UserAndActState uarState =UserAndActState.CANCEL;
@@ -300,8 +301,10 @@ public class ActivityController extends BaseController {
 	 * @throws Exception
 	 */
 	@RequestMapping("toShowActAllUserPage")
-	public ModelAndView toShowActAllUserPage(@RequestParam String actId) throws Exception{
+	public ModelAndView toShowActAllUserPage(@RequestParam String actId,
+			@RequestParam(value="access_token") String tokenId ) throws Exception{
 		ModelAndView mav = new ModelAndView();
+		mav.addObject("tokenId", tokenId);
 		mav.addObject("actId", actId);
 		mav.setViewName("act/user/showActAllUserPage");
 		return mav;
@@ -315,8 +318,12 @@ public class ActivityController extends BaseController {
 	 * @throws Exception
 	 */
 	@RequestMapping("toShowSpecialActUserPage")
-	public ModelAndView showSpecialActUserPage(@RequestParam UserAndActState state,@RequestParam String actId) throws Exception{
+	public ModelAndView showSpecialActUserPage(@RequestParam UserAndActState state,
+			@RequestParam String actId,
+			@RequestParam(value="access_token") String tokenId ) throws Exception{
+		
 		ModelAndView mav = new ModelAndView();
+		mav.addObject("tokenId", tokenId);
 		mav.addObject("actId", actId);
 		mav.addObject("state",state);
 		mav.setViewName("act/user/showSpecialActUserPage");

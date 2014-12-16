@@ -77,7 +77,7 @@ public class ActivityService extends BaseService {
 		act.setActCreateTime(new Date());
 		act.setOwnUser(user);
 		//TODO 保存默认为发布状态
-		act.setState(ACTState.RELEASE);
+//		act.setState(ACTState.RELEASE);
 		actDao.save(act);
 		//建立消息信息
 		createActNotify(user,act);
@@ -203,7 +203,7 @@ public class ActivityService extends BaseService {
 		Activity act = actDao.load(actId);
 		User user = act.getOwnUser();
 		if(user.getId().equals(userId)){
-			act.setState(ACTState.DELETE);
+//			act.setState(ACTState.DELETE);
 			actDao.update(act);
 		}else{
 			throw new BusinessException("登录用户无权删除此活动");

@@ -22,7 +22,7 @@ public class ActServiceTest extends AbstractContextTests  {
 		Activity act = new Activity();
 		act.setId("2");
 		act.setName("更新测试");
-		act.setState(ACTState.STOP);
+//		act.setState(ACTState.STOP);
 		service.deleteActivity("1", "1");
 	}
 	

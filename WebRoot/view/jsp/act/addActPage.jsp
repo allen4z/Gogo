@@ -50,7 +50,7 @@
 		$("#addActBtn").click(function(){
 			
 			var token =$("#token").val();
-			var actionInfo = 'activity/saveAct?token='+token;	
+			var actionInfo = 'activity/saveAct?access_token='+token;	
 			var params = {
 				name : $("#act_name").val(),
 				content : $("#act_content").val(),

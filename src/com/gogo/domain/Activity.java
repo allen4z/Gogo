@@ -41,11 +41,11 @@ public class Activity extends BaseDomain {
 	@Column(name="act_name",length=20,nullable=false)
 	private String name;
 	
-	//活动内容
-	@NotNull(message="{act.actcount.not.empty}")
-	@Length(min=0,max=200,message="{act.actcount.length.error}")
-	@Column(name="act_contents",length=200)
-	private String content;
+//	//活动内容
+//	@NotNull(message="{act.actcount.not.empty}")
+//	@Length(min=0,max=200,message="{act.actcount.length.error}")
+//	@Column(name="act_contents",length=200)
+//	private String content;
 	
 	
 	@OneToMany(mappedBy="act",cascade=CascadeType.ALL)
@@ -68,26 +68,26 @@ public class Activity extends BaseDomain {
 	@Column(name="act_create_time",length=10)
 	private Date actCreateTime;
 	
-	//是否循环任务
-	@Column(name="act_isloop",length=1)
-	private boolean loop;
+//	//是否循环任务
+//	@Column(name="act_isloop",length=1)
+//	private boolean loop;
 	
 	//开始时间
 	@NotNull(message="{act.actstarttime.not.empty}")
 	@Column(name="act_start_time",length=10)
 	private Date startTime;
 	
-	//报名时间
-	@Column(name="act_sign_time",length=10)
-	private Date signTime;
+//	//报名时间
+//	@Column(name="act_sign_time",length=10)
+//	private Date signTime;
 	
-	//活动状态 ：未发布、未发布
-	@Column(name="act_state",length=1)
-	private ACTState state;
-	
-	//热度
-	@Column(name="act_hotpoint",length=10)
-	private int hotPoind;
+//	//活动状态 ：未发布、未发布
+//	@Column(name="act_state",length=1)
+//	private ACTState state;
+
+//	//热度
+//	@Column(name="act_hotpoint",length=10)
+//	private int hotPoind;
 	
 
 	@ManyToOne(cascade=CascadeType.ALL)
@@ -129,9 +129,15 @@ public class Activity extends BaseDomain {
 	@Column(name="act_current_message",length=50)
 	private int cutMessage;
 	
+	//球队
 	@ManyToOne(cascade=CascadeType.ALL)
 	@JoinColumn(name="group_id")
 	private Group gorup;
+	
+	//比赛
+	@ManyToOne(cascade=CascadeType.ALL)
+	@JoinColumn(name="match_id")
+	private MatchList matchList;
 	
 	//版本
 	@Version
@@ -195,13 +201,13 @@ public class Activity extends BaseDomain {
 		this.name = name;
 	}
 
-	public String getContent() {
-		return content;
-	}
-
-	public void setContent(String content) {
-		this.content = content;
-	}
+//	public String getContent() {
+//		return content;
+//	}
+//
+//	public void setContent(String content) {
+//		this.content = content;
+//	}
 
 	public Set<Label> getLabel() {
 		return label;
@@ -235,13 +241,13 @@ public class Activity extends BaseDomain {
 		this.actCreateTime = actCreateTime;
 	}
 
-	public boolean isLoop() {
-		return loop;
-	}
-
-	public void setLoop(boolean loop) {
-		this.loop = loop;
-	}
+//	public boolean isLoop() {
+//		return loop;
+//	}
+//
+//	public void setLoop(boolean loop) {
+//		this.loop = loop;
+//	}
 
 	public Date getStartTime() {
 		return startTime;
@@ -251,37 +257,29 @@ public class Activity extends BaseDomain {
 		this.startTime = startTime;
 	}
 
-	public Date getSignTime() {
-		return signTime;
-	}
+//	public Date getSignTime() {
+//		return signTime;
+//	}
+//
+//	public void setSignTime(Date signTime) {
+//		this.signTime = signTime;
+//	}
+//	public ACTState getState() {
+//		return state;
+//	}
+//
+//	public void setState(ACTState state) {
+//		this.state = state;
+//	}
+//
+//	public int getHotPoind() {
+//		return hotPoind;
+//	}
+//
+//	public void setHotPoind(int hotPoind) {
+//		this.hotPoind = hotPoind;
+//	}
 
-	public void setSignTime(Date signTime) {
-		this.signTime = signTime;
-	}
-	public ACTState getState() {
-		return state;
-	}
-
-	public void setState(ACTState state) {
-		this.state = state;
-	}
-
-	public int getHotPoind() {
-		return hotPoind;
-	}
-
-	public void setHotPoind(int hotPoind) {
-		this.hotPoind = hotPoind;
-	}
-
-/*	public Place getPlace() {
-		return place;
-	}
-
-	public void setPlace(Place place) {
-		this.place = place;
-	}
-*/
 	public boolean isOpen() {
 		return open;
 	}
@@ -344,6 +342,14 @@ public class Activity extends BaseDomain {
 
 	public void setGorup(Group gorup) {
 		this.gorup = gorup;
+	}
+
+	public MatchList getMatchList() {
+		return matchList;
+	}
+
+	public void setMatchList(MatchList matchList) {
+		this.matchList = matchList;
 	}
 
 	@Override
