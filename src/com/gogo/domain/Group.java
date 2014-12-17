@@ -47,17 +47,13 @@ public class Group extends BaseDomain{
 	@Column(name="group_logo",length=100)
 	private String logoUrl;
 	
-	public String getLogoUrl() {
-		return logoUrl;
-	}
-
-	public void setLogoUrl(String logoUrl) {
-		this.logoUrl = logoUrl;
-	}
-
 	//简介
 	@Column(name="group_content",length=200)
 	private String content;
+	
+	// 创建时间
+	@Column(name = "group_create_time", length = 10)
+	private Date createTime;
 
 	//是否调整期（暂停）
 	@Column(name="group_adjustment",length=1)
@@ -181,4 +177,19 @@ public class Group extends BaseDomain{
 		this.isAdjustment = isAdjustment;
 	}
 
+	public String getLogoUrl() {
+		return logoUrl;
+	}
+
+	public void setLogoUrl(String logoUrl) {
+		this.logoUrl = logoUrl;
+	}
+
+	public Date getCreateTime() {
+		return createTime;
+	}
+
+	public void setCreateTime(Date createTime) {
+		this.createTime = createTime;
+	}
 }

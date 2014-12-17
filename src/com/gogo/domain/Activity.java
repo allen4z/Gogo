@@ -20,136 +20,115 @@ import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.validator.constraints.Length;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import com.gogo.domain.enums.ACTState;
 
 @Entity
-@Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
-@Table(name="t_act")
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+@Table(name = "t_act")
 public class Activity extends BaseDomain {
-	
-	//主键
+
+	// 主键
 	@Id
 	@GenericGenerator(name = "idGenerator", strategy = "uuid")
 	@GeneratedValue(generator = "idGenerator")
-	@Column(name="act_id",length=32,nullable=false)
+	@Column(name = "act_id", length = 32, nullable = false)
 	private String id;
-	
-	//活动名称
-	@NotNull(message="{act.actname.not.empty}")
-	@Length(min=4,max=20,message="{act.actname.length.error}")
-	@Column(name="act_name",length=20,nullable=false)
+
+	// 活动名称
+	@NotNull(message = "{act.actname.not.empty}")
+	@Length(min = 4, max = 20, message = "{act.actname.length.error}")
+	@Column(name = "act_name", length = 20, nullable = false)
 	private String name;
-	
-//	//活动内容
-//	@NotNull(message="{act.actcount.not.empty}")
-//	@Length(min=0,max=200,message="{act.actcount.length.error}")
-//	@Column(name="act_contents",length=200)
-//	private String content;
-	
-	
-	@OneToMany(mappedBy="act",cascade=CascadeType.ALL)
+
+	// //活动内容
+	// @NotNull(message="{act.actcount.not.empty}")
+	// @Length(min=0,max=200,message="{act.actcount.length.error}")
+	// @Column(name="act_contents",length=200)
+	// private String content;
+
+	@OneToMany(mappedBy = "act", cascade = CascadeType.ALL)
 	private Set<Label> label;
-	
-	//活动logo
-	@Column(name="act_image_url",length=100)
+
+	// 活动logo
+	@Column(name = "act_image_url", length = 100)
 	private String imageUrl;
 
-	//活动创建人
+	// 活动创建人
 	@ManyToOne
-	@JoinColumn(name="act_own_user")
+	@JoinColumn(name = "act_own_user")
 	@OrderBy("name ASC")
 	private User ownUser;
-	
-	@OneToMany(mappedBy="act",cascade=CascadeType.ALL)
-	private Set<UserAndAct> joinUser;
-	
-	//创建时间
-	@Column(name="act_create_time",length=10)
-	private Date actCreateTime;
-	
-//	//是否循环任务
-//	@Column(name="act_isloop",length=1)
-//	private boolean loop;
-	
-	//开始时间
-	@NotNull(message="{act.actstarttime.not.empty}")
-	@Column(name="act_start_time",length=10)
-	private Date startTime;
-	
-//	//报名时间
-//	@Column(name="act_sign_time",length=10)
-//	private Date signTime;
-	
-//	//活动状态 ：未发布、未发布
-//	@Column(name="act_state",length=1)
-//	private ACTState state;
 
-//	//热度
-//	@Column(name="act_hotpoint",length=10)
-//	private int hotPoind;
-	
-	//关联的地点
-	//热度
-	@Column(name="act_hotpoint",length=10)
-	private int hotPoind;
-	
-	//关联的地点
-	@ManyToOne(cascade=CascadeType.ALL)
-	@JoinColumn(name="place_id")
+	@OneToMany(mappedBy = "act", cascade = CascadeType.ALL)
+	private Set<UserAndAct> joinUser;
+
+	// 创建时间
+	@Column(name = "act_create_time", length = 10)
+	private Date actCreateTime;
+
+	// 开始时间
+	@NotNull(message = "{act.actstarttime.not.empty}")
+	@Column(name = "act_start_time", length = 10)
+	@DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
+	private Date startTime;
+
+	// 活动状态 ：未发布、未发布
+	@Column(name = "act_state", length = 1)
+	private ACTState state;
+
+	// 关联的地点
+	@ManyToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "place_id")
 	private Place place;
-	
-	//是否所有人可见
-	@Column(name="act_isopen",length=1)
-	private boolean open;	
-	
-	//活总需金额
-	@Column(name="act_need_amount",length=50)
+
+	// 内部训练、野球
+	@Column(name = "act_isopen", length = 1)
+	private boolean open;
+
+	// 活总需金额 根据缴费金额自动计算
+	@Column(name = "act_need_amount", length = 50)
 	private double amount;
-	
-	//已拥有资金
-	@Column(name="act_has_amount",length=50)
+
+	// 已拥有资金
+	@Column(name = "act_has_amount", length = 50)
 	private double hasAmount;
-	
-	//是否按报名人数
-	@Column(name="act_split",length=1)
-	private boolean split;
-	
-	//每名参与者需要支付
-	@Column(name="act_join_needpay",length=50)
+
+	// 每名参与者需要支付
+	@Column(name = "act_join_needpay", length = 50)
 	private double joinNeedPay;
-	
-	//-------------------JOIN INFO -----------------------
-	//参与者最少
-	@Column(name="act_min_join",length=50)
+
+	// -------------------JOIN INFO -----------------------
+	// 参与者最少
+	@Column(name = "act_min_join", length = 50)
 	private int minJoin;
-	
-	//参与者最多
-	@Column(name="act_max_join",length=50)
+
+	// 参与者最多
+	@Column(name = "act_max_join", length = 50)
 	private int maxJoin;
-	@Column(name="act_current_join",length=50)
+	@Column(name = "act_current_join", length = 50)
 	private int cutJoin;
-	
-	//留言数量
-	@Column(name="act_current_message",length=50)
+
+	// 留言数量
+	@Column(name = "act_current_message", length = 50)
 	private int cutMessage;
-	
-	//球队
-	@ManyToOne(cascade=CascadeType.ALL)
-	@JoinColumn(name="group_id")
+
+	// 球队
+	@ManyToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "group_id")
 	private Group gorup;
-	
-	//比赛
-	@ManyToOne(cascade=CascadeType.ALL)
-	@JoinColumn(name="match_id")
+
+	// 比赛
+	@ManyToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "match_id")
 	private MatchList matchList;
-	
-	//版本
+
+	// 版本
 	@Version
-	@Column(name="update_time",length=10,nullable=false)
+	@Column(name = "update_time", length = 10, nullable = false)
 	private Date update_time;
-	
-	
+
 	public int getCutMessage() {
 		return cutMessage;
 	}
@@ -170,15 +149,14 @@ public class Activity extends BaseDomain {
 		return imageUrl;
 	}
 
-
 	public void setImageUrl(String imageUrl) {
 		this.imageUrl = imageUrl;
 	}
 
-
 	public double getJoinNeedPay() {
 		return joinNeedPay;
 	}
+
 	public void setJoinNeedPay(double joinNeedPay) {
 		this.joinNeedPay = joinNeedPay;
 	}
@@ -186,6 +164,7 @@ public class Activity extends BaseDomain {
 	public int getMaxJoin() {
 		return maxJoin;
 	}
+
 	public void setMaxJoin(int maxJoin) {
 		this.maxJoin = maxJoin;
 	}
@@ -206,13 +185,13 @@ public class Activity extends BaseDomain {
 		this.name = name;
 	}
 
-//	public String getContent() {
-//		return content;
-//	}
-//
-//	public void setContent(String content) {
-//		this.content = content;
-//	}
+	// public String getContent() {
+	// return content;
+	// }
+	//
+	// public void setContent(String content) {
+	// this.content = content;
+	// }
 
 	public Set<Label> getLabel() {
 		return label;
@@ -246,14 +225,6 @@ public class Activity extends BaseDomain {
 		this.actCreateTime = actCreateTime;
 	}
 
-//	public boolean isLoop() {
-//		return loop;
-//	}
-//
-//	public void setLoop(boolean loop) {
-//		this.loop = loop;
-//	}
-
 	public Date getStartTime() {
 		return startTime;
 	}
@@ -262,28 +233,13 @@ public class Activity extends BaseDomain {
 		this.startTime = startTime;
 	}
 
-//	public Date getSignTime() {
-//		return signTime;
-//	}
-//
-//	public void setSignTime(Date signTime) {
-//		this.signTime = signTime;
-//	}
-//	public ACTState getState() {
-//		return state;
-//	}
-//
-//	public void setState(ACTState state) {
-//		this.state = state;
-//	}
-//
-//	public int getHotPoind() {
-//		return hotPoind;
-//	}
-//
-//	public void setHotPoind(int hotPoind) {
-//		this.hotPoind = hotPoind;
-//	}
+	public ACTState getState() {
+		return state;
+	}
+
+	public void setState(ACTState state) {
+		this.state = state;
+	}
 
 	public boolean isOpen() {
 		return open;
@@ -309,14 +265,6 @@ public class Activity extends BaseDomain {
 		this.hasAmount = hasAmount;
 	}
 
-	public boolean isSplit() {
-		return split;
-	}
-
-	public void setSplit(boolean split) {
-		this.split = split;
-	}
-
 	public int getCutJoin() {
 		return cutJoin;
 	}
@@ -332,7 +280,7 @@ public class Activity extends BaseDomain {
 	public void setUpdate_time(Date update_time) {
 		this.update_time = update_time;
 	}
-	
+
 	public Place getPlace() {
 		return place;
 	}

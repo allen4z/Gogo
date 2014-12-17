@@ -14,7 +14,8 @@
 			var actionInfo = 'group/saveGroup?pn=1';	
 			var params = {
 				name : $("#group_name").val(),
-				nickName:$("#group_nickname").val()
+				nickName:$("#group_nickname").val(),
+				name : $("#group_content").val()
 			};
 			
 			var success = function(id){
@@ -40,6 +41,10 @@
 <form>
 球队名称：<input id="group_name" name="group_name" type="text"/>	<br/>
 简称：<input id="group_nickname" name="group_nickname" type="text"/>	<br/>
+
+简介：<input id="group_content" name="group_content" type="text"/>	<br/>
+
+logo:
 
 <input id="addGroupBtn" name="addGroupBtn"  type="button" value="保存"/>
 </form>

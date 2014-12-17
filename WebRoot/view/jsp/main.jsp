@@ -173,7 +173,6 @@
 	</tr>
 	<tr>
 		<td>活动名称</td>
-		<td>活动内容</td>
 	</tr>
 	
 	<%
@@ -182,7 +181,6 @@
 		%>
 		<tr>
 			<td><a href="activity/toShowActPage?actId=<%=act.getId()%>&access_token=<%=tokenId %>"><%=act.getName() %></a></td>
-			<td><%=act.getContent() %></td>
 		</tr>
 		<%
 	}
@@ -199,7 +197,6 @@
 	</tr>
 	<tr>
 		<td>活动名称</td>
-		<td>活动内容</td>
 	</tr>
 	
 	<%
@@ -208,7 +205,6 @@
 		%>
 		<tr>
 			<td><a href="activity/toShowActPage?actId=<%=act.getId()%>&access_token=<%=tokenId %>"><%=act.getName() %></a></td>
-			<td><%=act.getContent() %></td>
 		</tr>
 		<%
 	}

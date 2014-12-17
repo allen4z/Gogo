@@ -37,14 +37,15 @@ public class MatchList extends BaseDomain {
 	@ManyToOne
 	@JoinColumn(name="belongGroup")
 	private Group belongGroup;
-	//主队进球数
-	@Column(name="ml_belonggoals",length=10)
-	private int belongGroupGoals;
 	
 	//对方小组
 	@ManyToOne
 	@JoinColumn(name="otherGroup")
 	private Group otherGroup;
+	
+	//主队进球数
+	@Column(name="ml_belonggoals",length=10)
+	private int belongGroupGoals;
 	
 	//客队进球数
 	@Column(name="ml_othergoals",length=10)

@@ -1,5 +1,6 @@
 package com.gogo.service;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,6 +49,7 @@ public class GroupService extends BaseService {
 		group.setCreateUser(user);
 		group.setMaxJoinUser(DomainStateHelper.GROUP_DEFAULT_USER_SIZE);
 		group.setCurJoinUser(1);
+		group.setCreateTime(new Date());
 		
 		int maxAuthority  = RoleHelper.ROLE_SUPERMANAGER;
 		UserAndGroup uag =new UserAndGroup();
@@ -72,7 +74,7 @@ public class GroupService extends BaseService {
 		if(group.getCurJoinUser()>=group.getMaxJoinUser()){
 			throw new Business4JsonException("小组人数已满");
 		}
-		
+		//判断是否加入过小组
 		UserAndGroup uag = userAndGroupDao.loadUAG4UserAndGroup(user.getId(), groupId);
 		if(uag != null && uag.getState() == UserAndGroupState.FORMAL){
 			throw new Business4JsonException("您已经加入了小组");

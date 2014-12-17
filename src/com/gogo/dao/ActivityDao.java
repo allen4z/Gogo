@@ -132,7 +132,7 @@ public class ActivityDao extends BaseDao<Activity>{
 		//非公开项目不能被查询到
 		hql.append(" where "+HQL_AILS+".open=true ");
 		//活动状态为发布则可以被查询
-//		hql.append(" and "+HQL_AILS+".state="+ACTState.RELEASE.ordinal());
+		hql.append(" and "+HQL_AILS+".state="+ACTState.RELEASE.ordinal());
 		
 		
 		return hql.toString();

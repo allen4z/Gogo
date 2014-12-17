@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 import org.apache.log4j.Logger;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -76,8 +75,8 @@ public class ActivityService extends BaseService {
 		}
 		act.setActCreateTime(new Date());
 		act.setOwnUser(user);
-		//TODO 保存默认为发布状态
-//		act.setState(ACTState.RELEASE);
+		//保存默认为发布状态
+		act.setState(ACTState.RELEASE);
 		actDao.save(act);
 		//建立消息信息
 		createActNotify(user,act);
@@ -213,20 +212,18 @@ public class ActivityService extends BaseService {
 	/**
 	 * 更新活动信息，将前台传入的数据赋值到查询出的活动 并更新
 	 */
-	public void updateActivity(Activity act, String tokenId) throws Exception {
+	public Activity updateActivity(Activity act, String tokenId) throws Exception {
 		String actId = act.getId();
-		
-		Activity act4db = actDao.load(actId);
+		Activity act4db = actDao.get(actId);
 		User user = act4db.getOwnUser();
-		
 		if(user.getId().equals(getUserbyToken(tokenId).getId())){
-			BeanUtils.copyProperties(act, act4db);
+			//将前台传入的参数模型值复制到数据库模型中
 			DomainStateHelper.copyPriperties(act, act4db);
-//			act4db.setUpdate_time(new Date());
 			actDao.update(act4db);
 		}else{
 			throw new BusinessException("登录用户无权更新此活动");
 		}
+		return act4db;
 	}
 	
 	/**
@@ -283,16 +280,12 @@ public class ActivityService extends BaseService {
 	 * @param userId
 	 * @param actId
 	 */
-	public UserAndActState loadCurUserStateInAct(String token, String actId) {
+	public UserAndAct loadCurUserStateInAct(String token, String actId) {
 		
 		UserToken userToken = userTokenDao.get(token);
-		
-		UserAndAct uaa = userAndActDao.loadByUserAndAct(userToken.getUser().getId(), actId);	
-		if(uaa != null){
-			return uaa.getUaaState();
-		}else{
-			return UserAndActState.CANCEL;
-		}
+		User user = userToken.getUser();
+		UserAndAct uaa = userAndActDao.loadByUserAndAct(user.getId(), actId);	
+		return uaa;
 	}
 
 }

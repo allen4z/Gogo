@@ -23,6 +23,7 @@ import com.gogo.dao.UserAndGroupDao;
 import com.gogo.domain.Activity;
 import com.gogo.domain.Place;
 import com.gogo.domain.User;
+import com.gogo.domain.UserAndAct;
 import com.gogo.domain.enums.UserAndActState;
 import com.gogo.exception.Business4JsonException;
 import com.gogo.helper.CommonConstant;
@@ -71,10 +72,36 @@ public class ActivityController extends BaseController {
 			String tokenId = getUserToken(request);
 			actService.saveActivity(act,tokenId);
 		}
-		
 		return act;
 	}
 	
+	
+	
+	/**
+	 * 根据ID跟新活动
+	 * @param actId
+	 * @return
+	 */
+	@RequestMapping("updateAct")
+	@ResponseBody
+	public Activity updateActivity(HttpServletRequest request,
+			@RequestBody Activity act,
+			BindingResult result) throws Exception{
+		//验证用户信息
+		if(result.hasErrors()){
+			List<ObjectError> errorList = result.getAllErrors();
+			StringBuffer errMsg = new StringBuffer();
+			for (ObjectError oe : errorList) {
+				errMsg.append(oe.getDefaultMessage()+"\n");
+			}
+			throw new Business4JsonException(errMsg.toString());
+		}
+		if(checkActInfo(act)){
+			String tokenId = getUserToken(request);
+			act = actService.updateActivity(act, tokenId);
+		}
+		return act;
+	}
 	/**
 	 * 验证活动信息是否正确
 	 * @param act
@@ -129,16 +156,6 @@ public class ActivityController extends BaseController {
 		String tokenId = getUserToken(request);
 		actService.updateUserJoinActivity(actId,tokenId);
 		return true;
-	}
-	
-	/**
-	 * 根据ID跟新活动
-	 * @param actId
-	 * @return
-	 */
-	public void updateActivity(HttpServletRequest request,@RequestBody Activity act)throws Exception{
-		String tokenId = getUserToken(request);
-		actService.updateActivity(act, tokenId);
 	}
 	
 	/**
@@ -255,9 +272,22 @@ public class ActivityController extends BaseController {
 		ModelAndView mav = new ModelAndView();
 		String token = getUserToken(request);
 		UserAndActState uarState =UserAndActState.CANCEL;
+		boolean isOwnUser = false;
 		if(token != null){
-			uarState = actService.loadCurUserStateInAct(token,actId);
+			UserAndAct uaa = actService.loadCurUserStateInAct(token,actId);
+			if(uaa!=null){
+				uarState = uaa.getUaaState();
+			}
+			Activity act = actService.loadActbyActId(actId);
+			User actOwnUser = act.getOwnUser();
+			User tonkenUser = getUser(tokenId);
+			if(actOwnUser.getId().equals(tonkenUser.getId())){
+				isOwnUser = true;
+			}
+			
 		}
+	
+		mav.addObject("isOwnUser", isOwnUser);
 		mav.addObject("tokenId",token);
 		mav.addObject("uarState", uarState);
 		mav.addObject("actId", actId);
@@ -274,6 +304,27 @@ public class ActivityController extends BaseController {
 	@RequestMapping("toAddActPage")
 	public ModelAndView toAddActPage(@RequestParam String access_token) throws Exception{
 		ModelAndView mav = new ModelAndView();
+		mav.addObject("state", "add");
+		mav.addObject("tokenId", access_token);
+		mav.setViewName("act/addActPage");
+		return mav;
+	}
+	
+	
+	/**
+	 * 进入编辑活动页面
+	 * @return
+	 * @throws Exception
+	 */
+	@Token(save=true)
+	@RequestMapping("toEditActPage")
+	public ModelAndView toEditActPage(@RequestParam String actId,@RequestParam String access_token) throws Exception{
+		
+		Activity act = actService.loadActbyActId(actId);
+		
+		ModelAndView mav = new ModelAndView();
+		mav.addObject("act", act);
+		mav.addObject("state", "edit");
 		mav.addObject("tokenId", access_token);
 		mav.setViewName("act/addActPage");
 		return mav;

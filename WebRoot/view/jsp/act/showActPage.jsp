@@ -7,12 +7,19 @@
 	String actId = (String)request.getAttribute("actId");
 
 	UserAndActState uarState = (UserAndActState)request.getAttribute("uarState");
+	
+	boolean isOwnUser = (Boolean)request.getAttribute("isOwnUser");
 %>
 
 <html>
 <head>
 <title>Gogo-Main</title>
 <script type="text/javascript">
+$(document).ready(function(){
+	$("#editAct").click(function(){
+		location.href = '<%=basePath %>activity/toEditActPage?actId=<%=actId%>&access_token=<%=tokenId%>'; 
+	});
+});
 
 function getAct(actId){
 	var action = 'activity/loadActByActId/'+actId+'?flag=0';
@@ -73,6 +80,12 @@ function templatefill(data){
 		</div>
 		
 </script>
+<%if(isOwnUser){
+	%>
+	<button id="editAct" name="editAct">修改活动</button>
+	<%
+}%>
+
 
 </body>
 </html>

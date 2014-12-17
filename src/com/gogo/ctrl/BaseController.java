@@ -13,6 +13,7 @@ import org.springframework.web.servlet.support.RequestContextUtils;
 
 import com.gogo.dao.UserTokenDao;
 import com.gogo.domain.GoError;
+import com.gogo.domain.User;
 import com.gogo.exception.Business4JsonException;
 import com.gogo.exception.BusinessException;
 import com.gogo.exception.ParameterException;
@@ -74,6 +75,9 @@ public class BaseController {
 		return request.getParameter("access_token");
 	}
 	
+	protected User getUser(String tokenId){
+		return userTokenDao.get(tokenId).getUser();
+	}
 	protected String getServletPath(HttpServletRequest request) {
 		return request.getServletPath();
 	}

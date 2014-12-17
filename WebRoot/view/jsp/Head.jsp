@@ -11,9 +11,9 @@
 <head>
 <script type="text/javascript">	
 	$(document).ready(function(){
-		$("#backMain").click(function(){
-			location.href = '<%=basePath %>'; 
-		});
+		//$("#backMain").click(function(){
+		//	location.href = '<%=basePath %>'; 
+		//});
 		
 		$("#backUserMain").click(function(){
 			location.href = '<%=basePath %>user/forwoardMain?access_token=<%=tokenId%>'; 
@@ -46,8 +46,8 @@
 
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-<button id="backMain">返回主页</button>
-&nbsp;
+<!-- <button id="backMain">返回主页</button>
+&nbsp; -->
 <button id="searchActBtn" >查找附近活动</button>
 &nbsp;
 
