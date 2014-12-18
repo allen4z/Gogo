@@ -24,7 +24,7 @@ public class UserAndGroupDao extends BaseDao<UserAndGroup> {
 	
 	
 	public UserAndGroup loadUAG4User(String userId){
-		String hql = "select uag from UserAndGroup uag left join uag.user u where u.id=:id";
+		String hql = "select uag from UserAndGroup uag left join uag.user u where u.id:=id";
 		Query query =  getSession().createQuery(hql);
 		query.setString("id", userId);
 		return (UserAndGroup) query.uniqueResult();
@@ -37,7 +37,7 @@ public class UserAndGroupDao extends BaseDao<UserAndGroup> {
 	}
 	
 	public UserAndGroup loadByUser(String userId){
-		String hql = "select uag from UserAndGroup uag left join uag.user u where u.id=:id and uag.state:=state";
+		String hql = " select uag from UserAndGroup uag left join uag.user u where u.id=:id and uag.state=:state ";
 		Query query =  getSession().createQuery(hql);
 		query.setString("id", userId);
 		query.setInteger("state", UserAndGroupState.FORMAL.ordinal());
