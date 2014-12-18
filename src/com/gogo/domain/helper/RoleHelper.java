@@ -23,11 +23,11 @@ package com.gogo.domain.helper;
 public class RoleHelper {
 	
 	//系统默认角色---------------------------------------------------------------
-	//普通成员
+	//球员
 	public static final int ROLE_MEMBER=mergeParamState(RoleHelper.THREE_AUTHORITY_INVITE);
-	//管理员
+	//代理队长
 	public static final int ROLE_MANAGER=mergeParamState(RoleHelper.FOUR_AUTHORITY_EXPEL);
-	//超级管理员
+	//队长
 	public static final int ROLE_SUPERMANAGER = mergeParamState(RoleHelper.FIVE_AUTHORITY_SUPER);
 	
 	//-----------------------------------------------------
@@ -38,9 +38,9 @@ public class RoleHelper {
 	public static final int TOW_AUTHORITY_TEXT=1;  //  001
 	//是否允许邀请其他人
 	public static final int THREE_AUTHORITY_INVITE=2;  //  010
-	//是否允许踢人
+	//是否允许踢人/或通过申请
 	public static final int FOUR_AUTHORITY_EXPEL=4; //100
-	//超级管理权限
+	//允许报名参加比赛或同意比赛邀请
 	public static final int FIVE_AUTHORITY_SUPER=8; //1000
 	
 	

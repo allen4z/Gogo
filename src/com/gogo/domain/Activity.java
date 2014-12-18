@@ -119,7 +119,7 @@ public class Activity extends BaseDomain {
 	@JoinColumn(name = "group_id")
 	private Group gorup;
 
-	// 比赛
+	//比赛   TODO 活动和比赛需要区分  所以活动不应属于比赛 此字段需要去掉
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "match_id")
 	private MatchList matchList;

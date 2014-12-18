@@ -21,6 +21,7 @@ import com.gogo.domain.Group;
 import com.gogo.domain.GroupApplyInfo;
 import com.gogo.domain.Invite;
 import com.gogo.domain.Place;
+import com.gogo.domain.enums.InviteState;
 import com.gogo.domain.enums.InviteType;
 import com.gogo.exception.Business4JsonException;
 import com.gogo.helper.CommonConstant;
@@ -119,8 +120,8 @@ public class GroupController extends BaseController {
 	
 	
 	/**
-	 * 用户退出小组
-	 * @param user
+	 * 邀请加入小组
+	 * @param request
 	 * @param friendId
 	 * @param groupId
 	 * @return
@@ -134,6 +135,12 @@ public class GroupController extends BaseController {
 		return true;
 	}
 	
+	/**
+	 * 用户退出小组
+	 * @param user
+	 * @param groupId
+	 * @return
+	 */
 	@RequestMapping(value = "quitGroup/{groupId}")
 	@ResponseBody
 	public boolean quitGroup(HttpServletRequest request,@PathVariable String groupId){
@@ -142,15 +149,21 @@ public class GroupController extends BaseController {
 	}
 	
 	/**
-	 * 获得所有的小组邀请信息
+	 * 获得所有等待通过的受邀信息
 	 * @param user
 	 * @param pn
 	 * @return
 	 */
 	public Page<Invite> loadAllGroupInvite(HttpServletRequest request,int pn){
-		return inviteService.loadAllInvite(getUserToken(request),InviteType.GROUP,pn,CommonConstant.PAGE_SIZE);
+		return inviteService.loadAllInvite(getUserToken(request),InviteType.GROUP,InviteState.WAITING,pn,CommonConstant.PAGE_SIZE);
 	}
 	
+	/**
+	 * 通过小组邀请信息（受邀加入小组）
+	 * @param request
+	 * @param inviteId
+	 * @return
+	 */
 	public boolean passInviteGroup(HttpServletRequest request,
 			@PathVariable String inviteId){
 		groupService.savePassInviteGroup(getUserToken(request),inviteId);
@@ -173,7 +186,12 @@ public class GroupController extends BaseController {
 	}
 	
 	
-	
+	/**
+	 * 根据主键查询小组信息
+	 * @param groupId
+	 * @param tokenId
+	 * @return
+	 */
 	@RequestMapping(value="loadGroupById/{groupId}",method=RequestMethod.GET)
 	@ResponseBody
 	public Group loadGroupById(@PathVariable String groupId,

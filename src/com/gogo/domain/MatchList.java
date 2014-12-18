@@ -71,8 +71,8 @@ public class MatchList extends BaseDomain {
 	private LeagueMatchesGroup leagueGroup;
 	
 	//是否同意（应战）
-	@Column(name="ml_isagree",length=1)
-	private GroupMatchState isAgree;
+	@Column(name="ml_state",length=1)
+	private GroupMatchState state;
 	
 	//版本
 	@Version
@@ -103,12 +103,12 @@ public class MatchList extends BaseDomain {
 		this.otherGroup = otherGroup;
 	}
 
-	public GroupMatchState getIsAgree() {
-		return isAgree;
+	public GroupMatchState getState() {
+		return state;
 	}
 
-	public void setIsAgree(GroupMatchState isAgree) {
-		this.isAgree = isAgree;
+	public void setState(GroupMatchState state) {
+		this.state = state;
 	}
 
 	public Date getMatchDate() {
