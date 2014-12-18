@@ -40,9 +40,9 @@ function templatefill(groups){
 		<h3>{{group.name}}<h3>
 		<br/>
 		<br/>
-		<a href="group/applyJoin/{{group.id}}">加入小组</a>
-		<a href="group/toShowGroupPage?groupId={{group.id}}">查看小组人员</a>
-		<a href="group/toMatchesPage?groupId={{group.id}}">约</a>
+		<a href="group/applyJoin/{{group.id}}?access_token=<%=tokenId%>">加入小组</a>
+		<a href="group/toShowGroupPage?groupId={{group.id}}&access_token=<%=tokenId%>">查看小组人员</a>
+		<a href="">约</a>
 		</div>
 {{/each}}
 </script>

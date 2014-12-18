@@ -21,6 +21,8 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.validator.constraints.Length;
 
+import com.gogo.domain.enums.GroupType;
+
 
 @Entity
 @Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
@@ -51,6 +53,19 @@ public class Group extends BaseDomain{
 	@Column(name="group_content",length=200)
 	private String content;
 	
+	//球队性质
+	@Column(name = "group_type", length = 1)
+	private GroupType type;
+	
+	
+	public GroupType getType() {
+		return type;
+	}
+
+	public void setType(GroupType type) {
+		this.type = type;
+	}
+
 	// 创建时间
 	@Column(name = "group_create_time", length = 10)
 	private Date createTime;

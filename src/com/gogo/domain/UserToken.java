@@ -32,6 +32,12 @@ public class UserToken {
 	@Cascade(value=org.hibernate.annotations.CascadeType.SAVE_UPDATE)
 	private User user;
 	
+	//当前用户加入的球队
+	@ManyToOne
+	@JoinColumn(name="token_group")
+	@Cascade(value=org.hibernate.annotations.CascadeType.SAVE_UPDATE)
+	private Group group;
+	
 	@Column(name="token_start",length=10,nullable=false)
 	private Date startDate;
 	@Column(name="token_end",length=10,nullable=false)
@@ -67,5 +73,13 @@ public class UserToken {
 
 	public void setEndDate(Date endDate) {
 		this.endDate = endDate;
+	}
+
+	public Group getGroup() {
+		return group;
+	}
+
+	public void setGroup(Group group) {
+		this.group = group;
 	}
 }
