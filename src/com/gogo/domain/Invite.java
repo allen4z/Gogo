@@ -16,6 +16,9 @@ import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.GenericGenerator;
 
+import com.gogo.domain.enums.InviteState;
+import com.gogo.domain.enums.InviteType;
+
 
 
 @Entity
@@ -39,21 +42,16 @@ public class Invite extends BaseDomain{
 	@OrderBy("name ASC")
 	private User beInvited;
 	
-	/*@ManyToOne
-	@JoinColumn(name="invite_group")
-	@OrderBy("name ASC")
-	private Group group;
-	
-	@ManyToOne
-	@JoinColumn(name="invite_activity")
-	@OrderBy("name ASC")
-	private Activity activity;*/
 	@Column(name="invite_entityid",length=32,nullable=false)
 	private String entityId;
 	
-	
+	//类型  活动/球队
 	@Column(name="invite_type",length=1)
-	private int type;
+	private InviteType type;
+	
+	//邀请状态
+	@Column(name="invite_state",length=1)
+	private InviteState state;
 
 	//版本
 	@Version
@@ -69,14 +67,21 @@ public class Invite extends BaseDomain{
 		this.update_time = update_time;
 	}
 
-	public int getType() {
+	public InviteType getType() {
 		return type;
 	}
 
-	public void setType(int type) {
+	public void setType(InviteType type) {
 		this.type = type;
 	}
 
+	public InviteState getState() {
+		return state;
+	}
+
+	public void setState(InviteState state) {
+		this.state = state;
+	}
 
 	public String getId() {
 		return id;
@@ -110,22 +115,4 @@ public class Invite extends BaseDomain{
 		this.entityId = entityId;
 	}
 
-/*	public Activity getActivity() {
-		return activity;
-	}
-
-	public void setActivity(Activity activity) {
-		this.activity = activity;
-	}
-		public Group getGroup() {
-		return group;
-	}
-
-	public void setGroup(Group group) {
-		this.group = group;
-	}
-
-		*
-		*/
-	
 }

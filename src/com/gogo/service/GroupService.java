@@ -18,6 +18,8 @@ import com.gogo.domain.Place;
 import com.gogo.domain.User;
 import com.gogo.domain.UserAndGroup;
 import com.gogo.domain.enums.GroupApplyState;
+import com.gogo.domain.enums.InviteState;
+import com.gogo.domain.enums.InviteType;
 import com.gogo.domain.enums.UserAndGroupState;
 import com.gogo.domain.helper.DomainStateHelper;
 import com.gogo.domain.helper.RoleHelper;
@@ -46,13 +48,18 @@ public class GroupService extends BaseService {
 	 */
 	public void saveGroup(Group group, String tokenId) {
 		User user  =  getUserbyToken(tokenId);
+		//查询是否已经加入小组
+		UserAndGroup uag = userAndGroupDao.loadByUser(user.getId());
+		if(uag!= null){
+			throw new Business4JsonException("您已经加入了["+uag.getGroup().getName()+"]，不能新建球队");
+		}
 		group.setCreateUser(user);
 		group.setMaxJoinUser(DomainStateHelper.GROUP_DEFAULT_USER_SIZE);
 		group.setCurJoinUser(1);
 		group.setCreateTime(new Date());
 		
 		int maxAuthority  = RoleHelper.ROLE_SUPERMANAGER;
-		UserAndGroup uag =new UserAndGroup();
+		uag =new UserAndGroup();
 		uag.setState(UserAndGroupState.FORMAL);
 		uag.setGroup(group);
 		uag.setUser(user);
@@ -113,20 +120,34 @@ public class GroupService extends BaseService {
 	 */
 	public void savePassInviteGroup(String tokenId, String inviteId) {
 		User user  =  getUserbyToken(tokenId);
-		
-		Invite invite= inviteDao.load(inviteId);
-		Group group = groupDao.load(invite.getEntityId());
-		userAndGroupHandler(user, group);
-		
+		//查询是否已经加入小组
+		UserAndGroup uag = userAndGroupDao.loadByUser(user.getId());
+		try {
+			if(uag != null){
+				throw new Business4JsonException("您已经加入了["+uag.getGroup().getName()+"]，不能加入其他球队");
+			}else{
+				Invite invite= inviteDao.load(inviteId);
+				Group group = groupDao.load(invite.getEntityId());
+				userAndGroupHandler(user, group);
+			}
+		} catch (RuntimeException e) {
+			throw e;
+		}finally{
+			//清除所有受邀信息
+			List<Invite> invites = inviteDao.loadAllInvite(user.getId(), InviteType.GROUP,InviteState.WAITING);
+			for (Invite invite : invites) {
+				invite.setState(InviteState.DEL);
+			}
+		}
 	}
 	
 	/**
-	 * 查询当前用户所管理的小组的申请信息
+	 * 查询当前用户所管理的小组的人员申请信息
 	 * @author allen
 	 */
 	public List<GroupApplyInfo> loadAllApplyInfo(String tokenId) {
 		User user  =  getUserbyToken(tokenId);
-		//获得所有是管理员和超级管理员的小组
+		//获得所有拥有申请权限的小组
 		List<UserAndGroup> uagList =userAndGroupDao.loadAllUserAndGroup(user.getId(),
 				RoleHelper.getAuthInfo(RoleHelper.ROLE_MANAGER,RoleHelper.ROLE_SUPERMANAGER));
 		
@@ -145,11 +166,9 @@ public class GroupService extends BaseService {
 	
 	public List<GroupApplyInfo> loadGroupApplyInfo(String tokenId,String groupId) {
 		User user  =  getUserbyToken(tokenId);
-		
 		checkAuth(user, groupId);
 		return groupApplyInfoDao.loadGroupApplyInfo(groupId);
 	}
-	
 	
 	/**
 	 * 更改用户权限
@@ -193,7 +212,6 @@ public class GroupService extends BaseService {
 		if(group.getCurJoinUser()>=group.getMaxJoinUser()){
 			throw new Business4JsonException("小组人数已满");
 		}
-		
 		UserAndGroup checkUag = userAndGroupDao.loadUAG4UserAndGroup(applyUser.getId(), group.getId());
 		if(checkUag != null && checkUag.getState() == UserAndGroupState.FORMAL){
 			throw new Business4JsonException("您已经加入了小组");
@@ -207,9 +225,8 @@ public class GroupService extends BaseService {
 		applyUag.setState(UserAndGroupState.FORMAL);
 		applyUag.setGroup(group);
 		applyUag.setUser(applyUser);
-		applyUag.setAuthorityState(RoleHelper.mergeParamState(RoleHelper.TOW_AUTHORITY_TEXT));
+		applyUag.setAuthorityState(RoleHelper.mergeParamState(RoleHelper.ROLE_MEMBER));
 		userAndGroupDao.saveOrUpdate(applyUag);
-		
 		group.setCurJoinUser(group.getCurJoinUser()+1);
 		groupDao.update(group);
 	}
@@ -218,7 +235,7 @@ public class GroupService extends BaseService {
 		UserAndGroup uag = userAndGroupDao.loadUAG4UserAndGroup(user.getId(), groupId);
 		int authstate = uag.getAuthorityState();
 		//如果用户不包含第三级别的权限，则无权查看申请列表
-		if(!RoleHelper.judgeState(authstate, RoleHelper.THREE_AUTHORITY_INVITE)){
+		if(!RoleHelper.judgeState(authstate, RoleHelper.FOUR_AUTHORITY_EXPEL)){
 			throw new Business4JsonException("您无权查看改小组的申请列表！");
 		}
 	}
