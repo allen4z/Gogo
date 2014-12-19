@@ -82,14 +82,18 @@ public class GroupService extends BaseService {
 			throw new Business4JsonException("小组人数已满");
 		}
 		//判断是否加入过小组
-		//UserAndGroup uag = userAndGroupDao.loadUAG4UserAndGroup(user.getId(), groupId);
 		UserAndGroup uag = userAndGroupDao.loadUAG4User(user.getId());
 		
 		if(uag != null && uag.getState() == UserAndGroupState.FORMAL){
 			throw new Business4JsonException("您已经加入了球队:"+uag.getGroup().getName());
 		}
 		
-		GroupApplyInfo gai = new GroupApplyInfo();
+		GroupApplyInfo gai = groupApplyInfoDao.loadApplyInfo(user.getId(), groupId);
+		if(gai==null){
+			gai = new GroupApplyInfo();
+		}else{
+			throw new Business4JsonException("您已经申请过加入球队["+group.getName()+"],请等待队长审核！");
+		}
 		gai.setUser(user);
 		gai.setGroup(group);
 		gai.setState(GroupApplyState.APPLY);
@@ -147,29 +151,19 @@ public class GroupService extends BaseService {
 	 * 查询当前用户所管理的小组的人员申请信息
 	 * @author allen
 	 */
-	public List<GroupApplyInfo> loadAllApplyInfo(String tokenId) {
+	public List<GroupApplyInfo> loadAllApplyInfo(String tokenId,GroupApplyState state) {
 		User user  =  getUserbyToken(tokenId);
 		//获得所有拥有申请权限的小组
-		List<UserAndGroup> uagList =userAndGroupDao.loadAllUserAndGroup(user.getId(),
+		UserAndGroup uag =userAndGroupDao.loadAllUserAndGroup(user.getId(),
 				RoleHelper.getAuthInfo(RoleHelper.ROLE_MANAGER,RoleHelper.ROLE_SUPERMANAGER));
 		
-		String[] groupIds  = new String[uagList.size()];
 
-		for (int i = 0; i < uagList.size(); i++) {
-			UserAndGroup uag = uagList.get(i);
-			groupIds[i] = uag.getGroup().getId();
-		}
-		if(groupIds!= null && groupIds.length>0){
-			return groupApplyInfoDao.loadAllApplyInfo(groupIds);
+		if(uag!=null){
+			Group group = uag.getGroup();
+			return groupApplyInfoDao.loadAllApplyInfo(group.getId(),state);
 		}else{
 			return null;
 		}
-	}
-	
-	public List<GroupApplyInfo> loadGroupApplyInfo(String tokenId,String groupId) {
-		User user  =  getUserbyToken(tokenId);
-		checkAuth(user, groupId);
-		return groupApplyInfoDao.loadGroupApplyInfo(groupId);
 	}
 	
 	/**
@@ -183,14 +177,14 @@ public class GroupService extends BaseService {
 		User user  =  getUserbyToken(tokenId);
 		
 		//判断是否允许修改
-		UserAndGroup  uag = userAndGroupDao.loadUAG4UserAndGroup(user.getId(), groupId);
+		UserAndGroup  uag = userAndGroupDao.loadByUserAndGroup(user.getId(), groupId,UserAndGroupState.FORMAL);
 		
 		int curAuth = uag.getAuthorityState();
 		
 		if(authority>curAuth){
 			throw new Business4JsonException("被分配的权限比当前用户的权限大");
 		}
-		UserAndGroup  uagAuth = userAndGroupDao.loadUAG4UserAndGroup(userId, groupId);
+		UserAndGroup  uagAuth = userAndGroupDao.loadByUserAndGroup(userId, groupId,UserAndGroupState.FORMAL);
 		uagAuth.setAuthorityState(RoleHelper.mergeState(uagAuth.getAuthorityState(), authority));
 		
 	}
@@ -214,16 +208,11 @@ public class GroupService extends BaseService {
 		if(group.getCurJoinUser()>=group.getMaxJoinUser()){
 			throw new Business4JsonException("小组人数已满");
 		}
-		UserAndGroup checkUag = userAndGroupDao.loadUAG4UserAndGroup(applyUser.getId(), group.getId());
-		if(checkUag != null && checkUag.getState() == UserAndGroupState.FORMAL){
+		UserAndGroup checkUag = userAndGroupDao.loadByUserAndGroup(applyUser.getId(), group.getId(),UserAndGroupState.FORMAL);
+		if(checkUag != null){
 			throw new Business4JsonException("您已经加入了小组");
 		}
-		UserAndGroup applyUag;
-		if(checkUag != null){
-			applyUag = checkUag;
-		}else{
-			applyUag = new UserAndGroup();
-		}
+		UserAndGroup applyUag = new UserAndGroup();
 		applyUag.setState(UserAndGroupState.FORMAL);
 		applyUag.setGroup(group);
 		applyUag.setUser(applyUser);
@@ -234,7 +223,7 @@ public class GroupService extends BaseService {
 	}
 
 	private void checkAuth(User user, String groupId) {
-		UserAndGroup uag = userAndGroupDao.loadUAG4UserAndGroup(user.getId(), groupId);
+		UserAndGroup uag = userAndGroupDao.loadByUserAndGroup(user.getId(), groupId,UserAndGroupState.FORMAL);
 		int authstate = uag.getAuthorityState();
 		//如果用户不包含第三级别的权限，则无权查看申请列表
 		if(!RoleHelper.judgeState(authstate, RoleHelper.FOUR_AUTHORITY_EXPEL)){
@@ -245,7 +234,7 @@ public class GroupService extends BaseService {
 	public void updateQuitGroup(String tokenId, String groupId) {
 		User user  =  getUserbyToken(tokenId);
 		
-		UserAndGroup uag = userAndGroupDao.loadUAG4UserAndGroup(user.getId(), groupId);
+		UserAndGroup uag = userAndGroupDao.loadByUserAndGroup(user.getId(), groupId,UserAndGroupState.FORMAL);
 		if(uag == null){
 			throw new Business4JsonException("您不在此小组");
 		}

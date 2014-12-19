@@ -16,6 +16,7 @@ import com.gogo.domain.User;
 import com.gogo.domain.UserAndGroup;
 import com.gogo.domain.enums.GroupMatchState;
 import com.gogo.domain.enums.MatchType;
+import com.gogo.domain.enums.UserAndGroupState;
 import com.gogo.domain.helper.RoleHelper;
 import com.gogo.exception.Business4JsonException;
 
@@ -41,7 +42,7 @@ public class MatchesService extends BaseService {
 		User user = getUserbyToken(tokenId);
 	 	UserAndGroup uag = userAndGroupDao.loadByUser(user.getId());
 	 	if(uag == null){
-	 		throw new Business4JsonException("您还没有小组");
+	 		throw new Business4JsonException("您没有加入球队！");
 	 	}
  		Group group = uag.getGroup();
  		int authState = uag.getAuthorityState();
@@ -59,6 +60,7 @@ public class MatchesService extends BaseService {
  		}
  		//友谊赛
  		match.setType(MatchType.Friendly);
+ 		match.setState(GroupMatchState.Wait);
  		matchesDao.save(match);
  		return match;
 	}
@@ -71,7 +73,7 @@ public class MatchesService extends BaseService {
 	public void savePassInviteMatch(String tokenId, String matchListId) {
 		User user = getUserbyToken(tokenId);
 		MatchList matchList = matchesDao.get(matchListId);
-		UserAndGroup uag = userAndGroupDao.loadByUserAndGroup(user.getId(), matchList.getOtherGroup().getId());
+		UserAndGroup uag = userAndGroupDao.loadByUserAndGroup(user.getId(), matchList.getOtherGroup().getId(),UserAndGroupState.FORMAL);
 		int auth = uag.getAuthorityState();
 		
 		if(RoleHelper.judgeState(auth, RoleHelper.FOUR_AUTHORITY_EXPEL)){
@@ -100,7 +102,27 @@ public class MatchesService extends BaseService {
 		UserAndGroup uag = userAndGroupDao.loadByUser(user.getId());
 		if(uag!= null){
 			Group group = uag.getGroup();
-			return matchesDao.loadAllMatchByUser(group.getId(),state);
+			List<MatchList> matchlists =  matchesDao.loadAllMatchByUser(group.getId(),state);
+			 return matchlists;
+		}
+		return null;
+	}
+	
+	/**
+	 * 查询所有受邀比赛
+	 * @param tokenId
+	 * @param wait
+	 * @return
+	 */
+	public List<MatchList> loadInviteMatchByUser(String tokenId,
+			GroupMatchState state) {
+		User user = getUserbyToken(tokenId);
+		
+		UserAndGroup uag = userAndGroupDao.loadByUser(user.getId());
+		if(uag!= null){
+			Group group = uag.getGroup();
+			List<MatchList> matchlists =  matchesDao.loadAllInviteMatchByUser(group.getId(),state);
+			 return matchlists;
 		}
 		return null;
 	}
@@ -117,5 +139,6 @@ public class MatchesService extends BaseService {
 			GroupMatchState done) {
 		return matchesDao.loadMatchById(matchListId,done);
 	}
+
 
 }

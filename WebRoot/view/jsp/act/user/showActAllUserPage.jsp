@@ -17,6 +17,9 @@ String actId = (String)request.getAttribute("actId");
 function getActAllUser(pn){
 	var action = 'activity/loadAllUserFromAct/<%=actId%>?pn='+pn;
 	var success = function(page){
+		if(!checkResult(page)){
+			return ;
+		}
 		var users = page.items;
 		templatefill(users);
 	};

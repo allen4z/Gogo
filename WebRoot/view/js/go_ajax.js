@@ -75,6 +75,19 @@ function get4Json(params, actionInfo, success, failed) {
 }
 
 /**
+ * 如果返回值是error 则打印错误信息
+ * @param result
+ * @returns {Boolean}
+ */
+function checkResult(result){
+	if(result.category == "error"){
+		alert(result.message);
+		return false;
+	}
+	return true;
+}
+
+/**
  * 获得路径信息
  * 
  * @returns {String}

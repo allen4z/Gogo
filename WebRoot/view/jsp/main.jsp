@@ -1,3 +1,5 @@
+<%@page import="com.gogo.domain.enums.GroupMatchState"%>
+<%@page import="com.gogo.domain.MatchList"%>
 <%@page import="com.gogo.domain.GroupApplyInfo"%>
 <%@page import="com.gogo.domain.Group"%>
 <%@page import="com.gogo.page.Page"%>
@@ -21,6 +23,10 @@
 	
 	List<GroupApplyInfo> groupApplys = (List)request.getAttribute("groupApplys");
 	
+	List<MatchList> matchLists = (List)request.getAttribute("matchList");
+	
+	List<MatchList> inviteMatch = (List) request.getAttribute("inviteMatch");
+	
 	
 %>
 <html>
@@ -31,6 +37,9 @@
 	$(document).ready(function(){
 		$("#searchUserBtn").click(function(){
 			get4Json(null,'user/load/1',function(user){
+				if(!checkResult(result)){
+					return ;
+				}
 				alert(user.userName);
 			},null);
 		});
@@ -94,6 +103,63 @@
 	}
 	%>
 </table>
+
+
+<table border="1">
+<tr >
+		<td colspan="2" align="center">比赛列表</td>
+	</tr>
+<%
+	if(matchLists!= null && matchLists.size()>0){
+		for(MatchList matchList : matchLists){
+			%><tr>
+			<td>
+			邀请对方球队：【<%=matchList.getOtherGroup().getName() %>】<br>
+			比赛时间：<%=matchList.getMatchDate() %>
+			比赛地点：<%=matchList.getMatchPlace() %>
+			</td>
+			<td>
+			<%if(matchList.getState().equals(GroupMatchState.Wait)){
+				%>等待对方确认<%
+			}else if(matchList.getState().equals(GroupMatchState.Agree)){
+				%>对方同意约赛，等待比赛开始<%
+			}else if(matchList.getState().equals(GroupMatchState.Disagree)){
+				%>对方不同意约赛，比赛取消<%
+			}else if(matchList.getState().equals(GroupMatchState.Done)){
+				%>比赛已结束<%
+			} %>
+			</td>
+			
+			</tr><%
+		}
+	}
+
+	if(inviteMatch!= null && inviteMatch.size()>0){
+		for(MatchList matchList : inviteMatch){
+			%><tr>
+			<td>
+			受邀对方球队：【<%=matchList.getBelongGroup().getName() %>】<br>
+			比赛时间：<%=matchList.getMatchDate() %>
+			比赛地点：<%=matchList.getMatchPlace() %>
+			</td>
+			<td>
+			<%if(matchList.getState().equals(GroupMatchState.Wait)){
+				%><a>同意</a><%
+			}else if(matchList.getState().equals(GroupMatchState.Agree)){
+				%>已同意对方邀请，等待比赛开始<%
+			}else if(matchList.getState().equals(GroupMatchState.Disagree)){
+				%>不同意对方邀请，比赛取消<%
+			}else if(matchList.getState().equals(GroupMatchState.Done)){
+				%>比赛已结束<%
+			} %>
+			</td>
+			
+			</tr><%
+		}
+	}
+	%>
+</table>
+
 
 <table border="1">
 <tr >

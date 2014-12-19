@@ -20,16 +20,37 @@ public class MatchesDao extends BaseDao<MatchList> {
 	public List<MatchList> loadAllMatchByUser(String groupId, GroupMatchState state) {
 		StringBuffer hql =new StringBuffer();
 		hql.append("select matchList from MatchList matchList left join matchList.belongGroup belongGroup ");
-		hql.append(" where matchLiat.state=? ");
-		hql.append(" and belongGroup.id=? ");
-		return find(hql.toString(), state,groupId);
+		hql.append(" where belongGroup.id=? ");
+		if(state!=null){
+			hql.append(" and matchList.state=? ");
+			return find(hql.toString(), groupId,state);
+		}
+		return find(hql.toString(), groupId);
 	}
 
+	/**
+	 * 查询所有受邀比赛信息
+	 * @param id
+	 * @param state
+	 * @return
+	 */
+	public List<MatchList> loadAllInviteMatchByUser(String groupId, GroupMatchState state) {
+		StringBuffer hql =new StringBuffer();
+		hql.append("select matchList from MatchList matchList left join matchList.otherGroup otherGroup ");
+		hql.append(" where otherGroup.id=? ");
+		if(state!=null){
+			hql.append(" and matchList.state=? ");
+			return find(hql.toString(), groupId,state);
+		}
+		return find(hql.toString(), groupId);
+	}
+	
 	public MatchList loadMatchById(String matchListId, GroupMatchState done) {
 		StringBuffer hql =new StringBuffer();
 		hql.append("select matchList from MatchList matchList where matchList.id=? and matchList.state=? ");
 		return findUnique(hql.toString(), matchListId,done.ordinal());
 	}
+
 
 
 }

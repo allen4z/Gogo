@@ -6,12 +6,17 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
+import com.gogo.domain.Group;
 import com.gogo.domain.MatchList;
 import com.gogo.domain.enums.GroupMatchState;
+import com.gogo.service.GroupService;
 import com.gogo.service.MatchesService;
 
 
@@ -21,6 +26,8 @@ public class MatchesController extends BaseController {
 	
 	@Autowired
 	private MatchesService matchesService;
+	@Autowired
+	private GroupService groupService;
 	
 	/**
 	 * 约赛
@@ -78,7 +85,19 @@ public class MatchesController extends BaseController {
 	 * @return
 	 */
 	public List<MatchList> loadWaitMatchByUser(String tokenId){
-		return matchesService.loadMatchByUser(tokenId,GroupMatchState.Wait);
+		return matchesService.loadInviteMatchByUser(tokenId,GroupMatchState.Wait);
+	}
+	
+	@RequestMapping("toAddInviteMatches/{groupId}")
+	public ModelAndView toShowInviteMatches(@RequestParam(value="access_token") String tokenId,
+			@PathVariable String groupId){
+		
+		Group group = groupService.loadGroupById(groupId);
+		ModelAndView mav = new ModelAndView();
+		mav.addObject("otherGroup", group);
+		mav.addObject("tokenId", tokenId);
+		mav.setViewName("matches/addInviteMatches");
+		return mav;
 	}
 	
 }

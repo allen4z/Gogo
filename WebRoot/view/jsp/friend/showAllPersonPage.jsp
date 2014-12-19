@@ -11,6 +11,9 @@
 function getNearFriend(pn){
 	var action = 'friend/loadFriendByPlace?pn='+pn;
 	var success = function(page){
+		if(!checkResult(page)){
+			return ;
+		}
 		var users = page.items;
 		templatefill(users);
 	};

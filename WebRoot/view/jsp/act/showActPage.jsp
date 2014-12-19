@@ -24,6 +24,9 @@ $(document).ready(function(){
 function getAct(actId){
 	var action = 'activity/loadActByActId/'+actId+'?flag=0';
 	var success = function(act){
+		if(!checkResult(act)){
+			return ;
+		}
 		templatefill(act);
 	};
 	var failed = function(XMLHttpRequest,textStatus, errorThrown){

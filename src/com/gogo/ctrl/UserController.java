@@ -20,12 +20,15 @@ import org.springframework.web.servlet.ModelAndView;
 import com.gogo.domain.Activity;
 import com.gogo.domain.Group;
 import com.gogo.domain.GroupApplyInfo;
+import com.gogo.domain.MatchList;
 import com.gogo.domain.User;
+import com.gogo.domain.enums.GroupApplyState;
 import com.gogo.exception.Business4JsonException;
 import com.gogo.helper.CommonConstant;
 import com.gogo.page.Page;
 import com.gogo.service.FriendService;
 import com.gogo.service.GroupService;
+import com.gogo.service.MatchesService;
 import com.gogo.service.UserService;
 
 /**
@@ -37,15 +40,14 @@ import com.gogo.service.UserService;
 @RequestMapping("/user")
 public class UserController extends BaseController{
 	
-
 	@Autowired
 	private UserService userService;
-	
 	@Autowired
 	private FriendService friendService;
-	
 	@Autowired
 	private GroupService groupService;
+	@Autowired
+	private MatchesService matchesService;
 	/**
 	 * 用户注册
 	 * @param user
@@ -166,8 +168,14 @@ public class UserController extends BaseController{
 		Page<Group> myGroup = groupService.loadGroup4User(tokenId, currPage, CommonConstant.PAGE_SIZE);
 		
 		//申请加群信息
-		List<GroupApplyInfo> groupApplys = groupService.loadAllApplyInfo(tokenId);
+		List<GroupApplyInfo> groupApplys = groupService.loadAllApplyInfo(tokenId,GroupApplyState.APPLY);
 		
+		List<MatchList> matchList = matchesService.loadMatchByUser(tokenId,null);
+		
+		List<MatchList> inviteMatch = matchesService.loadInviteMatchByUser(tokenId, null);
+		
+		mav.addObject("inviteMatch", inviteMatch);
+		mav.addObject("matchList", matchList);
 		mav.addObject("page",ownAct );
 		mav.addObject("joinpage",joinAct );
 		mav.addObject("payinfo",payInfo );

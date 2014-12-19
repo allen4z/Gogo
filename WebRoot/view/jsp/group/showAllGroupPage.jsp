@@ -12,6 +12,10 @@
 function getNearAct(pn){
 	var action = 'group/loadAllGroup?pn='+pn;
 	var success = function(page){
+		if(!checkResult(page)){
+			return ;
+		}
+		
 		var groups = page.items;
 		templatefill(groups);
 	};
@@ -42,7 +46,7 @@ function templatefill(groups){
 		<br/>
 		<a href="group/applyJoin/{{group.id}}?access_token=<%=tokenId%>">加入小组</a>
 		<a href="group/toShowGroupPage?groupId={{group.id}}&access_token=<%=tokenId%>">查看小组人员</a>
-		<a href="">约</a>
+		<a href="matches/toAddInviteMatches/{{group.id}}?access_token=<%=tokenId%>">约</a>
 		</div>
 {{/each}}
 </script>

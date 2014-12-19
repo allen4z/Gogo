@@ -17,6 +17,9 @@ function getNearAct(pn){
 	};
 	
 	var success = function(page){
+		if(!checkResult(page)){
+			return ;
+		}
 		var acts = page.items;
 		templatefill(acts);
 	};

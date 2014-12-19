@@ -25,6 +25,9 @@
 			var params = {name:f_userName,password:f_password,aliasName:f_aliasName,phoneNum:f_phone,email:f_email,imageUrl:f_userhead};
 			var actionInfo = 'user/doRegister';
 			var success = function(result) { 
+				if(!checkResult(result)){
+					return ;
+				}
 					if(result == true){
 						alert('用户注册成功');
 	        			location.href = '<%=basePath%>';		        			

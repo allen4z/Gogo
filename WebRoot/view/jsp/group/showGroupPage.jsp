@@ -15,7 +15,10 @@ $(document).ready(function(){
 	$("#quitGroup").click(function(){
 		var actionInfo = 'group/quitGroup/<%=groupId%>?flag=0';	
 		
-		var success = function(id){
+		var success = function(result){
+			if(!checkResult(result)){
+				return ;
+			}
 			alert('成功退出小组');
 			location.href = '<%=basePath %>user/forwoardMain'; 
 		};

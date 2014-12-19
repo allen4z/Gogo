@@ -27,6 +27,9 @@ function getActAllUser(pn,state){
 	}
 	
 	var success = function(page){
+		if(!checkResult(page)){
+			return ;
+		}
 		var users = page.items;
 		templatefill(users);
 	};

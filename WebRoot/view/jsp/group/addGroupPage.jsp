@@ -18,7 +18,10 @@
 				name : $("#group_content").val()
 			};
 			
-			var success = function(id){
+			var success = function(result){
+				if(!checkResult(result)){
+					return ;
+				}
 				location.href = '<%=basePath %>user/forwoardMain?access_token=<%=tokenId%>'; 
 			};
 			

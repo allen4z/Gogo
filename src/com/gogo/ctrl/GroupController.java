@@ -21,6 +21,7 @@ import com.gogo.domain.Group;
 import com.gogo.domain.GroupApplyInfo;
 import com.gogo.domain.Invite;
 import com.gogo.domain.Place;
+import com.gogo.domain.enums.GroupApplyState;
 import com.gogo.domain.enums.InviteState;
 import com.gogo.domain.enums.InviteType;
 import com.gogo.exception.Business4JsonException;
@@ -84,7 +85,7 @@ public class GroupController extends BaseController {
 	 * @return
 	 */
 	public List<GroupApplyInfo> loadAllApplyInfo(HttpServletRequest request,String groupId){
-		return groupService.loadAllApplyInfo(getUserToken(request));
+		return groupService.loadAllApplyInfo(getUserToken(request),GroupApplyState.APPLY);
 	}
 	
 	/**
