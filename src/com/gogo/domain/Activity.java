@@ -43,10 +43,10 @@ public class Activity extends BaseDomain {
 	private String name;
 
 	// //活动内容
-	// @NotNull(message="{act.actcount.not.empty}")
-	// @Length(min=0,max=200,message="{act.actcount.length.error}")
-	// @Column(name="act_contents",length=200)
-	// private String content;
+	 @NotNull(message="{act.actcount.not.empty}")
+	 @Length(min=0,max=200,message="{act.actcount.length.error}")
+	 @Column(name="act_contents",length=200)
+	 private String content;
 
 	@OneToMany(mappedBy = "act", cascade = CascadeType.ALL)
 	private Set<Label> label;
@@ -292,8 +292,17 @@ public class Activity extends BaseDomain {
 		this.gorup = gorup;
 	}
 
+	public String getContent() {
+		return content;
+	}
+
+	public void setContent(String content) {
+		this.content = content;
+	}
+
 	@Override
 	public String getCategory() {
 		return this.getClass().getName();
 	}
+	
 }

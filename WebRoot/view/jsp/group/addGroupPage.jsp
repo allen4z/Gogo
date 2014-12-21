@@ -15,7 +15,7 @@
 			var params = {
 				name : $("#group_name").val(),
 				nickName:$("#group_nickname").val(),
-				name : $("#group_content").val()
+				content : $("#group_content").val()
 			};
 			
 			var success = function(result){
