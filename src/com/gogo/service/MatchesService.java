@@ -40,29 +40,33 @@ public class MatchesService extends BaseService {
 	 */
 	public MatchList saveMatches(String tokenId, MatchList match) {
 		User user = getUserbyToken(tokenId);
-	 	UserAndGroup uag = userAndGroupDao.loadByUser(user.getId());
-	 	if(uag == null){
-	 		throw new Business4JsonException("您没有加入球队！");
+	 	List<UserAndGroup> uags = userAndGroupDao.loadByUser(user.getId());
+	 	if(uags == null){
+	 		throw new Business4JsonException("您没有加入任何球队！");
 	 	}
- 		Group group = uag.getGroup();
- 		int authState = uag.getAuthorityState();
- 		boolean hasAuth = RoleHelper.judgeState(authState, RoleHelper.FOUR_AUTHORITY_EXPEL);
- 		if(!hasAuth){
- 			throw new Business4JsonException("您没有所在的小组"+group.getName()+"的约赛权限！");
- 		}
- 		match.setBelongGroup(group);
- 		Group otherGroup = groupDao.get(match.getOtherGroup().getId());
- 		match.setOtherGroup(otherGroup);
- 		
- 		Place dbPlaceInfo = placeDao.findPlaceByNameAndLocal(match.getMatchPlace());
- 		if(dbPlaceInfo!=null){
- 			match.setMatchPlace(dbPlaceInfo);
- 		}
- 		//友谊赛
- 		match.setType(MatchType.Friendly);
- 		match.setState(GroupMatchState.Wait);
- 		matchesDao.save(match);
- 		return match;
+	 	for (UserAndGroup userAndGroup : uags) {
+	 		Group group = userAndGroup.getGroup();
+	 		int authState = userAndGroup.getAuthorityState();
+	 		boolean hasAuth = RoleHelper.judgeState(authState, RoleHelper.FOUR_AUTHORITY_EXPEL);
+	 		//TODO 现阶段只有队长和用户，所以只对第一个有权限的队伍进行约赛
+	 		if(hasAuth){
+	 			match.setBelongGroup(group);
+		 		Group otherGroup = groupDao.get(match.getOtherGroup().getId());
+		 		match.setOtherGroup(otherGroup);
+		 		
+		 		Place dbPlaceInfo = placeDao.findPlaceByNameAndLocal(match.getMatchPlace());
+		 		if(dbPlaceInfo!=null){
+		 			match.setMatchPlace(dbPlaceInfo);
+		 		}
+		 		//友谊赛
+		 		match.setType(MatchType.Friendly);
+		 		match.setState(GroupMatchState.Wait);
+		 		matchesDao.save(match);
+		 		break;
+	 		}
+		}
+
+	 	return match;
 	}
 	
 	/**
@@ -99,10 +103,17 @@ public class MatchesService extends BaseService {
 	 */
 	public List<MatchList> loadMatchByUser(String tokenId,GroupMatchState state) {
 		User user = getUserbyToken(tokenId);
-		UserAndGroup uag = userAndGroupDao.loadByUser(user.getId());
-		if(uag!= null){
-			Group group = uag.getGroup();
-			List<MatchList> matchlists =  matchesDao.loadAllMatchByUser(group.getId(),state);
+		List<UserAndGroup> uags = userAndGroupDao.loadByUser(user.getId());
+		if(uags!= null){
+			String[] groupIds = new String[uags.size()];
+			int index = 0;
+			for (UserAndGroup userAndGroup : uags) {
+				Group group = userAndGroup.getGroup();
+				groupIds[index] = group.getId();
+				index++;
+			}
+			
+			List<MatchList> matchlists =  matchesDao.loadAllMatchByUser(groupIds,state);
 			 return matchlists;
 		}
 		return null;
@@ -118,10 +129,16 @@ public class MatchesService extends BaseService {
 			GroupMatchState state) {
 		User user = getUserbyToken(tokenId);
 		
-		UserAndGroup uag = userAndGroupDao.loadByUser(user.getId());
-		if(uag!= null){
-			Group group = uag.getGroup();
-			List<MatchList> matchlists =  matchesDao.loadAllInviteMatchByUser(group.getId(),state);
+		List<UserAndGroup> uags = userAndGroupDao.loadByUser(user.getId());
+		if(uags!= null){
+			String[] groupIds = new String[uags.size()];
+			int index = 0;
+			for (UserAndGroup userAndGroup : uags) {
+				Group group = userAndGroup.getGroup();
+				groupIds[index] = group.getId();
+				index++;
+			}
+			List<MatchList> matchlists =  matchesDao.loadAllInviteMatchByUser(groupIds,state);
 			 return matchlists;
 		}
 		return null;

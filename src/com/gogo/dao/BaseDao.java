@@ -15,18 +15,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.gogo.page.PageUtil;
 
 
-
+@SuppressWarnings("unchecked")
 public class BaseDao<T> {
 	
 	@Autowired
 	private SessionFactory sessionFactory;
 
-	private Class entityClass;
+	//TODO 增加了泛型 ？
+	private Class<T> entityClass;
 	
 	public BaseDao() {
 	        Type genType = getClass().getGenericSuperclass();
 	        Type[] params = ((ParameterizedType) genType).getActualTypeArguments();
-	        entityClass = (Class) params[0];
+	        entityClass = (Class<T>) params[0];
 	    }
 
 	    /**
@@ -113,7 +114,7 @@ public class BaseDao<T> {
 	     * @param params
 	     * @return 查询结果
 	     */
-	    public List<T> find(String hql, Object... params) {
+		public List<T> find(String hql, Object... params) {
 	    	 Object[] values = params;
 		     Query queryObject = getSession().createQuery(hql);
 			 if (values != null) {
