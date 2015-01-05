@@ -30,6 +30,42 @@
 
 		    postWithOutToken(params, actionInfo, success, failed);
 		});
+		
+		/* $("#getDate").click(function() {
+			 var success = function(result){
+				alert(result.buyNum);
+			};
+			
+			var failed = function(XMLHttpRequest,textStatus, errorThrown){
+		         alert(XMLHttpRequest.responseText);
+		    };
+		    
+			var url='http://192.168.20.222:8090/wxportal/wx?type=invoicing4year&orgCode=11310001&date=2014-11-27&isSum=true';
+			$.ajax({
+				dataType:'jsonp',
+				jsonp:'jsonpCallback',
+				url:url,
+				success:success
+			}); 
+			
+			//get4Json(null, url, success, failed);
+			
+			$.ajax({
+				type : "get",
+				async:false,
+				url : "http://192.168.20.222:8090/wxportal/wx?type=invoicing4year&orgCode=11310001&date=2014-11-27&isSum=true",
+				dataType : "jsonp",
+				jsonp: "jsonpCallback",//服务端用于接收callback调用的function名的参数
+				jsonpCallback:"success_jsonpCallback",	//callback的function名称
+				success : function(json){
+					alert('参数:'+json.buyNum);
+				},
+				error:function(){
+					alert('fail');
+					}
+				});
+			
+		}); */
 	});
 </script>
 </head>
@@ -56,9 +92,6 @@
 <br/><br/>
 <hr style="float:left;width:10000px;"/>
 
-<a href="http://127.0.0.1:8080/Gogo/user/forwoardMain?access_token=2c9ba38149e639ce0149e63aa80b0000">AAAA</a>
-<a href="http://127.0.0.1:8080/Gogo/user/forwoardMain?access_token=2c9ba3814a1317db014a132d4cba0000">BBBB</a>
-<a href="http://127.0.0.1:8080/Gogo/user/forwoardMain?access_token=2c9ba38149e639ce0149e63aa80b0000">CCCC</a>
-
+<!-- <input type="button" id="getDate" name="getDate" value="GETDATE"> -->
 </body>
 </html>

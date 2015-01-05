@@ -2,6 +2,7 @@ package com.gogo.dao;
 
 import java.util.List;
 
+import org.hibernate.Query;
 import org.springframework.stereotype.Repository;
 
 import com.gogo.domain.MatchList;
@@ -17,15 +18,22 @@ public class MatchesDao extends BaseDao<MatchList> {
 	 * @param state
 	 * @return
 	 */
-	public List<MatchList> loadAllMatchByUser(String groupId, GroupMatchState state) {
+	@SuppressWarnings("unchecked")
+	public List<MatchList> loadAllMatchByUser(String[] groupIds, GroupMatchState state) {
 		StringBuffer hql =new StringBuffer();
 		hql.append("select matchList from MatchList matchList left join matchList.belongGroup belongGroup ");
-		hql.append(" where belongGroup.id=? ");
+		hql.append(" where belongGroup.id in( :ids ) ");
+		
+		
+		Query query = getSession().createQuery(hql.toString());
+		query.setParameterList("ids", groupIds);
+		
 		if(state!=null){
-			hql.append(" and matchList.state=? ");
-			return find(hql.toString(), groupId,state);
+			hql.append(" and matchList.state=:state ");
+			query.setParameter("state", state);
 		}
-		return find(hql.toString(), groupId);
+		
+		return query.list();
 	}
 
 	/**
@@ -34,15 +42,20 @@ public class MatchesDao extends BaseDao<MatchList> {
 	 * @param state
 	 * @return
 	 */
-	public List<MatchList> loadAllInviteMatchByUser(String groupId, GroupMatchState state) {
+	@SuppressWarnings("unchecked")
+	public List<MatchList> loadAllInviteMatchByUser(String[] groupIds, GroupMatchState state) {
 		StringBuffer hql =new StringBuffer();
 		hql.append("select matchList from MatchList matchList left join matchList.otherGroup otherGroup ");
-		hql.append(" where otherGroup.id=? ");
+		hql.append(" where otherGroup.id in(:ids) ");
+		
+		Query query = getSession().createQuery(hql.toString());
+		query.setParameterList("ids", groupIds);
+		
 		if(state!=null){
-			hql.append(" and matchList.state=? ");
-			return find(hql.toString(), groupId,state);
+			hql.append(" and matchList.state=:state ");
+			query.setParameter("state", state);
 		}
-		return find(hql.toString(), groupId);
+		return query.list();
 	}
 	
 	public MatchList loadMatchById(String matchListId, GroupMatchState done) {

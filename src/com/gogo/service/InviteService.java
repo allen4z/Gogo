@@ -1,5 +1,7 @@
 package com.gogo.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,6 +13,7 @@ import com.gogo.domain.User;
 import com.gogo.domain.UserAndGroup;
 import com.gogo.domain.enums.InviteState;
 import com.gogo.domain.enums.InviteType;
+import com.gogo.domain.helper.DomainStateHelper;
 import com.gogo.exception.Business4JsonException;
 import com.gogo.page.Page;
 import com.gogo.page.PageUtil;
@@ -26,9 +29,9 @@ public class InviteService extends BaseService{
 	
 	public void saveInviteJoinGroup(String tokenId,String friendId,String groupId){
 		//查询受邀用户是否已经加入其他球队
-		UserAndGroup uag = userAndGroupDao.loadByUser(friendId);
-		if(uag!= null){
-			throw new Business4JsonException("用户已经加入了["+uag.getGroup().getName()+"]，不能接受邀请");
+		List<UserAndGroup> uags = userAndGroupDao.loadByUser(friendId);
+		if(uags != null && uags.size()>DomainStateHelper.JOIN_GROUP_MAX){
+			throw new Business4JsonException("用户已经加入了"+DomainStateHelper.JOIN_GROUP_MAX+"支球队，不能接受邀请");
 		}
 		User user = getUserbyToken(tokenId);
 		Invite invite = new Invite();
