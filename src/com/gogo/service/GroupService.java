@@ -51,7 +51,8 @@ public class GroupService extends BaseService {
 		//查询是否已经加入小组
 		UserAndGroup uag = userAndGroupDao.loadByUser(user.getId());
 		if(uag!= null){
-			throw new Business4JsonException("您已经加入了["+uag.getGroup().getName()+"]，不能新建球队");
+			
+			throw new Business4JsonException("您已经创建了["+uag.getGroup().getName()+"]，不能新建球队");
 		}
 		group.setCreateUser(user);
 		group.setMaxJoinUser(DomainStateHelper.GROUP_DEFAULT_USER_SIZE);
@@ -127,15 +128,16 @@ public class GroupService extends BaseService {
 	public void savePassInviteGroup(String tokenId, String inviteId) {
 		User user  =  getUserbyToken(tokenId);
 		//查询是否已经加入小组
-		UserAndGroup uag = userAndGroupDao.loadByUser(user.getId());
+		UserAndGroup uags = userAndGroupDao.loadByUser(user.getId());
 		try {
-			if(uag != null){
-				throw new Business4JsonException("您已经加入了["+uag.getGroup().getName()+"]，不能加入其他球队");
-			}else{
-				Invite invite= inviteDao.load(inviteId);
-				Group group = groupDao.load(invite.getEntityId());
-				userAndGroupHandler(user, group);
+			if(uags != null){
+				throw new Business4JsonException("您已经加入了["+uags.getGroup().getName()+"]，不能加入其他球队");
 			}
+
+			Invite invite= inviteDao.load(inviteId);
+			Group group = groupDao.load(invite.getEntityId());
+			userAndGroupHandler(user, group);
+			
 		} catch (RuntimeException e) {
 			throw e;
 		}finally{
@@ -156,8 +158,6 @@ public class GroupService extends BaseService {
 		//获得所有拥有申请权限的小组
 		UserAndGroup uag =userAndGroupDao.loadAllUserAndGroup(user.getId(),
 				RoleHelper.getAuthInfo(RoleHelper.ROLE_MANAGER,RoleHelper.ROLE_SUPERMANAGER));
-		
-
 		if(uag!=null){
 			Group group = uag.getGroup();
 			return groupApplyInfoDao.loadAllApplyInfo(group.getId(),state);
@@ -240,7 +240,7 @@ public class GroupService extends BaseService {
 		}
 		//如果用户是最大权限的用户 -- 管理员
 		if(RoleHelper.judgeState(uag.getAuthorityState(), RoleHelper.ROLE_SUPERMANAGER)){
-			throw new Business4JsonException("管理员退出小组需将管理员转移给其他人");
+			throw new Business4JsonException("队长退出球队需将球队转移给其他人");
 		}
 		
 		uag.setAuthorityState(RoleHelper.ONE_AUTHORITY_NONE);

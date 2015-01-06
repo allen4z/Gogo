@@ -26,9 +26,9 @@ public class InviteService extends BaseService{
 	
 	public void saveInviteJoinGroup(String tokenId,String friendId,String groupId){
 		//查询受邀用户是否已经加入其他球队
-		UserAndGroup uag = userAndGroupDao.loadByUser(friendId);
-		if(uag!= null){
-			throw new Business4JsonException("用户已经加入了["+uag.getGroup().getName()+"]，不能接受邀请");
+		UserAndGroup uags = userAndGroupDao.loadByUser(friendId);
+		if(uags != null){
+			throw new Business4JsonException("用户已经加入了["+uags.getGroup().getName()	+"]，不能接受邀请");
 		}
 		User user = getUserbyToken(tokenId);
 		Invite invite = new Invite();
