@@ -43,12 +43,7 @@ public class UserService extends BaseService{
 		//使用MD5加密用户密码
 		String password = user.getPassword();
 		user.setPassword(MD5Util.MD5(password));
-		
-		/*FriendList fg = new FriendList();
-		fg.setBelongUser(user);*/
-
 		userDao.save(user);
-//		friendGroupDao.save(fg);
 	}
 	
 	@Transactional
