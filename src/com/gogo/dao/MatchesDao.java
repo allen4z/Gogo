@@ -19,14 +19,14 @@ public class MatchesDao extends BaseDao<MatchList> {
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	public List<MatchList> loadAllMatchByUser(String[] groupIds, GroupMatchState state) {
+	public List<MatchList> loadAllMatchByUser(String groupId, GroupMatchState state) {
 		StringBuffer hql =new StringBuffer();
 		hql.append("select matchList from MatchList matchList left join matchList.belongGroup belongGroup ");
 		hql.append(" where belongGroup.id in( :ids ) ");
 		
 		
 		Query query = getSession().createQuery(hql.toString());
-		query.setParameterList("ids", groupIds);
+		query.setParameter("ids", groupId);
 		
 		if(state!=null){
 			hql.append(" and matchList.state=:state ");
@@ -43,13 +43,13 @@ public class MatchesDao extends BaseDao<MatchList> {
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	public List<MatchList> loadAllInviteMatchByUser(String[] groupIds, GroupMatchState state) {
+	public List<MatchList> loadAllInviteMatchByUser(String groupIds, GroupMatchState state) {
 		StringBuffer hql =new StringBuffer();
 		hql.append("select matchList from MatchList matchList left join matchList.otherGroup otherGroup ");
 		hql.append(" where otherGroup.id in(:ids) ");
 		
 		Query query = getSession().createQuery(hql.toString());
-		query.setParameterList("ids", groupIds);
+		query.setParameter("ids", groupIds);
 		
 		if(state!=null){
 			hql.append(" and matchList.state=:state ");

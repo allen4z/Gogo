@@ -49,22 +49,18 @@ public class GroupService extends BaseService {
 	public void saveGroup(Group group, String tokenId) {
 		User user  =  getUserbyToken(tokenId);
 		//查询是否已经加入小组
-		List<UserAndGroup> uags = userAndGroupDao.loadByUser(user.getId());
-		if(uags!= null && uags.size()>0){
-			for (UserAndGroup userAndGroup : uags) {
-				if(userAndGroup.getGroup().getCreateUser().getId().equals(user.getId())){
-					throw new Business4JsonException("您已经创建了["+userAndGroup.getGroup().getName()+"]，不能新建球队");
-				}
-			}
+		UserAndGroup uag = userAndGroupDao.loadByUser(user.getId());
+		if(uag!= null){
+			
+			throw new Business4JsonException("您已经创建了["+uag.getGroup().getName()+"]，不能新建球队");
 		}
-		
 		group.setCreateUser(user);
 		group.setMaxJoinUser(DomainStateHelper.GROUP_DEFAULT_USER_SIZE);
 		group.setCurJoinUser(1);
 		group.setCreateTime(new Date());
 		
 		int maxAuthority  = RoleHelper.ROLE_SUPERMANAGER;
-		UserAndGroup uag =new UserAndGroup();
+		uag =new UserAndGroup();
 		uag.setState(UserAndGroupState.FORMAL);
 		uag.setGroup(group);
 		uag.setUser(user);
@@ -132,10 +128,10 @@ public class GroupService extends BaseService {
 	public void savePassInviteGroup(String tokenId, String inviteId) {
 		User user  =  getUserbyToken(tokenId);
 		//查询是否已经加入小组
-		List<UserAndGroup> uags = userAndGroupDao.loadByUser(user.getId());
+		UserAndGroup uags = userAndGroupDao.loadByUser(user.getId());
 		try {
-			if(uags != null && uags.size()>DomainStateHelper.JOIN_GROUP_MAX){
-				throw new Business4JsonException("您已经加入了"+DomainStateHelper.JOIN_GROUP_MAX+"支球队，不能加入其他球队");
+			if(uags != null){
+				throw new Business4JsonException("您已经加入了["+uags.getGroup().getName()+"]，不能加入其他球队");
 			}
 
 			Invite invite= inviteDao.load(inviteId);

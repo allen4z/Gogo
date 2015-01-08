@@ -17,6 +17,7 @@ import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.validator.constraints.Length;
 
 import com.gogo.domain.enums.UserState;
+import com.gogo.domain.enums.UserStatus;
 
 @Entity
 @Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
@@ -60,11 +61,12 @@ public class User extends BaseDomain{
 	@Length(min=0,max=100,message="{user.signature.length.error}")
 	private String signature;
 	
-	
+	//电话
 	@Pattern(regexp ="[0-9]{9,11}", message = "{user.phonenum.regexp.error}") 
 	@Column(name="user_phonenum",length=20,nullable=true)
 	private String phoneNum;
 	
+	//邮箱
 	@Pattern(regexp="^([a-zA-Z0-9-._]*)+@+([a-zA-Z0-9]*)+.+([a-zA-Z0-9]{1,4})$",message="{user.email.regexp.error}")
 	@Column(name="user_email",length=30,nullable=true)
 	private String email;
@@ -76,6 +78,10 @@ public class User extends BaseDomain{
 	//用户状态：删除、正常
 	@Column(name="user_state",length=1,nullable=false)
 	private UserState state;	
+	
+	//用户擅长位置
+	@Column(name="user_status",length=1,nullable=false)
+	private UserStatus status;
 	
 	//版本信息
 	@Version
@@ -148,6 +154,12 @@ public class User extends BaseDomain{
 	}
 	public void setState(UserState state) {
 		this.state = state;
+	}
+	public UserStatus getStatus() {
+		return status;
+	}
+	public void setStatus(UserStatus status) {
+		this.status = status;
 	}
 
 }

@@ -16,9 +16,7 @@ public class DomainStateHelper {
 		
 	//活动小组默认人数
 	public static final int GROUP_DEFAULT_USER_SIZE=50;
-	//可计入球队数量限制
-	public static final int JOIN_GROUP_MAX = 5;
-	
+
 	//错误标识
 	public static final String ERROR_FLAG = "error";
 	
