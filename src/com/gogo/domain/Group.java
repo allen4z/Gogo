@@ -57,16 +57,7 @@ public class Group extends BaseDomain{
 	@Column(name = "group_type", length = 1)
 	private GroupType type;
 	
-	
-	public GroupType getType() {
-		return type;
-	}
-
-	public void setType(GroupType type) {
-		this.type = type;
-	}
-
-	// 创建时间
+	//创建时间
 	@Column(name = "group_create_time", length = 10)
 	private Date createTime;
 
@@ -86,7 +77,7 @@ public class Group extends BaseDomain{
 	//最多加入人数
 	@Column(name="group_max_user",length=20,nullable=false)
 	private int maxJoinUser;
-	//当前小组人数
+	//当前球队人数
 	@Column(name="group_current_user",length=20,nullable=false)
 	private int curJoinUser;
 	
@@ -206,5 +197,13 @@ public class Group extends BaseDomain{
 
 	public void setCreateTime(Date createTime) {
 		this.createTime = createTime;
+	}
+	
+	public GroupType getType() {
+		return type;
+	}
+
+	public void setType(GroupType type) {
+		this.type = type;
 	}
 }

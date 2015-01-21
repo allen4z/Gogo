@@ -20,7 +20,11 @@ import com.gogo.domain.enums.InviteState;
 import com.gogo.domain.enums.InviteType;
 
 
-
+/**
+ * 邀请信息
+ * @author allen
+ *
+ */
 @Entity
 @Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
 @Table(name="t_invite")
